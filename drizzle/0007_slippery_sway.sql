@@ -1,0 +1,1 @@
+ALTER TABLE "physician_profile" DROP COLUMN "nav_items";

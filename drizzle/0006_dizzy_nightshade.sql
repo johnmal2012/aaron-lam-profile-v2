@@ -1,0 +1,1 @@
+ALTER TABLE "physician_sections" ALTER COLUMN "content" DROP NOT NULL;
