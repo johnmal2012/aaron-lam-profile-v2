@@ -20,6 +20,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { useForm, useWatch } from 'react-hook-form';
+import { getInitials } from '@/lib/utils';
 
 interface UpdateUserFormProps {
   image?: string | null;
@@ -80,7 +81,7 @@ export const UpdateUserForm = ({ name, image }: UpdateUserFormProps) => {
 
         <Field>
           <FieldLabel>Image</FieldLabel>
-          <UserAvatar image={image} name={watchedName} size="lg" />
+          <UserAvatar image={image} name={getInitials(watchedName)} size="lg" />
           <ProfileImageUpload />
         </Field>
       </FieldGroup>

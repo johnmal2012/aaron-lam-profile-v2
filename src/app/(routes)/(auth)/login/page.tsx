@@ -50,7 +50,7 @@ export default async function LoginPage({ searchParams }: LoginProps) {
 
       <div className="flex flex-col max-w-sm gap-4 mx-auto">
         <SignInOauthButton provider="google" />
-        <SignInOauthButton provider="github" />
+        {/* <SignInOauthButton provider="github" /> */}
       </div>
     </div>
   );
