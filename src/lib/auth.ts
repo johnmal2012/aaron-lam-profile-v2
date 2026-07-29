@@ -22,10 +22,7 @@ const options = {
 
   baseURL: clientEnv.NEXT_PUBLIC_APP_URL,
 
-  trustedOrigins: [
-    'http://localhost:3000',
-    'https://next-mdx-drizzle-zod-shadcn-better.vercel.app',
-  ],
+  trustedOrigins: ['http://localhost:3000', clientEnv.NEXT_PUBLIC_APP_URL],
 
   emailAndPassword: {
     enabled: true,

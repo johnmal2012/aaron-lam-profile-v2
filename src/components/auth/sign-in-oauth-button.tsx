@@ -21,7 +21,7 @@ export const SignInOauthButton = ({
   async function handleClick() {
     await signIn.social({
       provider,
-      callbackURL: '/profile',
+      callbackURL: '/account-settings',
       errorCallbackURL: '/login/error',
       fetchOptions: {
         onRequest: () => {
@@ -35,7 +35,6 @@ export const SignInOauthButton = ({
         },
         onSuccess: () => {
           toast.success('Login successful. Good to have you back.');
-          router.refresh();
         },
       },
     });
