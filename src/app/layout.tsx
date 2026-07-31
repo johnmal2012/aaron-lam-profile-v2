@@ -17,9 +17,13 @@ const inter = Inter({
 export async function generateMetadata(): Promise<Metadata> {
   const physician = await db.query.physicianProfile.findFirst();
 
+  //   return {
+  //     title: physician?.name ?? 'Dr. Nikki Lam',
+  //     description: physician?.clinicName ?? 'Dr. Nikki Lam Profile Site',
+  //   };
   return {
-    title: physician?.name ?? 'Dr. Nikki Lam',
-    description: physician?.clinicName ?? 'Dr. Nikki Lam Profile Site',
+    title: 'VERCEL TEST 2026',
+    description: 'Deployment test',
   };
 }
 
