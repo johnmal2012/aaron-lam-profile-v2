@@ -1,14 +1,15 @@
 // using with RHF
 'use server';
 
-import { auth } from '@/lib/auth';
-import { ChangePasswordFormInput, changePasswordSchema } from '@/lib/validations/auth';
+import { auth } from '@/lib/auth/auth';
+import {
+  ChangePasswordFormInput,
+  changePasswordSchema,
+} from '@/lib/validations/auth';
 import { APIError } from 'better-auth/api';
 import { headers } from 'next/headers';
 
-export async function changePasswordAction(
-  values: ChangePasswordFormInput
-) {
+export async function changePasswordAction(values: ChangePasswordFormInput) {
   const validated = changePasswordSchema.safeParse(values);
 
   if (!validated.success) {

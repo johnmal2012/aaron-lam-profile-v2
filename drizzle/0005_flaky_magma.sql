@@ -1,1 +1,0 @@
-ALTER TABLE "physician_profile" ADD COLUMN "image_key" text;

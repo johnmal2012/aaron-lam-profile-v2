@@ -4,7 +4,7 @@ import { DeleteSectionButton } from '@/components/sections/delete-section-button
 import { DeleteProfileButton } from '@/components/profile/delete-profile-button';
 import { UserRoleSelect } from '@/components/user/user-role-select';
 import { USER_ROLE, UserRole } from '@/db/schema/auth-schema';
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 import { db } from '@/db/db';
 import { RestoreUserButton } from '@/components/user/user-restore-button';
 import { Separator } from '@/components/ui/separator';
@@ -214,7 +214,9 @@ export default async function DashboardPage() {
       <div className="space-y-4">
         <h2 className="flex items-center p-2 rounded-md text-lg bg-red-400 text-white font-bold">
           Deleted Sections{' '}
-          <Badge className='ml-2' variant="secondary">{deletedSections.length}</Badge>
+          <Badge className="ml-2" variant="secondary">
+            {deletedSections.length}
+          </Badge>
         </h2>
 
         <div className="w-full overflow-x-auto">
@@ -253,7 +255,10 @@ export default async function DashboardPage() {
       {/*** Profile list ***/}
       <div className="space-y-4 bg-slate-100">
         <h2 className="flex items-center p-2 rounded-md text-lg bg-blue-400 text-white font-bold">
-          Profiles <Badge className='ml-2' variant="secondary">{activeProfile.length}</Badge>
+          Profiles{' '}
+          <Badge className="ml-2" variant="secondary">
+            {activeProfile.length}
+          </Badge>
         </h2>
 
         <div className="w-full overflow-x-auto">
@@ -290,7 +295,10 @@ export default async function DashboardPage() {
       </div>
       <div className="space-y-4">
         <h2 className="flex items-center p-2 rounded-md text-lg bg-red-400 text-white font-bold">
-          Deleted Profiles <Badge className='ml-2' variant="secondary">{deletedProfile.length}</Badge>
+          Deleted Profiles{' '}
+          <Badge className="ml-2" variant="secondary">
+            {deletedProfile.length}
+          </Badge>
         </h2>
 
         <div className="w-full overflow-x-auto">

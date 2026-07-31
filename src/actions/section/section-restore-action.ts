@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db/db';
 import { physicianSections } from '@/db/schema/physician-sections';
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 import { APIError } from 'better-auth/api';
 
 export async function restoreSection(sectionId: number) {

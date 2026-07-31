@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { admin } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import type { UserRole } from "@/db/schema/auth-schema";
+import { admin } from '@/lib/auth/auth-client';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import type { UserRole } from '@/db/schema/auth-schema';
 
 interface UserRoleSelectProps {
   userId: string;
@@ -25,7 +25,7 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
     });
 
     if (canChangeRole.error) {
-      return toast.error("Forbidden");
+      return toast.error('Forbidden');
     }
 
     await admin.setRole({
@@ -42,7 +42,7 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
           toast.error(ctx.error.message);
         },
         onSuccess: () => {
-          toast.success("User role updated");
+          toast.success('User role updated');
           router.refresh();
         },
       },
@@ -52,9 +52,9 @@ export const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
   return (
     <select
       value={role}
-      title='User Role'
+      title="User Role"
       onChange={handleChange}
-      disabled={role === "admin" || isPending}
+      disabled={role === 'admin' || isPending}
       className="px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
     >
       <option value="admin">ADMIN</option>

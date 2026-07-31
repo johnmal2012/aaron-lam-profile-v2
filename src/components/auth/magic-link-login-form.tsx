@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StarIcon } from 'lucide-react';
-import { signIn } from '@/lib/auth-client';
+import { signIn } from '@/lib/auth/auth-client';
 import { toast } from 'sonner';
 import {
   magicLinkLoginSchema,

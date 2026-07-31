@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signUp } from '@/lib/auth-client';
+import { signUp } from '@/lib/auth/auth-client';
 import { toast } from 'sonner';
 import { registerSchema } from '@/lib/validations/auth';
 import z from 'zod';
@@ -76,8 +76,11 @@ export const RegisterForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm w-full space-y-4"
-    noValidate>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-sm w-full space-y-4"
+      noValidate
+    >
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
 

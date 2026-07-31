@@ -1,4 +1,4 @@
-import { requireLogin } from '@/lib/auth-utils';
+import { requireLogin } from '@/lib/auth/auth-utils';
 import { AdminNavbar } from '@/components/shared/admin-navbar';
 
 export default async function SemiProtectedLayout({
@@ -6,13 +6,11 @@ export default async function SemiProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const session = await requireLogin();
 
   return (
     <>
-    {session && (
-      <AdminNavbar session={session} />)}
+      {session && <AdminNavbar session={session} />}
       <div className="flex min-h-screen">
         {/* Sidebar */}
         {/* <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-48 shrink-0 border-r bg-muted/30 md:block">

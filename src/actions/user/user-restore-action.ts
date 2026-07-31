@@ -5,10 +5,10 @@ import { eq } from 'drizzle-orm';
 
 import { db } from '@/db/db';
 import { user } from '@/db/schema/auth-schema';
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { APIError } from 'better-auth/api';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/auth/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 

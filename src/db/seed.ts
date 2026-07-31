@@ -1,11 +1,14 @@
 // intended for development or initial setup, such as:
 // Creating an admin user.
 // Populating default physician sections (hero, education, expertise, etc.)
-
 import { db } from './db';
-
-import { user, physicianProfile, physicianSections } from '@/db/schema';
-
+import {
+  user,
+  physicianProfile,
+  physicianSections,
+  USER_ROLE,
+} from '@/db/schema';
+import { createCredentialUser } from '@/lib/auth/create-credential-user';
 import { eq } from 'drizzle-orm';
 
 async function seed() {
@@ -17,25 +20,19 @@ async function seed() {
 
   const email = 'test@gmail.com';
 
-  let existingUser = await db.query.user.findFirst({
+  await createCredentialUser({
+    name: 'lam',
+    email,
+    password: '123456',
+    role: USER_ROLE.ADMIN,
+  });
+
+  const existingUser = await db.query.user.findFirst({
     where: eq(user.email, email),
   });
 
   if (!existingUser) {
-    const [createdUser] = await db
-      .insert(user)
-      .values({
-        name: 'Dr. John Smith',
-        email,
-        emailVerified: true,
-      })
-      .returning();
-
-    existingUser = createdUser;
-
-    console.log('User created');
-  } else {
-    console.log('User already exists');
+    throw new Error(`Failed to create seed user: ${email}`);
   }
 
   // --------------------------------------------------
@@ -46,6 +43,7 @@ async function seed() {
     where: eq(physicianProfile.userId, existingUser.id),
   });
 
+  // use uploadthing image url and key
   if (!existingProfile) {
     await db.insert(physicianProfile).values({
       userId: existingUser.id,
@@ -55,12 +53,13 @@ async function seed() {
       specialty: 'Specialist	Foot & Ankle Specialist',
       title: 'Board-Certified Podiatric Surgeon',
       image:
-        'https://ffkf9c9vt3.ufs.sh/f/mm5bHxn2kR9wLfvkx9BsyOhk8MnVworU43SQBglYctdeJHX9',
+        'https://dq7f2nilk5.ufs.sh/f/GdXQXOsRC2BExsAVeb7tmwzjlM3SC42auIkQh8LsgKcb7UN0',
+      imageKey: 'GdXQXOsRC2BExsAVeb7tmwzjlM3SC42auIkQh8LsgKcb7UN0',
       clinicName: 'Maimonides Foot & Ankle',
       clinicAddress: '4802 Tenth Avenue Brooklyn, NY 11219',
       phone: '(718) 123-4567',
       email: 'info@hudsonfootankle.com',
-    //   address: '4802 Tenth Avenue Brooklyn, NY 11219',
+      //   address: '4802 Tenth Avenue Brooklyn, NY 11219',
       location: 'Office Location',
       linkName: 'Foot Care',
       footCareLink: 'https://www.footcaremd.org/',
@@ -73,7 +72,6 @@ async function seed() {
       isActive: true,
       deletedAt: null,
       //   user_id: '8c2a700c-3b36-405d-8049-492d89acfb75',
-      imageKey: 'mm5bHxn2kR9wLfvkx9BsyOhk8MnVworU43SQBglYctdeJHX9',
     });
 
     console.log('Physician profile created');
@@ -87,8 +85,8 @@ async function seed() {
 
   const sections = [
     {
-      slug: 'hero',
-      title: 'Hero',
+      slug: 'about',
+      title: '',
       content:
         '### Compassionate Foot & Ankle Care\n\nDr. Lam specializes in advanced foot and ankle treatments focused on restoring mobility, relieving pain, and improving quality of life.\n\nWith over 5 years of clinical experience, Dr. Lam combines modern surgical techniques with compassionate patient-centered care.',
       displayOrder: 1,
@@ -123,7 +121,7 @@ async function seed() {
       deletedAt: null,
     },
     {
-      slug: 'office_hours',
+      slug: 'hours',
       title: 'Office Hours',
       content:
         '| Day | Hours |\r\n| --- | --- |\r\n| Monday | 8:00 AM – 5:00 PM |\r\n| Tuesday | 8:00 AM – 5:00 PM |\r\n| Wednesday | 9:00 AM – 6:00 PM |\r\n| Thursday | 8:00 AM – 5:00 PM |\r\n| Friday | 8:00 AM – 2:00 PM |\r\n| Saturday | By Appointment |\r\n| Sunday | Closed |',
@@ -146,6 +144,22 @@ async function seed() {
       content:
         '### Current Research Interests\r\n\r\n- Minimally invasive bunion correction\r\n- Regenerative therapies for tendon injuries\r\n- Diabetic wound prevention\r\n- Sports rehabilitation protocols\r\n\r\n### Publications\r\n\r\n- Journal of Foot & Ankle Surgery\r\n- Podiatry Today\r\n- International Journal of Sports Medicine',
       displayOrder: 8,
+      isActive: true,
+      deletedAt: null,
+    },
+    {
+      slug: 'contact',
+      title: 'Contact Information',
+      content: '',
+      displayOrder: 8,
+      isActive: true,
+      deletedAt: null,
+    },
+    {
+      slug: 'location',
+      title: 'Office Location',
+      content: '',
+      displayOrder: 9,
       isActive: true,
       deletedAt: null,
     },

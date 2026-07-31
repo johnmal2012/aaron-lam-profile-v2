@@ -1,5 +1,5 @@
 {
-  "id": "177f2d4e-7db2-4e8d-881b-c4b45a791f43",
+  "id": "0e438d64-a5d5-444c-bf7c-eaba0bf6613f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -286,6 +286,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "image_key": {
+          "name": "image_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "role": {
           "name": "role",
           "type": "user_role",
@@ -309,6 +315,19 @@
         },
         "ban_expires": {
           "name": "ban_expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "deleted_at": {
+          "name": "deleted_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
@@ -398,6 +417,63 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.physician_sections": {
+      "name": "physician_sections",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "display_order": {
+          "name": "display_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.physician_profile": {
       "name": "physician_profile",
       "schema": "",
@@ -406,6 +482,12 @@
           "name": "id",
           "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
           "notNull": true
         },
         "logo": {
@@ -444,6 +526,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "image_key": {
+          "name": "image_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "clinic_name": {
           "name": "clinic_name",
           "type": "text",
@@ -464,12 +552,6 @@
         },
         "email": {
           "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "address": {
-          "name": "address",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -499,12 +581,18 @@
           "notNull": false,
           "default": "'[]'::jsonb"
         },
-        "nav_items": {
-          "name": "nav_items",
-          "type": "jsonb",
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'[]'::jsonb"
+          "notNull": true,
+          "default": true
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -521,52 +609,38 @@
           "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.physician_sections": {
-      "name": "physician_sections",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "display_order": {
-          "name": "display_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
+      "indexes": {
+        "physician_profile_user_id_idx": {
+          "name": "physician_profile_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "physician_profile_user_id_user_id_fk": {
+          "name": "physician_profile_user_id_user_id_fk",
+          "tableFrom": "physician_profile",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

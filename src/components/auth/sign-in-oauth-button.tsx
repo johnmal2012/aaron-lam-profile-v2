@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { signIn } from '@/lib/auth-client';
+import { signIn } from '@/lib/auth/auth-client';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 

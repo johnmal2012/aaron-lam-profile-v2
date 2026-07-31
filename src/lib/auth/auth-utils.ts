@@ -1,8 +1,8 @@
 import 'server-only';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/auth/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import type { AppPermissions } from "@/lib/permissions";
+import type { AppPermissions } from '@/lib/auth/permissions';
 import { USER_ROLE } from '@/db/schema/auth-schema';
 
 export async function getSession() {
@@ -20,7 +20,7 @@ export async function requireLogin() {
   });
 
   if (!session) {
-    redirect("/login?reason=login-required");
+    redirect('/login?reason=login-required');
   }
 
   return session;
@@ -47,9 +47,7 @@ export async function requireAdmin() {
 }
 
 // client page
-export async function requirePermission(
-  permissions: AppPermissions,
-) {
+export async function requirePermission(permissions: AppPermissions) {
   const session = await requireLogin();
   const result = await auth.api.userHasPermission({
     body: {

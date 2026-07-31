@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { useSession } from "@/lib/auth-client";
-import Link from "next/link";
+import { Button } from '@/components/ui/button';
+import { useSession } from '@/lib/auth/auth-client';
+import Link from 'next/link';
 import type { SessionUser } from '@/lib/types/auth-types';
 
 export const GetStartedButton = () => {
@@ -17,7 +17,7 @@ export const GetStartedButton = () => {
     );
   }
 
-  const href = session ? "/profile" : "/login";
+  const href = session ? '/profile' : '/login';
 
   return (
     <div className="flex flex-col items-center gap-4">

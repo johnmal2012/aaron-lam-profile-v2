@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { updateUser } from '@/lib/auth-client';
+import { updateUser } from '@/lib/auth/auth-client';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { ProfileImageUpload } from '@/components/profile/profile-image-upload';

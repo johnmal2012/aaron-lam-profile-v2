@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db/db';
 import { physicianProfile } from '@/db/schema/physician-profile';
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 import { APIError } from 'better-auth/api';
 
 export async function restoreProfile(profileId: number) {
@@ -20,7 +20,7 @@ export async function restoreProfile(profileId: number) {
       .where(eq(physicianProfile.id, profileId));
 
     revalidatePath('/dashboard');
-    
+
     return { error: null };
   } catch (err) {
     if (err instanceof APIError) {

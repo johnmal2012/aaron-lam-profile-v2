@@ -1,11 +1,8 @@
 // 1) admin profile page
-import {
-  Card,
-  CardContent,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 import { Separator } from '@/components/ui/separator';
-import { getSession } from '@/lib/auth-utils';
+import { getSession } from '@/lib/auth/auth-utils';
 import { getProfilePageData } from '@/lib/profile/get-profile-page-data';
 import { NoProfileState } from '@/components/profile/profile-empty-state';
 import { ProfileHeader } from '@/components/profile/profile-header';

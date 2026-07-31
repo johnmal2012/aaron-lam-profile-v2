@@ -8,7 +8,7 @@ import {
   physicianProfileSchema,
   PhysicianProfileInput,
 } from '@/lib/validations/physician-profile';
-import { requireAdmin, requireLogin } from '@/lib/auth-utils';
+import { requireAdmin, requireLogin } from '@/lib/auth/auth-utils';
 import { APIError } from 'better-auth/api';
 
 /* -------------------------------------------------- */
@@ -28,12 +28,10 @@ export async function createPhysicianProfile(values: PhysicianProfileInput) {
 
   try {
     const session = await requireLogin();
-    await db
-      .insert(physicianProfile)
-      .values({
-        ...validated.data,
-        userId: session.user.id,
-      });
+    await db.insert(physicianProfile).values({
+      ...validated.data,
+      userId: session.user.id,
+    });
 
     revalidatePath('/');
     revalidatePath('/profile');

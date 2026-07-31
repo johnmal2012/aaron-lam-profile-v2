@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db/db';
 import { physicianProfile } from '@/db/schema';
 import { ProfileForm } from '@/components/profile/profile-form';
-import { getSession } from '@/lib/auth-utils';
+import { getSession } from '@/lib/auth/auth-utils';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { UserRoundArrowLeft } from 'lucide-react';
 
@@ -17,8 +17,8 @@ export default async function ProfileEditPage({ params }: ProfileEditProps) {
 
   const [profile, session] = await Promise.all([
     db.query.physicianProfile.findFirst({
-    where: eq(physicianProfile.id, Number(id)),
-  }),
+      where: eq(physicianProfile.id, Number(id)),
+    }),
     getSession(),
   ]);
 

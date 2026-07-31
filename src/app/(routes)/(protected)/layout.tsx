@@ -1,4 +1,4 @@
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 import { AdminNavbar } from '@/components/shared/admin-navbar';
 
 export default async function ProtectedLayout({
@@ -6,7 +6,6 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const session = await requireAdmin();
 
   return (

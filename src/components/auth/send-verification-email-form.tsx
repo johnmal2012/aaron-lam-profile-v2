@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { sendVerificationEmail } from '@/lib/auth-client';
+import { sendVerificationEmail } from '@/lib/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';

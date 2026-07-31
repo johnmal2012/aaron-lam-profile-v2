@@ -2,13 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { resetPassword } from '@/lib/auth-client';
+import { resetPassword } from '@/lib/auth/auth-client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-    ResetPasswordInput,
+  ResetPasswordInput,
   resetPasswordSchema,
   type ResetPasswordFormInput,
 } from '@/lib/validations/auth';

@@ -4,7 +4,7 @@ import { db } from '@/db/db';
 import { physicianProfile, user } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 import { utapi } from '@/lib/uploadthing-server';
 import { revalidatePath } from 'next/cache';
 

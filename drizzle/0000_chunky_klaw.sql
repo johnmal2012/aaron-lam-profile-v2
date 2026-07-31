@@ -36,10 +36,13 @@ CREATE TABLE "user" (
 	"email" text NOT NULL,
 	"email_verified" boolean DEFAULT false NOT NULL,
 	"image" text,
+	"image_key" text,
 	"role" "user_role" DEFAULT 'user',
 	"banned" boolean DEFAULT false,
 	"ban_reason" text,
 	"ban_expires" timestamp,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"deleted_at" timestamp,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
@@ -52,38 +55,44 @@ CREATE TABLE "verification" (
 	"expires_at" timestamp NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "physician_sections" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"slug" varchar(255) NOT NULL,
+	"title" varchar(255),
+	"content" text,
+	"display_order" integer DEFAULT 0 NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"deleted_at" timestamp
+);
+--> statement-breakpoint
 CREATE TABLE "physician_profile" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
 	"logo" text,
 	"name" text,
 	"board_specialty" text,
 	"specialty" text,
 	"title" text,
 	"image" text,
+	"image_key" text,
 	"clinic_name" text,
 	"clinic_address" text,
 	"phone" text,
 	"email" text,
-	"address" text,
 	"location" text,
 	"link_name" text,
 	"footcare_link" text,
 	"expertise" jsonb DEFAULT '[]'::jsonb,
-	"nav_items" jsonb DEFAULT '[]'::jsonb,
+	"is_active" boolean DEFAULT true NOT NULL,
+	"deleted_at" timestamp,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "physician_sections" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"slug" varchar(255) NOT NULL,
-	"title" varchar(255) NOT NULL,
-	"content" text NOT NULL,
-	"display_order" integer DEFAULT 0 NOT NULL
-);
---> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "physician_profile" ADD CONSTRAINT "physician_profile_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");
+CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
+CREATE UNIQUE INDEX "physician_profile_user_id_idx" ON "physician_profile" USING btree ("user_id");

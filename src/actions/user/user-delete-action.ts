@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/db/db';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/auth/auth';
 import { APIError } from 'better-auth/api';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -10,7 +10,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { user } from '@/db/schema/auth-schema';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { requireAdmin } from '@/lib/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 
 export async function deleteUser(userId: string) {
   const headersList = await headers();

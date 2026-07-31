@@ -2,7 +2,7 @@ import { ChangePasswordForm } from '@/components/auth/change-password-form';
 import { ReturnButton } from '@/components/navigation/return-button';
 import { UpdateUserForm } from '@/components/user/user-update-form';
 import { Separator } from '@/components/ui/separator';
-import { getSession } from '@/lib/auth-utils';
+import { getSession } from '@/lib/auth/auth-utils';
 import { SettingsSection } from '@/components/settings/settings-section';
 
 export default async function AccountSettingsPage() {

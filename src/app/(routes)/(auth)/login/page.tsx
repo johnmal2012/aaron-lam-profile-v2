@@ -3,7 +3,7 @@ import { MagicLinkLoginForm } from '@/components/auth/magic-link-login-form';
 import { ReturnButton } from '@/components/navigation/return-button';
 import { SignInOauthButton } from '@/components/auth/sign-in-oauth-button';
 import Link from 'next/link';
-import { getSession } from '@/lib/auth-utils';
+import { getSession } from '@/lib/auth/auth-utils';
 import { redirect } from 'next/navigation';
 import { USER_ROLE } from '@/db/schema/auth-schema';
 
@@ -15,10 +15,14 @@ type LoginProps = {
 
 export default async function LoginPage({ searchParams }: LoginProps) {
   const { reason } = await searchParams;
-    const session = await getSession();
-    if (session && (session.user.role === USER_ROLE.ADMIN || session.user.role === USER_ROLE.USER)) {
-      redirect('/account-settings');
-    }
+  const session = await getSession();
+  if (
+    session &&
+    (session.user.role === USER_ROLE.ADMIN ||
+      session.user.role === USER_ROLE.USER)
+  ) {
+    redirect('/account-settings');
+  }
 
   return (
     <div className="px-8 py-16 container mx-auto max-w-5xl space-y-8">

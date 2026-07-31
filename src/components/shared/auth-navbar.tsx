@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Stethoscope } from 'lucide-react';
 import { AuthButtons } from '@/components/auth/auth-buttons';
-import { getSession } from '@/lib/auth-utils';
+import { getSession } from '@/lib/auth/auth-utils';
 
 export async function AuthNavbar() {
   const session = await getSession();

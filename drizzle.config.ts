@@ -13,7 +13,8 @@ if (!process.env.DATABASE_URL) {
 
 // migration files live outside to separate src which stores app codes
 export default {
-  schema: './src/db/schema/**/*',
+  //   schema: './src/db/schema/**/*',
+  schema: './src/db/schema/index.ts',
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
