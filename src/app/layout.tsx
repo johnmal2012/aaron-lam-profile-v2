@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: physician?.name ?? 'Dr. Nikki Lam',
-    description: physician?.clinicName ?? 'Dr. Nikki Lam Site',
+    description: physician?.clinicName ?? 'Dr. Nikki Lam Profile Site',
   };
 }
 
