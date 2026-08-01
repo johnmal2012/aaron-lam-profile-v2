@@ -9,14 +9,35 @@ import { ProfileHeader } from '@/components/profile/profile-header';
 import { ProfileCardHeader } from '@/components/profile/profile-card-header';
 import { DesktopProfileGrid } from '@/components/profile/profile-desktop-grid';
 import { MobileProfileList } from '@/components/profile/profile-mobile-list';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function ProfilePage() {
   const session = await getSession();
 
   const profileData = await getProfilePageData(session?.user.id ?? null);
 
-  if (!profileData) {
-    return <NoProfileState />;
+  if (!profileData.success) {
+    return (
+      // <div className="rounded-md border border-destructive p-4 text-destructive">
+      //   {profileData.message}
+      // </div>
+      <div className="container mx-auto flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+        <div className="max-w-lg space-y-6">
+          <div className="space-y-2">
+            <p className="rounded-md border border-destructive p-4 text-destructive">
+              {profileData.message}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button asChild>
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const { profile, currentUser, items } = profileData;
