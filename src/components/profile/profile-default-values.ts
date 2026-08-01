@@ -14,7 +14,7 @@ export function getProfileDefaultValues(
     clinicAddress: profile?.clinicAddress ?? '',
     phone: profile?.phone ?? '',
     email: profile?.email ?? '',
-    location: profile?.location ?? '',
+    // location: profile?.location ?? '',
     linkName: profile?.linkName ?? '',
     footCareLink: profile?.footCareLink ?? '',
     expertise: profile?.expertise?.join(', ') ?? ''

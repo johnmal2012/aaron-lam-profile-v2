@@ -39,18 +39,12 @@ export function ProfileForm({
 }: ProfileFormProps) {
   const router = useRouter();
 
-  const form = useForm<
-    PhysicianProfileFormInput,
-    unknown,
-    z.output<typeof physicianProfileFormSchema>
-  >({
+  const form = useForm<PhysicianProfileFormInput>({
     resolver: zodResolver(physicianProfileFormSchema),
     defaultValues: getProfileDefaultValues(profile),
   });
 
-  async function onFormSubmit(
-    values: z.output<typeof physicianProfileFormSchema>,
-  ) {
+  async function onFormSubmit(values: PhysicianProfileFormInput) {
     try {
       const payload = toProfilePayload(values);
 
@@ -80,25 +74,8 @@ export function ProfileForm({
         <h1 className="text-3xl py-6 font-bold">Edit Physician Profiles</h1>
       </div>
 
-      {/* Desktop View - Hidden on mobile */}
-      <FieldGroup className="hidden gap-4 md:grid md:grid-cols-2">
-        {profileFormFields.map((field, index) => (
-          <div
-            key={field.id}
-            className={cn('rounded-lg p-4', getCardBackground(index, 2))}
-          >
-            <ProfileFormField
-              field={field}
-              form={form}
-              userName={userName}
-              userImage={userImage}
-            />
-          </div>
-        ))}
-      </FieldGroup>
-
-      {/* Mobile View - Hidden on desktop */}
-      <FieldGroup className="grid gap-4 md:hidden">
+      {/* Desktop or mobile view depending on tailwind classes */}
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
         {profileFormFields.map((field, index) => (
           <div
             key={field.id}
@@ -116,6 +93,7 @@ export function ProfileForm({
 
       <div className="flex justify-start items-center gap-2">
         <Button
+          type="submit"
           disabled={form.formState.isSubmitting}
           className="h-10 px-4 w-24 bg-green-600! hover:bg-green-700!"
         >
