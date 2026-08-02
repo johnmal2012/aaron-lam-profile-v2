@@ -10,7 +10,7 @@ import { normalizeName } from '@/lib/utils';
 import { getValidDomains } from '@/lib/server/auth-utils';
 import { ac, roles } from '@/lib/auth/permissions';
 import { serverEnv } from '@/lib/env/server';
-import { clientEnv } from '../env/client';
+import { clientEnv } from '@/lib/env/client';
 import { sendEmailAction } from '@/actions/auth/send-email.action';
 import { USER_ROLE } from '@/db/schema/auth-schema';
 

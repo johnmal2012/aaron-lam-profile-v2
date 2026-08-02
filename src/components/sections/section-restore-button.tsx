@@ -5,7 +5,7 @@ import { restoreSection } from '@/actions/section/section-restore-action';
 import { Undo2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { ConfirmActionDialog } from '../shared/confirm-action-dialog';
+import { ConfirmActionDialog } from '@/components/shared/confirm-action-dialog';
 
 interface RestoreSectionButtonProps {
   sectionId: number;
