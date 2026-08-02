@@ -16,7 +16,6 @@ import {
   PhysicianProfileFormInput,
   physicianProfileFormSchema,
 } from '@/lib/validations/physician-profile';
-import z from 'zod';
 import { FieldGroup } from '@/components/ui/field';
 import { cn } from '@/lib/utils';
 import { profileFormFields } from '@/components/profile/profile-form-fields';

@@ -4,7 +4,6 @@ import Navbar from '@/components/navigation/navBar';
 import FooterSection from '@/components/sections/footer-section';
 import { SectionRenderer } from '@/components/sections/section-renderer';
 import { NoSectionState } from '@/components/sections/section-empty-state';
-import { NoProfileState } from '@/components/profile/profile-empty-state';
 import { getWebsiteData } from '@/lib/website/get-website-data';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
