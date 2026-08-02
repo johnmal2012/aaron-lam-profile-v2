@@ -18,10 +18,10 @@ import {
 } from '@/lib/validations/physician-profile';
 import { FieldGroup } from '@/components/ui/field';
 import { cn } from '@/lib/utils';
-import { profileFormFields } from '@/components/profile/profile-form-fields';
+import { profileFormFields } from '@/lib/profile/profile-form-fields';
 import { ProfileFormField } from '@/components/profile/profile-form-field';
-import { getProfileDefaultValues } from '@/components/profile/profile-default-values';
-import { toProfilePayload } from '@/components/profile/profile-mappers';
+import { getProfileDefaultValues } from '@/lib/profile/profile-default-values';
+import { toProfilePayload } from '@/lib/profile/profile-mappers';
 
 type Profile = InferSelectModel<typeof physicianProfile>;
 
