@@ -63,7 +63,7 @@ export const RegisterForm = () => {
 
           onSuccess: () => {
             toast.success("Registration complete. You're all set.");
-            router.push('/register/success');
+            router.push('/nikkilam20020404/register/success');
           },
         },
       );

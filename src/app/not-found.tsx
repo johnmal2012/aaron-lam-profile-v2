@@ -21,9 +21,9 @@ export default function GlobalNotFound() {
             <Link href="/">Return Home</Link>
           </Button>
 
-          <Button asChild variant="outline">
+          {/* <Button asChild variant="outline">
             <Link href="/profile">Go to Profile</Link>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

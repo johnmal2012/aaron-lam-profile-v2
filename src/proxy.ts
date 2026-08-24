@@ -25,7 +25,7 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!session) {
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL('/nikkilam20020404/login', request.url);
 
     loginUrl.searchParams.set('callbackUrl', pathname + search);
 
@@ -33,7 +33,8 @@ export async function proxy(request: NextRequest) {
   }
 
   if (isAdminRoute && session.user.role !== USER_ROLE.ADMIN) {
-    return NextResponse.redirect(new URL('/unauthorized', request.url));
+    // return NextResponse.redirect(new URL('/unauthorized', request.url));
+    return NextResponse.redirect(new URL('/', request.url)); // no one is able to see unauthorized
   }
 
   return NextResponse.next();

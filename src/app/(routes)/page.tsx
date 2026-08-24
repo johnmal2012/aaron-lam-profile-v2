@@ -5,33 +5,36 @@ import FooterSection from '@/components/sections/footer-section';
 import { SectionRenderer } from '@/components/sections/section-renderer';
 import { NoSectionState } from '@/components/sections/section-empty-state';
 import { getWebsiteData } from '@/lib/website/get-website-data';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+// import { Button } from '@/components/ui/button';
+// import Link from 'next/link';
 
 export default async function PhysicianPage() {
   const websiteData = await getWebsiteData();
 
-  if (!websiteData.success) {
+  if (!websiteData) {
     return (
       <div className="container mx-auto flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
         <div className="max-w-lg space-y-6">
           <div className="space-y-2">
             <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-destructive">
-              {websiteData.message}
+              {/* {websiteData.message} */}
+              Something went wrong. Please try again.
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3">
+          {/* <div className="flex flex-wrap justify-center gap-3">
             <Button asChild>
               <Link href="/dashboard">Dashboard</Link>
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     );
   }
 
   const { profile, sections, navItems } = websiteData;
+
+  console.log('sections: ', sections);
 
   if (!sections) {
     return <NoSectionState />;

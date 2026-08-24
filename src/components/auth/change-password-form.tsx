@@ -61,20 +61,20 @@ export const ChangePasswordForm = () => {
       noValidate
       autoComplete="off"
     >
-      <Input
+      {/* <Input
         type="text"
         name="username"
         autoComplete="off"
         style={{ display: 'none' }}
         aria-hidden="true"
-      />
+      /> */}
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="currentPassword">Current Password</FieldLabel>
           <Input
             id="currentPassword"
             type="password"
-            autoComplete="current-password"
+            autoComplete="off"
             aria-invalid={!!form.formState.errors.currentPassword}
             {...form.register('currentPassword')}
           />
@@ -98,6 +98,7 @@ export const ChangePasswordForm = () => {
         <Field>
           <FieldLabel>Confirm Password</FieldLabel>
           <Input
+            id="confirmPassword"
             type="password"
             autoComplete="new-password"
             aria-invalid={!!form.formState.errors.confirmPassword}

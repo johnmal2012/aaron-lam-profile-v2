@@ -31,7 +31,7 @@ export default async function ProfilePage() {
 
           <div className="flex flex-wrap justify-center gap-3">
             <Button asChild>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/nikkilam20020404/dashboard">Dashboard</Link>
             </Button>
           </div>
         </div>

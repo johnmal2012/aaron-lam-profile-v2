@@ -6,6 +6,15 @@ import Link from 'next/link';
 import { getSession } from '@/lib/auth/auth-utils';
 import { redirect } from 'next/navigation';
 import { USER_ROLE } from '@/db/schema/auth-schema';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Admin Login',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 type LoginProps = {
   searchParams: Promise<{
@@ -16,12 +25,21 @@ type LoginProps = {
 export default async function LoginPage({ searchParams }: LoginProps) {
   const { reason } = await searchParams;
   const session = await getSession();
-  if (
-    session &&
-    (session.user.role === USER_ROLE.ADMIN ||
-      session.user.role === USER_ROLE.USER)
-  ) {
+  //   if (
+  //     session &&
+  //     (session.user.role === USER_ROLE.ADMIN ||
+  //       session.user.role === USER_ROLE.USER)
+  //   ) {
+  //     redirect('/account-settings');
+  //   }
+  // admin to account-settings page
+  if (session && session.user.role === USER_ROLE.ADMIN) {
     redirect('/account-settings');
+  }
+
+  // user to home page
+  if (session && session.user.role === USER_ROLE.USER) {
+    redirect('/');
   }
 
   return (
@@ -33,7 +51,7 @@ export default async function LoginPage({ searchParams }: LoginProps) {
       </div>
 
       <div className="space-y-4 max-w-sm mx-auto">
-        <MagicLinkLoginForm />
+        {/* <MagicLinkLoginForm /> */}
 
         {reason === 'login-required' && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
@@ -42,7 +60,7 @@ export default async function LoginPage({ searchParams }: LoginProps) {
         )}
         <LoginForm />
 
-        <p className="text-muted-foreground text-sm">
+        {/* <p className="text-muted-foreground text-sm">
           Don&apos;t have an account?{' '}
           <Link href="/register" className="hover:text-foreground">
             Register
@@ -53,7 +71,7 @@ export default async function LoginPage({ searchParams }: LoginProps) {
       <hr className="max-w-sm mx-auto" />
 
       <div className="flex flex-col max-w-sm gap-4 mx-auto">
-        <SignInOauthButton provider="google" />
+        <SignInOauthButton provider="google" /> */}
         {/* <SignInOauthButton provider="github" /> */}
       </div>
     </div>

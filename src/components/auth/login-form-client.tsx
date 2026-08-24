@@ -91,7 +91,7 @@ export const LoginForm = () => {
           <Label htmlFor="password">Password</Label>
           <Link
             tabIndex={-1}
-            href="/forgot-password"
+            href="/nikkilam20020404/forgot-password"
             className="text-sm italic text-muted-foreground hover:text-foreground"
           >
             Forgot password?

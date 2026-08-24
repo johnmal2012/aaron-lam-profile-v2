@@ -1,6 +1,6 @@
-import { ReturnButton } from "@/components/navigation/return-button";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { ReturnButton } from '@/components/navigation/return-button';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const PAGE_TITLE = 'Manage Sections';
 const CREATE_BUTTON_LABEL = 'Create Section';

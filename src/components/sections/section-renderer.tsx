@@ -123,7 +123,7 @@ export function SectionRenderer({
         />
       );
 
-    case 'test_2':
+    case 'test1':
       return (
         <TestSection
           title={section.title ?? ''}

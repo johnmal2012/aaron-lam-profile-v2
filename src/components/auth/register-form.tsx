@@ -40,7 +40,7 @@ export const RegisterForm = () => {
           return;
         }
         toast.success('Registration complete. You are all set.');
-        router.replace('/register/success');
+        router.replace('/nikkilam20020404/register/success');
       } catch (err) {
         toast.error('Something went wrong. Please try again.');
         console.error(err);

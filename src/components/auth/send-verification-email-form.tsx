@@ -35,7 +35,7 @@ export const SendVerificationEmailForm = () => {
   async function onFormSubmit(values: SendVerificationEmailFormInput) {
     await sendVerificationEmail({
       email: values.email,
-      callbackURL: '/verify',
+      callbackURL: '/nikkilam20020404/verify',
       fetchOptions: {
         onRequest: () => {},
         onResponse: () => {},
@@ -44,7 +44,7 @@ export const SendVerificationEmailForm = () => {
         },
         onSuccess: () => {
           toast.success('Verification email sent successfully.');
-          router.push('/verify/success');
+          router.push('/nikkilam20020404/verify/success');
         },
       },
     });

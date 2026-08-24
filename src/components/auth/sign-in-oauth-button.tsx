@@ -20,7 +20,7 @@ export const SignInOauthButton = ({
     await signIn.social({
       provider,
       callbackURL: '/account-settings',
-      errorCallbackURL: '/login/error',
+      errorCallbackURL: '/nikkilam20020404/login/error',
       fetchOptions: {
         onRequest: () => {
           setIsPending(true);

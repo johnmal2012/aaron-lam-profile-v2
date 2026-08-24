@@ -1,7 +1,6 @@
 'use client';
 
 import { LoginButton } from '@/components/auth/login-button';
-import { RegisterButton } from '@/components/auth/register-button';
 import { SignOutButton } from '@/components/auth/sign-out-button';
 
 type AuthButtonsProps = {
@@ -17,7 +16,7 @@ export function AuthButtons({ user }: AuthButtonsProps) {
     return (
       <div className="flex items-center gap-2">
         <LoginButton />
-        <RegisterButton />
+        {/* <RegisterButton /> */}
       </div>
     );
   }

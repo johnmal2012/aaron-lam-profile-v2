@@ -11,7 +11,7 @@ export const registerSchema = z.object({
 
   password: z
     .string()
-    .min(6, 'Password must be at least 6 characters'),
+    .min(8, 'Password must be at least 8 characters'),
 });
 
 // login validation schema
@@ -21,7 +21,7 @@ export const loginSchema = z.object({
 
   password: z
     .string()
-    .min(6, 'Password must be at least 6 characters'),
+    .min(8, 'Password must be at least 8 characters'),
 });
 
 // Password validation schema
@@ -29,13 +29,13 @@ export const changePasswordSchema = z
   .object({
     currentPassword: z
       .string()
-      .min(6, "Current password must be at least 6 characters")
-      .max(100, "Current password is too long"),
+      .min(8, "Current password must be at least 8 characters")
+      .max(125, "Current password is too long"),
     
     newPassword: z
       .string()
-      .min(6, "New password must be at least 6 characters")
-      .max(100, "New password is too long"),
+      .min(8, "New password must be at least 8 characters")
+      .max(125, "New password is too long"),
     //   .regex(
     //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
     //     "New password must contain at least one uppercase letter, one lowercase letter, and one number"
@@ -43,7 +43,7 @@ export const changePasswordSchema = z
     
     confirmPassword: z
       .string()
-      .min(6, "Confirm password must be at least 6 characters"),
+      .min(8, "Confirm password must be at least 8 characters"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
@@ -55,11 +55,11 @@ export const resetPasswordSchema = z
   .object({
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters"),
+      .min(8, "Password must be at least 8 characters"),
 
     confirmPassword: z
       .string()
-      .min(6, "Please confirm your password"),
+      .min(8, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],

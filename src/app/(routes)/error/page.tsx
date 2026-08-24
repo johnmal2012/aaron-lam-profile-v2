@@ -22,7 +22,7 @@ export default function ProfileErrorPage() {
 
         <div className="flex flex-wrap justify-center gap-3">
           <Button asChild>
-            <Link href="/dashboard">
+            <Link href="/nikkilam20020404/dashboard">
               Dashboard
             </Link>
           </Button>

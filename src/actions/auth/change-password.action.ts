@@ -17,6 +17,7 @@ export async function changePasswordAction(values: ChangePasswordFormInput) {
       error: 'Invalid password data',
     };
   }
+  
   try {
     await auth.api.changePassword({
       headers: await headers(),

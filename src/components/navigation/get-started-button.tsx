@@ -17,7 +17,7 @@ export const GetStartedButton = () => {
     );
   }
 
-  const href = session ? '/profile' : '/login';
+  const href = session ? '/profile' : '/nikkilam20020404/login';
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -31,7 +31,7 @@ export const GetStartedButton = () => {
             data-role={user.role}
             className="size-4 rounded-full animate-pulse data-[role=user]:bg-blue-600 data-[role=admin]:bg-red-600"
           />
-          Welcome back, {session.user.name}! 👋
+          Welcome back, {session.user.name}!
         </p>
       )}
     </div>

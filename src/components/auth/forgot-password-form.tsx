@@ -32,14 +32,14 @@ export const ForgotPasswordForm = () => {
   async function onFormSubmit(values: ForgotPasswordFormInput) {
     await requestPasswordReset({
       email: values.email,
-      redirectTo: '/reset-password',
+      redirectTo: '/nikkilam20020404/reset-password',
       fetchOptions: {
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
         onSuccess: () => {
           toast.success('Reset link sent to your email.');
-          router.push('/forgot-password/success');
+          router.push('/nikkilam20020404/forgot-password/success');
         },
       },
     });
