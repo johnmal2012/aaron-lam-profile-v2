@@ -148,11 +148,17 @@ body {
   }
 }
 
+/* @layer base {
+  button[data-ut-element='button']:disabled {
+    cursor: pointer !important;
+  }
+} */
+
 /* Typography customizations
 .prose {
   --tw-prose-bullets: var(--color-slate-700);
 } */
- 
+
 /* Typography overrides */
 .prose {
   --tw-prose-body: var(--foreground);

@@ -6,6 +6,9 @@ import { getSession, isAdmin } from '@/lib/auth/auth-utils';
 import { SettingsSection } from '@/components/settings/settings-section';
 import { USER_ROLE } from '@/db/schema/auth-schema';
 import { CreateAdminUserForm } from '@/components/user/create-admin-user-form';
+import { db } from '@/db/db';
+import { eq } from 'drizzle-orm';
+import { physicianProfile } from '@/db/schema/physician-profile';
 
 export default async function AccountSettingsPage() {
   const session = await getSession();
@@ -18,6 +21,17 @@ export default async function AccountSettingsPage() {
 
   const isAdmin = user.role === USER_ROLE.ADMIN;
 
+  // Get the physician profile belonging to the current user.
+  const physician = await db.query.physicianProfile.findFirst({
+    where: eq(physicianProfile.userId, user.id),
+    columns: {
+      image: true,
+    },
+  });
+
+  // image is the current UploadThing image url.
+  const image = physician?.image ?? '';
+
   return (
     <div className="px-8 py-16 container mx-auto max-w-3xl space-y-4">
       <ReturnButton href="/" label="Physician Portal" />
@@ -27,13 +41,16 @@ export default async function AccountSettingsPage() {
         borderColor="border-t-blue-600"
         backgroundColor="bg-slate-100"
       >
-        <UpdateUserForm name={user.name} image={user.image ?? ''} />
+        <UpdateUserForm name={user.name} image={image} />
       </SettingsSection>
 
       <Separator className="my-8 data-[orientation=horizontal]:h-1 bg-slate-300" />
 
-      <SettingsSection title="Change Password" borderColor="border-t-red-600"
-      backgroundColor="bg-white">
+      <SettingsSection
+        title="Change Password"
+        borderColor="border-t-red-600"
+        backgroundColor="bg-white"
+      >
         <ChangePasswordForm />
       </SettingsSection>
 

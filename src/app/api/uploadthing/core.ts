@@ -15,7 +15,7 @@ export const ourFileRouter = {
     .input(z.object({}))
 
     .middleware(async () => {
-      const session = await await requireAdmin();
+      const session = await requireAdmin();
 
       if (!session) {
         throw new UploadThingError('Unauthorized');

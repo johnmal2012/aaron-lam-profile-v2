@@ -37,6 +37,7 @@ export async function updateProfileImage(data: {
     throw new Error('User not found');
   }
 
+  // 1. Update Better Auth user's image and imageKey.
   await db
     .update(user)
     .set({
@@ -45,6 +46,7 @@ export async function updateProfileImage(data: {
     })
     .where(eq(user.id, session.user.id));
 
+  // 2. Update physician profile's image and  imageKey.
   if (physicianProfileData) {
     await db
       .update(physicianProfile)
@@ -72,8 +74,10 @@ export async function updateProfileImage(data: {
     await utapi.deleteFiles(physicianProfileData.imageKey);
   }
 
+  // 3. Invalidate all pages that display the image.
   revalidatePath('/profile');
   revalidatePath('/account-settings');
+  revalidatePath('/');
 
   return {
     success: true,
