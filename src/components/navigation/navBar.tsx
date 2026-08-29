@@ -111,7 +111,7 @@ export default function Navbar({
                 key={item.id}
                 href={`#${item.id}`}
                 className={cn(
-                  'rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
+                  'whitespace-nowrap rounded-full px-2 py-1.5 text-xs font-medium transition-all duration-200 lg:px-3 lg:py-2 lg:text-sm',
                   isActive
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600',
