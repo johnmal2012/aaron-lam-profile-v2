@@ -83,25 +83,26 @@ export default function Navbar({
 
   return (
     <header className="sticky top-0 z-50 border-b bg-stone-100/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100">
-            <Stethoscope className="h-5 w-5 text-blue-700" />
+      <div className="mx-auto flex max-w-7xl items-center px-4 py-3 sm:px-6 lg:py-4">
+        {/* Logo */}
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:h-11 sm:w-11">
+            <Stethoscope className="h-5 w-5 shrink-0 text-blue-700" />
           </div>
 
-          <div className="min-w-0">
-            <h1 className="truncate text-base font-bold text-slate-900 sm:text-lg">
+          <div className="shrink-0">
+            <h1 className="whitespace-nowrap text-sm font-bold text-slate-900 sm:text-base lg:text-lg">
               <Link href="#hero">{logo}</Link>
             </h1>
 
-            <p className="truncate text-[11px] text-slate-500 sm:text-xs">
+            <p className="max-w-36 text-[10px] leading-tight text-slate-500 sm:max-w-32 sm:text-[11px] lg:max-w-36 lg:text-xs">
               <Link href="#hero">{specialty}</Link>
             </p>
           </div>
         </div>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-2 md:flex">
+        <nav className="ml-auto hidden items-center gap-0.5 md:flex lg:gap-1.5">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
 
@@ -131,7 +132,7 @@ export default function Navbar({
         </nav>
 
         {/* Mobile Nav */}
-        <div className="md:hidden">
+        <div className="ml-auto md:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Button

@@ -33,7 +33,8 @@ export default async function AboutSection({
       className={cn("scroll-mt-28 px-6 py-12", background,)}
     >
       <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-2 md:items-center">
-        <div className="relative w-64 h-64 mx-auto md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-white">
+        {/* Doctor's photograph: circle */}
+        {/* <div className="relative w-64 h-64 mx-auto md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-white">
           <Image
             src={image}
             alt={name}
@@ -42,6 +43,19 @@ export default async function AboutSection({
             priority
             className="rounded-3xl object-cover shadow-2xl"
           />
+        </div> */}
+        {/* Doctor's photograph: square protrait */}
+        <div className="mx-auto w-1/2 max-w-sm md:w-3/4">
+          <div className="overflow-hidden rounded-3xl border-4 border-white bg-white shadow-2xl">
+            <Image
+              src={image}
+              alt={`${name} in white coat`}
+              width={600}
+              height={700}
+              priority
+              className="h-auto w-full object-contain"
+            />
+          </div>
         </div>
         <Card className="rounded-3xl border-0 p-8 shadow-xl">
           <div className="space-y-6">
