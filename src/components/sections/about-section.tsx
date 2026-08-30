@@ -34,15 +34,17 @@ export default async function AboutSection({
     >
       <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-3 md:items-center">
         {/* Doctor's photograph: circle */}
-        {/* <div className="relative w-64 h-64 mx-auto md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-white">
-          <Image
-            src={image}
-            alt={name}
-            width={600}
-            height={700}
-            priority
-            className="rounded-3xl object-cover shadow-2xl"
-          />
+        {/* <div className="mx-auto w-1/2 max-w-sm md:w-full">
+          <div className="relative w-64 h-64 mx-auto md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-white">
+            <Image
+              src={image}
+              alt={name}
+              width={600}
+              height={700}
+              priority
+              className="rounded-3xl object-cover shadow-2xl"
+            />
+          </div>
         </div> */}
         {/* Doctor's photograph: square protrait */}
         <div className="mx-auto w-1/2 max-w-sm md:w-full">
