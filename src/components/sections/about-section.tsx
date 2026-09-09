@@ -46,7 +46,7 @@ export default async function AboutSection({
             />
           </div>
         </div> */}
-        {/* Doctor's photograph: square protrait */}
+        {/* Doctor's photograph: square portrait */}
         <div className="mx-auto w-1/2 max-w-sm md:w-full">
           <div className="overflow-hidden rounded-3xl border-4 border-white bg-white shadow-2xl">
             <Image
