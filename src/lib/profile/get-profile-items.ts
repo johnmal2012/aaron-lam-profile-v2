@@ -20,24 +20,20 @@ export function getProfileItems(profile: PhysicianProfile) {
       value: profile.email,
       type: 'info',
     },
+
+    {
+      id: 'clinics',
+      label: 'Clinics',
+      type: 'clinics' as const,
+    },
+
     {
       id: 'phone',
       label: 'Phone',
       value: profile.phone,
       type: 'info',
     },
-    {
-      id: 'clinic-name',
-      label: 'Clinic Name',
-      value: profile.clinicName,
-      type: 'info',
-    },
-    {
-      id: 'clinic-address',
-      label: 'Clinic Address',
-      value: profile.clinicAddress,
-      type: 'info',
-    },
+
     {
       id: 'logo',
       label: 'Logo',
@@ -64,7 +60,7 @@ export function getProfileItems(profile: PhysicianProfile) {
     {
       id: 'expertise',
       label: 'Expertise',
-      type: 'expertise',
+      type: 'expertise' as const,
     },
   ] as const;
 }

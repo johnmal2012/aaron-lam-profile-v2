@@ -280,9 +280,9 @@ export default async function DashboardPage() {
 
                   <td className="px-4 py-2">{profile.name}</td>
 
-                  <td className="px-4 py-2">{profile.clinicName}</td>
+                  <td className="px-4 py-2">{profile.clinics[0]?.name}</td>
 
-                  <td className="px-4 py-2">{profile.clinicAddress}</td>
+                  <td className="px-4 py-2">{profile.clinics[0]?.address}</td>
 
                   <td className="px-4 py-2 text-center">
                     <DeleteProfileButton profileId={profile.id} />
@@ -320,9 +320,9 @@ export default async function DashboardPage() {
 
                   <td className="px-4 py-2">{profile.name}</td>
 
-                  <td className="px-4 py-2">{profile.clinicName}</td>
+                  <td className="px-4 py-2">{profile.clinics[0]?.name}</td>
 
-                  <td className="px-4 py-2">{profile.clinicAddress}</td>
+                  <td className="px-4 py-2">{profile.clinics[0]?.address}</td>
 
                   <td className="px-4 py-2 text-center">
                     <RestoreProfileButton profileId={profile.id} />

@@ -34,7 +34,7 @@ export default async function PhysicianPage() {
 
   const { profile, sections, navItems } = websiteData;
 
-  console.log('sections: ', sections);
+//   console.log('sections: ', sections);
 
   if (!sections) {
     return <NoSectionState />;
@@ -46,7 +46,8 @@ export default async function PhysicianPage() {
         navItems={navItems}
         logo={profile.logo ?? ''}
         specialty={profile.specialty ?? ''}
-        clinicName={profile.clinicName ?? ''}
+        // clinicName={profile.clinicName ?? ''}
+        clinics={profile.clinics ?? []}
         linkName={profile.linkName ?? ''}
         footCareLink={profile.footCareLink ?? ''}
       />
@@ -61,8 +62,9 @@ export default async function PhysicianPage() {
       ))}
 
       <FooterSection
-        clinicName={profile.clinicName ?? ''}
-        clinicAddress={profile.clinicAddress ?? ''}
+        // clinicName={profile.clinicName ?? ''}
+        // clinicAddress={profile.clinicAddress ?? ''}
+        clinics={profile.clinics ?? []}
       />
     </main>
   );

@@ -106,7 +106,8 @@ export function SectionRenderer({
           title={section.title ?? ''}
           phone={profile.phone ?? ''}
           email={profile.email ?? ''}
-          address={profile.clinicAddress ?? ''}
+          //   address={profile.clinicAddress ?? ''}
+          clinics={profile.clinics ?? []}
           slug={section.slug ?? ''}
           background={background}
         />
@@ -117,7 +118,8 @@ export function SectionRenderer({
         <MapSection
           //   location={profile.location ?? ''}
           location={section.title ?? ''}
-          address={profile.clinicAddress ?? ''}
+          //   address={profile.clinicAddress ?? ''}
+          clinics={profile.clinics ?? []}
           slug={section.slug ?? ''}
           background={background}
         />

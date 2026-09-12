@@ -1,0 +1,1 @@
+ALTER TABLE "physician_profile" ALTER COLUMN "expertise" SET NOT NULL;

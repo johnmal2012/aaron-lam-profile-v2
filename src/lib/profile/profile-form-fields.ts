@@ -17,9 +17,16 @@ type InputField = BaseField & {
   helperText?: string;
 };
 
-export type ProfileFieldConfig  = ImageField | InputField;
+type TextareaField = BaseField & {
+  type: 'textarea';
+  name: keyof PhysicianProfileFormInput;
+  placeholder?: string;
+  helperText?: string;
+};
 
-export const profileFormFields: ProfileFieldConfig [] = [
+export type ProfileFieldConfig = ImageField | InputField | TextareaField;
+
+export const profileFormFields: ProfileFieldConfig[] = [
   {
     id: 'image',
     type: 'image',
@@ -65,21 +72,40 @@ export const profileFormFields: ProfileFieldConfig [] = [
     placeholder: 'e.g., Board-Certified Podiatric Surgeon',
     required: false,
   },
+  //   {
+  //     id: 'clinicName',
+  //     name: 'clinicName',
+  //     type: 'input',
+  //     label: 'Clinic Name',
+  //     placeholder: 'e.g., Meimo Foot & Ankle',
+  //     required: true,
+  //   },
+  //   {
+  //     id: 'clinicAddress',
+  //     name: 'clinicAddress',
+  //     type: 'input',
+  //     label: 'Clinic Address',
+  //     placeholder: 'e.g., 4802 Tenth Avenue Brooklyn, NY 11219',
+  //     required: true,
+  //   },
   {
-    id: 'clinicName',
-    name: 'clinicName',
-    type: 'input',
-    label: 'Clinic Name',
-    placeholder: 'e.g., Meimo Foot & Ankle',
+    id: 'clinicNames',
+    name: 'clinicNames',
+    type: 'textarea',
+    label: 'Clinic Names',
+    placeholder: 'e.g., Meimo Bone & Joint center',
     required: true,
+    helperText: 'Enter one clinic name per line.',
   },
   {
-    id: 'clinicAddress',
-    name: 'clinicAddress',
-    type: 'input',
-    label: 'Clinic Address',
-    placeholder: 'e.g., 4802 Tenth Avenue Brooklyn, NY 11219',
+    id: 'clinicAddresses',
+    name: 'clinicAddresses',
+    type: 'textarea',
+    label: 'Clinic Addresses',
+    placeholder: 'e.g., 6010 Bay Parkway, 7th & 8th Floors, Brooklyn, NY 11204',
     required: true,
+    helperText:
+      'Enter one address per line in the same order as the clinic names.',
   },
   {
     id: 'logo',
@@ -114,13 +140,32 @@ export const profileFormFields: ProfileFieldConfig [] = [
     required: false,
     helperText: 'URL must begin with https:// or http://',
   },
+  //   {
+  //     id: 'expertise',
+  //     name: 'expertise',
+  //     type: 'input',
+  //     label: 'Expertise',
+  //     placeholder: 'e.g., Sports Injuries, Foot Surgery, bunions',
+  //     required: false,
+  //     helperText: 'Items must be separated by commas',
+  //   },
   {
-    id: 'expertise',
-    name: 'expertise',
-    type: 'input',
+    id: 'expertiseTexts',
+    name: 'expertiseTexts',
     label: 'Expertise',
-    placeholder: 'e.g., Sports Injuries, Foot Surgery, bunions',
-    required: false,
-    helperText: 'Items must be separated by commas',
+    type: 'textarea',
+    placeholder:
+      'Sports Injuries\nFoot Surgery\nDiabetic Foot Care\nCustom Orthotics',
+    helperText: 'Enter one expertise text per line.',
+  },
+  {
+    id: 'expertiseUrls',
+    name: 'expertiseUrls',
+    label: 'Expertise URLs',
+    type: 'textarea',
+    placeholder:
+      'https://example.com/sports-injuries\nhttps://example.com/foot-surgery\nhttps://example.com/diabetic-foot-care\nhttps://example.com/custom-orthotics',
+    helperText:
+      'Enter one url per line in the same order as the expertise texts.',
   },
 ];

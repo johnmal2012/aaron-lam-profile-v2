@@ -41,6 +41,8 @@ export default async function ProfilePage() {
 
   const { profile, currentUser, items } = profileData;
 
+//   console.log('profile: ', profile);
+
   return (
     <div className="container mx-auto space-y-6 py-10">
       <ProfileHeader />

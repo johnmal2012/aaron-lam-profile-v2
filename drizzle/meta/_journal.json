@@ -8,6 +8,20 @@
       "when": 1785424161170,
       "tag": "0000_chunky_klaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788984195456,
+      "tag": "0001_third_psylocke",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789138496093,
+      "tag": "0002_sticky_mystique",
+      "breakpoints": true
     }
   ]
 }

@@ -15,12 +15,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NavItem } from '@/lib/types/navigation';
+import { Clinic } from '@/lib/types/clinic';
 
 interface NavbarProps {
   navItems: NavItem[];
   logo: string;
   specialty: string;
-  clinicName: string;
+  //   clinicName: string;
+  clinics: Clinic[];
   linkName: string;
   footCareLink: string;
 }
@@ -29,7 +31,8 @@ export default function Navbar({
   navItems,
   logo,
   specialty,
-  clinicName,
+  //   clinicName,
+  clinics,
   linkName,
   footCareLink,
 }: NavbarProps) {
@@ -84,7 +87,7 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-50 border-b bg-stone-100/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center px-4 py-3 sm:px-6 lg:py-4">
-        {/* Logo */}
+        {/* Logo icon */}
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:h-11 sm:w-11">
             <Stethoscope className="h-5 w-5 shrink-0 text-blue-700" />
@@ -131,7 +134,7 @@ export default function Navbar({
           </Link>
         </nav>
 
-        {/* Mobile Nav */}
+        {/* Mobile Nav / Tablet Navigation  */}
         <div className="ml-auto md:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -159,12 +162,58 @@ export default function Navbar({
                 "
             >
               <SheetHeader className="pb-2">
-                <SheetTitle className="text-lg font-semibold tracking-tight text-slate-900">
-                  {clinicName}
+                <SheetTitle className="text-md font-semibold tracking-tight text-slate-900">
+                  Clinics
                 </SheetTitle>
-                <SheetDescription className="text-sm text-slate-500">
-                  {logo}
+                <SheetDescription className="text-[10px] text-slate-500">
+                  {/* {logo} */}
+                  {specialty}
                 </SheetDescription>
+                <div className="mt-2 space-y-3 text-left">
+                  {' '}
+                  {clinics.length > 0 ? (
+                    clinics.map((clinic, index) => (
+                      <div
+                        key={`${clinic.name}-${index}`}
+                        className={cn(
+                          'space-y-0.5',
+                          index > 0 && 'border-t border-slate-300 pt-3',
+                        )}
+                      >
+                        {' '}
+                        <p className="text-[10px] italic font-medium leading-tight text-slate-700">
+                        </p>{' '}
+                        {/* <p className="wrap-break-word text-[11px] leading-relaxed text-slate-500">
+                          {' '}
+                          {clinic.address}{' '}
+                        </p>{' '} */}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-slate-500">
+                      {' '}
+                      No clinic locations available.{' '}
+                    </p>
+                  )}{' '}
+                </div>
+                {/* <div className="mt-2 space-y-3">
+                  {clinics.length > 0 ? (
+                    clinics.map((clinic, index) => (
+                      <div key={`${clinic.name}-${index}`}>
+                        <p className="text-sm font-medium text-slate-700">
+                          {clinic.name}
+                        </p>
+                        <p className="text-sm leading-relaxed text-slate-500">
+                          {clinic.address}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-slate-500">
+                      No clinic locations available.
+                    </p>
+                  )}
+                </div> */}
               </SheetHeader>
 
               <nav className="mt-2 flex flex-col gap-2">

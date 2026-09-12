@@ -39,9 +39,15 @@ export function ProfileDisplayField({
           <FieldLabel className="ml-2.5 text-sm text-muted-foreground">
             Expertise
           </FieldLabel>
+
           <div className="mt-2 flex flex-wrap gap-2">
-            {profile.expertise?.map((item: string) => (
-              <Badge key={item} variant="secondary" className="h-auto
+            {profile.expertise?.length ? (
+              profile.expertise.map((item, index) => (
+                <Badge
+                  key={`${item.text}-${item.url}-${index}`}
+                  variant="secondary"
+                  className="
+                h-auto
                 rounded-full
                 border
                 border-blue-200
@@ -50,10 +56,43 @@ export function ProfileDisplayField({
                 py-2
                 text-sm
                 font-medium
-                text-blue-700">
-                {item}
-              </Badge>
-            ))}
+                text-blue-700
+              "
+                >
+                  {item.text}
+                </Badge>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground">—</p>
+            )}
+          </div>
+        </Field>
+      );
+
+    case 'clinics':
+      return (
+        <Field>
+          <FieldLabel className="ml-2.5 text-sm text-muted-foreground">
+            Clinics
+          </FieldLabel>
+
+          <div className="mt-3 space-y-4">
+            {profile.clinics?.length ? (
+              profile.clinics.map((clinic, index) => (
+                <div
+                  key={`${clinic.name}-${clinic.address}-${index}`}
+                  className="rounded-lg border bg-muted/20 p-4"
+                >
+                  <p className="font-semibold">{clinic.name}</p>
+
+                  <p className="mt-1 wrap-break-word text-sm text-muted-foreground">
+                    {clinic.address}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground">—</p>
+            )}
           </div>
         </Field>
       );

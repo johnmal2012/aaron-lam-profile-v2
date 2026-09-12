@@ -10,6 +10,7 @@ import {
 } from '@/db/schema';
 import { createCredentialUser } from '@/lib/auth/create-credential-user';
 import { eq } from 'drizzle-orm';
+import type { Clinic } from '@/lib/types/clinic';
 
 async function seed() {
   console.log('Seeding database...');
@@ -55,8 +56,18 @@ async function seed() {
       image:
         'https://dq7f2nilk5.ufs.sh/f/GdXQXOsRC2BExsAVeb7tmwzjlM3SC42auIkQh8LsgKcb7UN0',
       imageKey: 'GdXQXOsRC2BExsAVeb7tmwzjlM3SC42auIkQh8LsgKcb7UN0',
-      clinicName: 'Maimonides Foot & Ankle',
-      clinicAddress: '4802 Tenth Avenue Brooklyn, NY 11219',
+      //   clinicName: 'Maimonides Foot & Ankle',
+      //   clinicAddress: '4802 Tenth Avenue Brooklyn, NY 11219',
+      clinics: [
+        {
+          name: 'Maimonides Foot & Ankle',
+          address: '4802 Tenth Avenue Brooklyn, NY 11219',
+        },
+        {
+          name: 'Queens Foot & Ankle Center',
+          address: '123 Queens Boulevard, Queens, NY 11375',
+        },
+      ],
       phone: '(718) 123-4567',
       email: 'info@hudsonfootankle.com',
       //   address: '4802 Tenth Avenue Brooklyn, NY 11219',
@@ -64,10 +75,14 @@ async function seed() {
       linkName: 'Foot Care',
       footCareLink: 'https://www.footcaremd.org/',
       expertise: [
-        'Sports Injuries',
-        'Foot Surgery',
-        'Diabetic Foot Care',
-        'Custom Orthotics',
+        {
+          text: 'Sports Injuries',
+          url: 'https://www.footcaremd.org/sports-injuries'
+        },
+        {
+          text: 'Foot Surgery',
+          url: 'https://www.footcaremd.org/foot-surgery'
+        },
       ],
       isActive: true,
       deletedAt: null,

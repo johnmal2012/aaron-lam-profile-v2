@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: profile?.name ?? 'Dr. Arron Lam',
-    description: profile?.clinicName ?? 'Dr. Arron Lam Site',
+    description: profile?.specialty ?? 'Foot and Ankle Surgeon',
   };
 }
 

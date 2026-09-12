@@ -9,6 +9,8 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import { user } from '@/db/schema/auth-schema';
+import { Clinic } from '@/lib/types/clinic';
+import { Expertise } from '@/lib/types/expertise';
 
 export const physicianProfile = pgTable(
   'physician_profile',
@@ -26,15 +28,15 @@ export const physicianProfile = pgTable(
     title: text('title'),
     image: text('image'),
     imageKey: text('image_key'),
-    clinicName: text('clinic_name'),
-    clinicAddress: text('clinic_address'),
+    clinics: jsonb('clinics').$type<Clinic[]>().notNull().default([]),
     phone: text('phone'),
     email: text('email'),
     // address: text('address'),
     location: text('location'),
     linkName: text('link_name'),
     footCareLink: text('footcare_link'),
-    expertise: jsonb('expertise').$type<string[]>().default([]),
+    // expertise: jsonb('expertise').$type<string[]>().default([]),
+    expertise: jsonb('expertise').$type<Expertise[]>().notNull().default([]),
     isActive: boolean('is_active').notNull().default(true),
     deletedAt: timestamp('deleted_at'),
     createdAt: timestamp('created_at').defaultNow(),

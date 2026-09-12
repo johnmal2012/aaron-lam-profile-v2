@@ -55,7 +55,9 @@ export function ProfileForm({
         toast.error(error);
         return;
       }
-      toast.success('Profile created/updated successfully');
+      toast.success(profile
+          ? 'Profile updated successfully'
+          : 'Profile created successfully',);
       router.push('/profile');
     } catch (err) {
       toast.error('Something went wrong. Please try again.');
