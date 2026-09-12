@@ -182,6 +182,8 @@ export default function Navbar({
                       >
                         {' '}
                         <p className="text-[10px] italic font-medium leading-tight text-slate-700">
+                          {' '}
+                          {clinic.name}{' '}
                         </p>{' '}
                         {/* <p className="wrap-break-word text-[11px] leading-relaxed text-slate-500">
                           {' '}
