@@ -23,10 +23,7 @@ export default async function ExpertiseSection({
   const mdx = await renderMDX(content);
 
   return (
-    <section
-      id={slug}
-      className={cn('scroll-mt-28 px-6 py-12', background)}
-    >
+    <section id={slug} className={cn('scroll-mt-28 px-6 py-12', background)}>
       <div className="mx-auto max-w-6xl">
         <Card className="rounded-3xl p-10 shadow-xl">
           <h2 className="mb-8 text-3xl font-bold">{title}</h2>
@@ -48,26 +45,16 @@ export default async function ExpertiseSection({
                 >
                   <Badge
                     variant="secondary"
-                    className="
-                      flex
-                      h-auto
-                      min-h-10
-                      w-full
-                      cursor-pointer
-                      items-center
-                      justify-center
-                      rounded-full
-                      border
-                      border-blue-200
-                      bg-blue-50
-                      px-3
-                      py-2
-                      text-center
-                      text-sm
-                      font-medium
-                      text-blue-700
-                      hover:bg-blue-100
-                    "
+                    className={cn(
+                      'flex h-auto min-h-10 w-full',
+                      'cursor-pointer items-center justify-center',
+                      'rounded-full border border-blue-200 bg-blue-50',
+                      'px-3 py-2',
+                      'text-center text-sm font-medium leading-tight',
+                      'text-blue-700',
+                      'whitespace-normal wrap-break-word',
+                      'hover:bg-blue-100',
+                    )}
                   >
                     {item.text}
                   </Badge>
