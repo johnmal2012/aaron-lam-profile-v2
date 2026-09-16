@@ -85,9 +85,15 @@ export default function Navbar({
   }, [sections]);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-stone-100/90 backdrop-blur-md">
+    <header className="
+        sticky
+        top-0
+        z-50
+        border-b
+        bg-stone-100/95
+        backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center px-4 py-3 sm:px-6 lg:py-4">
-        {/* Logo icon */}
+        {/* Logo */}
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:h-11 sm:w-11">
             <Stethoscope className="h-5 w-5 shrink-0 text-blue-700" />

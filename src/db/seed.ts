@@ -10,7 +10,6 @@ import {
 } from '@/db/schema';
 import { createCredentialUser } from '@/lib/auth/create-credential-user';
 import { eq } from 'drizzle-orm';
-import type { Clinic } from '@/lib/types/clinic';
 
 async function seed() {
   console.log('Seeding database...');
@@ -24,7 +23,7 @@ async function seed() {
   await createCredentialUser({
     name: 'lam',
     email,
-    password: '123456',
+    password: '12345678',
     role: USER_ROLE.ADMIN,
   });
 
@@ -51,21 +50,25 @@ async function seed() {
       logo: 'Dr. Lam',
       name: 'Dr. Nikki Lam',
       boardSpecialty: 'Board-Certified Foot & Ankle',
-      specialty: 'Specialist	Foot & Ankle Specialist',
+      specialty: 'Specialist Foot & Ankle Specialist',
       title: 'Board-Certified Podiatric Surgeon',
       image:
-        'https://dq7f2nilk5.ufs.sh/f/GdXQXOsRC2BExsAVeb7tmwzjlM3SC42auIkQh8LsgKcb7UN0',
-      imageKey: 'GdXQXOsRC2BExsAVeb7tmwzjlM3SC42auIkQh8LsgKcb7UN0',
+        'https://ffkf9c9vt3.ufs.sh/f/mm5bHxn2kR9wLfvkx9BsyOhk8MnVworU43SQBglYctdeJHX9',
+      imageKey: 'mm5bHxn2kR9wLfvkx9BsyOhk8MnVworU43SQBglYctdeJHX9',
       //   clinicName: 'Maimonides Foot & Ankle',
       //   clinicAddress: '4802 Tenth Avenue Brooklyn, NY 11219',
       clinics: [
         {
           name: 'Maimonides Foot & Ankle',
           address: '4802 Tenth Avenue Brooklyn, NY 11219',
+          latitude: 40.6382,
+          longitude: -74.0115,
         },
         {
           name: 'Queens Foot & Ankle Center',
           address: '123 Queens Boulevard, Queens, NY 11375',
+          latitude: 40.7282,
+          longitude: -73.7949,
         },
       ],
       phone: '(718) 123-4567',
@@ -77,13 +80,26 @@ async function seed() {
       expertise: [
         {
           text: 'Sports Injuries',
-          url: 'https://www.footcaremd.org/sports-injuries'
+          url: 'https://www.footcaremd.org/sports-injuries',
         },
         {
           text: 'Foot Surgery',
-          url: 'https://www.footcaremd.org/foot-surgery'
+          url: 'https://www.footcaremd.org/foot-surgery',
         },
       ],
+      //   navItems: [
+      //     'about',
+      //     'education',
+      //     'expertise',
+      //     'research',
+      //     'philosophy',
+      //     'hours',
+      //     'insurance',
+      //     'contact',
+      //     'location',
+      //   ],
+      //   createdAt: '2026-05-19 23:07:31.855239',
+      //   updatedAt: '2026-05-20 19:50:13.556',
       isActive: true,
       deletedAt: null,
       //   user_id: '8c2a700c-3b36-405d-8049-492d89acfb75',
@@ -103,7 +119,7 @@ async function seed() {
       slug: 'about',
       title: '',
       content:
-        '### Compassionate Foot & Ankle Care\n\nDr. Lam specializes in advanced foot and ankle treatments focused on restoring mobility, relieving pain, and improving quality of life.\n\nWith over 5 years of clinical experience, Dr. Lam combines modern surgical techniques with compassionate patient-centered care.',
+        '### Compassionate Foot & Ankle Care\n\nDr. Lam specializes in advanced foot and ankle treatments focused on restoring mobility, relieving pain, and improving quality of life.\n\nWith over 6 years of clinical experience, Dr. Lam combines modern surgical techniques with compassionate patient-centered care.',
       displayOrder: 1,
       isActive: true,
       deletedAt: null,
@@ -136,7 +152,7 @@ async function seed() {
       deletedAt: null,
     },
     {
-      slug: 'hours',
+      slug: 'office_hours',
       title: 'Office Hours',
       content:
         '| Day | Hours |\r\n| --- | --- |\r\n| Monday | 8:00 AM – 5:00 PM |\r\n| Tuesday | 8:00 AM – 5:00 PM |\r\n| Wednesday | 9:00 AM – 6:00 PM |\r\n| Thursday | 8:00 AM – 5:00 PM |\r\n| Friday | 8:00 AM – 2:00 PM |\r\n| Saturday | By Appointment |\r\n| Sunday | Closed |',
@@ -159,22 +175,6 @@ async function seed() {
       content:
         '### Current Research Interests\r\n\r\n- Minimally invasive bunion correction\r\n- Regenerative therapies for tendon injuries\r\n- Diabetic wound prevention\r\n- Sports rehabilitation protocols\r\n\r\n### Publications\r\n\r\n- Journal of Foot & Ankle Surgery\r\n- Podiatry Today\r\n- International Journal of Sports Medicine',
       displayOrder: 8,
-      isActive: true,
-      deletedAt: null,
-    },
-    {
-      slug: 'contact',
-      title: 'Contact Information',
-      content: '',
-      displayOrder: 8,
-      isActive: true,
-      deletedAt: null,
-    },
-    {
-      slug: 'location',
-      title: 'Office Location',
-      content: '',
-      displayOrder: 9,
       isActive: true,
       deletedAt: null,
     },

@@ -1,6 +1,8 @@
+// Instead of storing register and error, only store metadata
 import { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
 
 type BaseField = {
+  //   name: keyof PhysicianProfileFormInput | 'image';
   id: string;
   label: string;
   required?: boolean;
@@ -17,6 +19,7 @@ type InputField = BaseField & {
   helperText?: string;
 };
 
+// export type ProfileFieldConfig  = ImageField | InputField;
 type TextareaField = BaseField & {
   type: 'textarea';
   name: keyof PhysicianProfileFormInput;
@@ -26,6 +29,7 @@ type TextareaField = BaseField & {
 
 export type ProfileFieldConfig = ImageField | InputField | TextareaField;
 
+// Define field configurations with their properties
 export const profileFormFields: ProfileFieldConfig[] = [
   {
     id: 'image',
@@ -88,12 +92,13 @@ export const profileFormFields: ProfileFieldConfig[] = [
   //     placeholder: 'e.g., 4802 Tenth Avenue Brooklyn, NY 11219',
   //     required: true,
   //   },
+  // Each line represents one clinic
   {
     id: 'clinicNames',
     name: 'clinicNames',
     type: 'textarea',
     label: 'Clinic Names',
-    placeholder: 'e.g., Meimo Bone & Joint center',
+    placeholder: 'e.g., Maimonides Foot & Ankle\nQueens Foot & Ankle Center',
     required: true,
     helperText: 'Enter one clinic name per line.',
   },
@@ -102,10 +107,29 @@ export const profileFormFields: ProfileFieldConfig[] = [
     name: 'clinicAddresses',
     type: 'textarea',
     label: 'Clinic Addresses',
-    placeholder: 'e.g., 6010 Bay Parkway, 7th & 8th Floors, Brooklyn, NY 11204',
+    placeholder:
+      'e.g., 6010 Bay Parkway, 7th & 8th Floors, Brooklyn, NY 11204\nQueens Foot & Ankle Center, 136-20 38th Avenue, Suite 1, Flushing, NY 11354',
     required: true,
     helperText:
       'Enter one address per line in the same order as the clinic names.',
+  },
+  {
+    id: 'clinicLatitudes',
+    name: 'clinicLatitudes',
+    type: 'textarea',
+    label: 'Clinic Latitudes',
+    placeholder: 'e.g., 40.6382\n40.7282',
+    required: true,
+    helperText: 'Enter one latitude per line in the same order as the clinic addresses. Valid range: -90 to 90.',
+  },
+  {
+    id: 'clinicLongitudes',
+    name: 'clinicLongitudes',
+    type: 'textarea',
+    label: 'Clinic Longitudes',
+    placeholder: 'e.g., -74.0115\n-73.7949',
+    required: true,
+    helperText: 'Enter one longitude per line in the same order as the clinic addresses. Valid range: -180 to 180.',
   },
   {
     id: 'logo',
@@ -154,8 +178,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     name: 'expertiseTexts',
     label: 'Expertise',
     type: 'textarea',
-    placeholder:
-      'Sports Injuries\nFoot Surgery\nDiabetic Foot Care\nCustom Orthotics',
+    placeholder: 'e.g., Sports Injuries\nFoot Surgery',
     helperText: 'Enter one expertise text per line.',
   },
   {
@@ -164,7 +187,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     label: 'Expertise URLs',
     type: 'textarea',
     placeholder:
-      'https://example.com/sports-injuries\nhttps://example.com/foot-surgery\nhttps://example.com/diabetic-foot-care\nhttps://example.com/custom-orthotics',
+      'e.g., https://example.com/sports-injuries\nhttps://example.com/foot-surgery',
     helperText:
       'Enter one url per line in the same order as the expertise texts.',
   },

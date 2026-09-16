@@ -9,6 +9,14 @@ export function clinicsToFormValues(clinics: Clinic[] | null | undefined) {
     clinicNames: validClinics.map((clinic) => clinic.name).join('\n'),
 
     clinicAddresses: validClinics.map((clinic) => clinic.address).join('\n'),
+
+    clinicLatitudes: validClinics
+      .map((clinic) => String(clinic.latitude))
+      .join('\n'),
+
+    clinicLongitudes: validClinics
+      .map((clinic) => String(clinic.longitude))
+      .join('\n'),
   };
 }
 
@@ -28,7 +36,6 @@ export function getProfileDefaultValues(
   profile?: PhysicianProfile,
 ): PhysicianProfileFormInput {
   const clinicValues = clinicsToFormValues(profile?.clinics);
-
   const expertiseValues = expertiseToFormValues(profile?.expertise);
 
   return {
@@ -37,23 +44,14 @@ export function getProfileDefaultValues(
     boardSpecialty: profile?.boardSpecialty ?? '',
     specialty: profile?.specialty ?? '',
     title: profile?.title ?? '',
-    // clinicName: profile?.clinicName ?? '',
-    // clinicAddress: profile?.clinicAddress ?? '',
-    // clinics:
-    //   profile?.clinics
-    //     ?.map(
-    //       (clinic) =>
-    //         `${clinic.name} | ${clinic.address}`,
-    //     )
-    //     .join('\n') ?? '',
     clinicNames: clinicValues.clinicNames,
     clinicAddresses: clinicValues.clinicAddresses,
+    clinicLatitudes: clinicValues.clinicLatitudes,
+    clinicLongitudes: clinicValues.clinicLongitudes,
     phone: profile?.phone ?? '',
     email: profile?.email ?? '',
-    // location: profile?.location ?? '',
     linkName: profile?.linkName ?? '',
     footCareLink: profile?.footCareLink ?? '',
-    // expertise: profile?.expertise?.join(', ') ?? '',
     expertiseTexts: expertiseValues.expertiseTexts,
     expertiseUrls: expertiseValues.expertiseUrls,
   };

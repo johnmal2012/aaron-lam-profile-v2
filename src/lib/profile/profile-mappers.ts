@@ -1,96 +1,76 @@
-import { physicianProfileFormSchema } from '@/lib/validations/physician-profile';
-import z from 'zod';
 import type { Clinic } from '@/lib/types/clinic';
 import type { Expertise } from '@/lib/types/expertise';
+import type { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
 
-function splitLines(value: string | undefined | null) {
-  return (value ?? '')
+function splitLines(value: string): string[] {
+  return value
     .split('\n')
-    .map((value) => value.trim())
+    .map((item) => item.trim())
     .filter(Boolean);
 }
 
 // Convert form clinic fields into the Clinic[] format used by the database
-export function formValuesToClinics(
-  clinicNames: string,
-  clinicAddresses: string,
+function formValuesToClinics(
+  data: Pick<
+    PhysicianProfileFormInput,
+    | 'clinicNames'
+    | 'clinicAddresses'
+    | 'clinicLatitudes'
+    | 'clinicLongitudes'
+  >,
 ): Clinic[] {
-  const names = splitLines(clinicNames);
-  const addresses = splitLines(clinicAddresses);
+  const names = splitLines(data.clinicNames);
+  const addresses = splitLines(data.clinicAddresses);
+  const latitudes = splitLines(data.clinicLatitudes);
+  const longitudes = splitLines(data.clinicLongitudes);
 
-  const clinicCount = Math.max(names.length, addresses.length);
-
-  return Array.from({ length: clinicCount }, (_, index) => ({
-    name: names[index] ?? '',
-    address: addresses[index] ?? '',
-  })).filter((clinic) => clinic.name && clinic.address);
+  return names.map((name, index) => ({
+    name,
+    address: addresses[index],
+    latitude: Number(latitudes[index]),
+    longitude: Number(longitudes[index]),
+  }));
 }
 
 // Convert form expertise fields into the Expertise[] format used by the database.
-export function formValuesToExpertise(
-  expertiseTexts: string,
-  expertiseUrls: string,
+function formValuesToExpertise(
+  data: Pick<
+    PhysicianProfileFormInput,
+    'expertiseTexts' | 'expertiseUrls'
+  >,
 ): Expertise[] {
-  const texts = splitLines(expertiseTexts);
-  const urls = splitLines(expertiseUrls);
+  const texts = splitLines(data.expertiseTexts);
+  const urls = splitLines(data.expertiseUrls);
 
-  const expertiseCount = Math.max(texts.length, urls.length);
-
-  return Array.from({ length: expertiseCount }, (_, index) => ({
-    text: texts[index] ?? '',
-    url: urls[index] ?? '',
-  })).filter((item) => item.text && item.url);
+  return texts.map((text, index) => ({
+    text,
+    url: urls[index],
+  }));
 }
 
-// Convert database Clinic[] into the two form fields
-export function clinicsToFormValues(clinics: Clinic[] | null | undefined) {
-  const validClinics = clinics ?? [];
-  return {
-    clinicNames: validClinics.map((clinic) => clinic.name).join('\n'),
-    clinicAddresses: validClinics.map((clinic) => clinic.address).join('\n'),
-  };
-}
+// Payload sent to the server action.
+// The four clinic textarea fields and the two expertise textarea fields are form-only fields and are converted into their database structures below
+export type PhysicianProfilePayload = Omit<
+  PhysicianProfileFormInput,
+  | 'clinicNames'
+  | 'clinicAddresses'
+  | 'clinicLatitudes'
+  | 'clinicLongitudes'
+  | 'expertiseTexts'
+  | 'expertiseUrls'
+> & {
+  clinics: Clinic[];
+  expertise: Expertise[];
+};
 
-// Convert database Expertise[] into the two form fields.
-export function expertiseToFormValues(
-  expertise: Expertise[] | null | undefined,
-) {
-  const validExpertise = expertise ?? [];
-
-  return {
-    expertiseTexts: validExpertise.map((item) => item.text).join('\n'),
-
-    expertiseUrls: validExpertise.map((item) => item.url).join('\n'),
-  };
-}
-
-// Convert the complete form values into the database payload
-// export function toProfilePayload(
-//   values: z.output<typeof physicianProfileFormSchema>,
-// ) {
-//   const clinics = formValuesToClinics(
-//     values.clinicNames,
-//     values.clinicAddresses,
-//   );
-
-//   return {
-//     ...values,
-//     clinics,
-//     expertise: (values.expertise ?? '')
-//       .split(',')
-//       .map((x) => x.trim())
-//       .filter(Boolean),
-
-//       // Do not send the form-only fields to the database.
-//       clinicNames: undefined, clinicAddresses: undefined,
-//   };
-// }
 export function toProfilePayload(
-  values: z.output<typeof physicianProfileFormSchema>,
-) {
+  values: PhysicianProfileFormInput,
+): PhysicianProfilePayload {
   const {
     clinicNames,
     clinicAddresses,
+    clinicLatitudes,
+    clinicLongitudes,
     expertiseTexts,
     expertiseUrls,
     ...rest
@@ -99,8 +79,16 @@ export function toProfilePayload(
   return {
     ...rest,
 
-    clinics: formValuesToClinics(clinicNames, clinicAddresses),
+    clinics: formValuesToClinics({
+      clinicNames,
+      clinicAddresses,
+      clinicLatitudes,
+      clinicLongitudes,
+    }),
 
-    expertise: formValuesToExpertise(expertiseTexts, expertiseUrls),
+    expertise: formValuesToExpertise({
+      expertiseTexts,
+      expertiseUrls,
+    }),
   };
 }

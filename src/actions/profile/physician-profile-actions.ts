@@ -1,25 +1,30 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+
 import { eq } from 'drizzle-orm';
+
 import { db } from '@/db/db';
+
 import { physicianProfile } from '@/db/schema/physician-profile';
+
 import {
   physicianProfileSchema,
-  PhysicianProfileInput,
 } from '@/lib/validations/physician-profile';
 import { requireAdmin, requireLogin } from '@/lib/auth/auth-utils';
 import { APIError } from 'better-auth/api';
+import type { PhysicianProfilePayload } from '@/lib/profile/profile-mappers';
 
-/* -------------------------------------------------- */
-/* CREATE */
-/* -------------------------------------------------- */
-
-export async function createPhysicianProfile(values: PhysicianProfileInput) {
+// CREATE
+export async function createPhysicianProfile(values: PhysicianProfilePayload) {
   await requireAdmin();
+
+  console.log('Received:', values);
 
   const validated = physicianProfileSchema.safeParse(values);
 
+  console.log(validated);
+  
   if (!validated.success) {
     return {
       error: 'Invalid profile data',
@@ -28,10 +33,12 @@ export async function createPhysicianProfile(values: PhysicianProfileInput) {
 
   try {
     const session = await requireLogin();
-    await db.insert(physicianProfile).values({
-      ...validated.data,
-      userId: session.user.id,
-    });
+    await db
+      .insert(physicianProfile)
+      .values({
+        ...validated.data,
+        userId: session.user.id,
+      });
 
     revalidatePath('/');
     revalidatePath('/profile');
@@ -47,13 +54,10 @@ export async function createPhysicianProfile(values: PhysicianProfileInput) {
   }
 }
 
-/* -------------------------------------------------- */
-/* UPDATE */
-/* -------------------------------------------------- */
-
+// UPDATE
 export async function updatePhysicianProfile(
   id: number,
-  values: PhysicianProfileInput,
+  values: PhysicianProfilePayload,
 ) {
   await requireAdmin();
 
@@ -88,10 +92,7 @@ export async function updatePhysicianProfile(
   }
 }
 
-/* -------------------------------------------------- */
-/* DELETE */
-/* -------------------------------------------------- */
-
+// DELETE
 export async function deletePhysicianProfile(profileId: number) {
   try {
     await requireAdmin();

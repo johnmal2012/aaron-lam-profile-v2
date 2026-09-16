@@ -1,10 +1,10 @@
 import { Card } from '@/components/ui/card';
-import { Clinic } from '@/lib/types/clinic';
+import type { Clinic } from '@/lib/types/clinic';
 import { cn } from '@/lib/utils';
+import { ClinicMapWrapper } from '@/components/sections/clinic-map-wrapper';
 
 interface MapSectionProps {
   location: string;
-  //   address: string;
   clinics: Clinic[];
   background: string;
   slug: string;
@@ -17,60 +17,115 @@ export default function MapSection({
   slug,
 }: MapSectionProps) {
   const validClinics = clinics.filter(
-    (clinic) => clinic.name?.trim() && clinic.address?.trim(),
+    (clinic) =>
+      clinic.name?.trim() &&
+      clinic.address?.trim() &&
+      Number.isFinite(clinic.latitude) &&
+      Number.isFinite(clinic.longitude) &&
+      clinic.latitude >= -90 &&
+      clinic.latitude <= 90 &&
+      clinic.longitude >= -180 &&
+      clinic.longitude <= 180,
   );
-  /* * Nothing to display. */ if (validClinics.length === 0) {
+
+  if (validClinics.length === 0) {
     return null;
   }
+
   return (
     <section
       id={slug}
-      className={cn('scroll-mt-28 px-4 py-10 sm:px-6 sm:py-12', background)}
+      className={cn(
+        // Important for sticky navbar
+        'relative isolate scroll-mt-20 px-4 py-10',
+        'sm:scroll-mt-24 sm:px-6 sm:py-12',
+        background,
+      )}
     >
-      {' '}
-      <div className="mx-auto max-w-6xl">
-        {' '}
-        {/* Section title */}{' '}
-        <h2 className="mb-8 text-3xl font-bold text-slate-900"> {location} </h2>{' '}
-        {/* Clinic locations */}{' '}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-          {' '}
+      <div className="relative z-0 mx-auto max-w-6xl space-y-8">
+        <h2 className="relative z-0 text-3xl font-bold text-slate-900">
+          {location}
+        </h2>
+
+        {/* OpenStreetMap / Leaflet map */}
+		{/* One OpenStreetMap map containing every clinic */}
+        <Card
+          className="
+            relative
+            z-0
+            overflow-hidden
+            rounded-3xl
+            p-3
+            shadow-xl
+            sm:p-4
+          "
+        >
+          <ClinicMapWrapper clinics={validClinics} />
+        </Card>
+
+        {/* Clinic list */}
+        <div className="relative z-0 grid grid-cols-1 gap-4 md:grid-cols-2">
           {validClinics.map((clinic, index) => (
             <Card
-              key={`${clinic.name}-${clinic.address}-${index}`}
-              className="overflow-hidden rounded-3xl shadow-xl"
+              key={`${clinic.name}-${clinic.latitude}-${clinic.longitude}-${index}`}
+              className="
+                relative
+                z-0
+                rounded-2xl
+                border
+                border-slate-200
+                p-5
+                shadow-sm
+              "
             >
-              {' '}
-              {/* Clinic information */}{' '}
-              <div className="border-b px-6 py-5 sm:px-8 sm:py-6">
-                {' '}
-                <h3 className="text-xl font-bold text-slate-900 sm:text-2xl">
-                  {' '}
-                  {clinic.name}{' '}
-                </h3>{' '}
-                <p className="mt-2 wrap-break-word text-sm text-slate-600 sm:text-base">
-                  {' '}
-                  {clinic.address}{' '}
-                </p>{' '}
-              </div>{' '}
-              {/* Google Map */}{' '}
-              <div className="h-80 w-full sm:h-96 md:h-80 lg:h-96">
-                {' '}
-                <iframe
-                  title={`${clinic.name} office location`}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(clinic.address)}&output=embed`}
-                  width="100%"
-                  height="100%"
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="block h-full w-full border-0"
-                />{' '}
-              </div>{' '}
+              <div className="flex gap-4">
+                <div
+                  className="
+                    flex
+                    size-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-teal-700
+                    text-sm
+                    font-bold
+                    text-white
+                  "
+                >
+                  {index + 1}
+                </div>
+
+                <div className="min-w-0">
+                  <h3 className="text-lg font-bold text-slate-900">
+                    {clinic.name}
+                  </h3>
+
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                    {clinic.address}
+                  </p>
+
+                  <a
+                    href={`https://www.openstreetmap.org/?mlat=${clinic.latitude}&mlon=${clinic.longitude}#map=17/${clinic.latitude}/${clinic.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="
+                      mt-2
+                      inline-block
+                      text-sm
+                      font-medium
+                      text-teal-700
+                      hover:underline
+                    "
+                  >
+                    Open map location
+                  </a>
+                </div>
+              </div>
             </Card>
-          ))}{' '}
-        </div>{' '}
-      </div>{' '}
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

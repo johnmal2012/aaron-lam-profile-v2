@@ -43,6 +43,7 @@ export function ProfileForm({
     defaultValues: getProfileDefaultValues(profile),
   });
 
+  // For server actions called from RHF, no need to  use useTransition
   async function onFormSubmit(values: PhysicianProfileFormInput) {
     try {
       const payload = toProfilePayload(values);
@@ -55,9 +56,11 @@ export function ProfileForm({
         toast.error(error);
         return;
       }
-      toast.success(profile
+      toast.success(
+        profile
           ? 'Profile updated successfully'
-          : 'Profile created successfully',);
+          : 'Profile created successfully',
+      );
       router.push('/profile');
     } catch (err) {
       toast.error('Something went wrong. Please try again.');
@@ -65,9 +68,17 @@ export function ProfileForm({
     }
   }
 
+  // temporary development - only error logger
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   return (
     <form
-      onSubmit={form.handleSubmit(onFormSubmit)}
+      onSubmit={form.handleSubmit(
+        onFormSubmit,
+        isDevelopment
+          ? (errors) => console.log('Validation errors:', errors)
+          : undefined,
+      )}
       className="container mx-auto py-10 space-y-6"
       noValidate
     >
