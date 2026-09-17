@@ -109,15 +109,7 @@ export default function MapSection({
                     href={`https://www.openstreetmap.org/?mlat=${clinic.latitude}&mlon=${clinic.longitude}#map=17/${clinic.latitude}/${clinic.longitude}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="
-                      mt-2
-                      inline-block
-                      text-sm
-                      font-medium
-                      text-teal-700
-                      hover:underline
-                    "
-                  >
+                    className="mt-2 inline-block text-sm font-medium text-teal-700 hover:underline">
                     Open map location
                   </a>
                 </div>

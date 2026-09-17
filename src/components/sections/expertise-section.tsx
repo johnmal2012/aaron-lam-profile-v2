@@ -27,7 +27,7 @@ export default async function ExpertiseSection({
       <div className="mx-auto max-w-6xl">
         <Card className="rounded-3xl p-10 shadow-xl">
           <h2 className="mb-8 text-3xl font-bold">{title}</h2>
-
+          <div className="prose max-w-none">{mdx}</div>
           <div className="flex flex-wrap justify-center gap-3">
             {expertise.map((item, index) => {
               // Ignore malformed/empty expertise records.
@@ -62,8 +62,6 @@ export default async function ExpertiseSection({
               );
             })}
           </div>
-
-          <div className="prose max-w-none">{mdx}</div>
         </Card>
       </div>
     </section>
