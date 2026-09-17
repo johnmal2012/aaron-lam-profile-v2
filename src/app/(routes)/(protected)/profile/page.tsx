@@ -1,6 +1,5 @@
 // 1) admin profile page
 import { Card, CardContent } from '@/components/ui/card';
-
 import { Separator } from '@/components/ui/separator';
 import { getSession } from '@/lib/auth/auth-utils';
 import { getProfilePageData } from '@/lib/profile/get-profile-page-data';
@@ -18,9 +17,6 @@ export default async function ProfilePage() {
 
   if (!profileData.success) {
     return (
-      // <div className="rounded-md border border-destructive p-4 text-destructive">
-      //   {profileData.message}
-      // </div>
       <div className="container mx-auto flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
         <div className="max-w-lg space-y-6">
           <div className="space-y-2">
@@ -31,7 +27,7 @@ export default async function ProfilePage() {
 
           <div className="flex flex-wrap justify-center gap-3">
             <Button asChild>
-              <Link href="/nikkilam20020404/dashboard">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </Button>
           </div>
         </div>
@@ -41,8 +37,6 @@ export default async function ProfilePage() {
 
   const { profile, currentUser, items } = profileData;
 
-//   console.log('profile: ', profile);
-
   return (
     <div className="container mx-auto space-y-6 py-10">
       <ProfileHeader />
@@ -50,17 +44,15 @@ export default async function ProfilePage() {
       <Card className="rounded-2xl shadow-sm">
         <ProfileCardHeader profile={profile} />
 
-        <Separator className="bg-slate-300 data-[orientation=horizontal]:h-1" />
+        <Separator className="h-1 bg-slate-300" />
 
-        <CardContent className="space-y-6 pt-6">
-          {/* Desktop View - Hidden on mobile */}
+        <CardContent className="space-y-4 pt-6">
           <DesktopProfileGrid
             profile={profile}
             items={items}
             currentUser={currentUser}
           />
 
-          {/* Mobile - Hidden on desktop */}
           <MobileProfileList
             items={items}
             profile={profile}

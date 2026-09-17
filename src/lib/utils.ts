@@ -26,13 +26,32 @@ export const formatLabel = (slug: string) =>
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
+/**
+ * Responsive alternating background for profile display cards.
+ *
+ * Phone:
+ *   item 0 → bg-slate-100
+ *   item 1 → bg-white
+ *   item 2 → bg-slate-100
+ *   item 3 → bg-white
+ *
+ * Desktop (2 columns):
+ *   row 0 → bg-slate-100
+ *   row 1 → bg-white
+ *   row 2 → bg-slate-100
+ *   row 3 → bg-white
+ */
 export const getCardBackground = (
   index: number,
   cardsPerRow = 2,
 ) => {
+  // Phone: alternate every individual card.
   const mobile =
-    index % 2 === 0 ? 'bg-slate-100' : 'bg-white';
+    index % 2 === 0
+      ? 'bg-slate-100'
+      : 'bg-white';
 
+  // Desktop: alternate by row.
   const desktop =
     Math.floor(index / cardsPerRow) % 2 === 0
       ? 'md:bg-slate-100'

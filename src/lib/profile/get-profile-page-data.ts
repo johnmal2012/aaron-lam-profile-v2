@@ -73,7 +73,5 @@ export type ProfilePageData = Extract<
 
 export type CurrentUser = ProfilePageData['currentUser'];
 
-// single item type
-// export type ProfileItem = ProfilePageData['items'][number];
-// array items type
-export type ProfileItem = ProfilePageData['items'];
+export type ProfileItem =
+  ReturnType<typeof getProfileItems>[number];

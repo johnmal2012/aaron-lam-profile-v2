@@ -1,6 +1,10 @@
 import type { Clinic } from '@/lib/types/clinic';
 import type { Expertise } from '@/lib/types/expertise';
-import type { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
+
+import type {
+  PhysicianProfileFormInput,
+  PhysicianProfileInput,
+} from '@/lib/validations/physician-profile';
 
 function splitLines(value: string): string[] {
   return value
@@ -9,86 +13,106 @@ function splitLines(value: string): string[] {
     .filter(Boolean);
 }
 
-// Convert form clinic fields into the Clinic[] format used by the database
-function formValuesToClinics(
-  data: Pick<
-    PhysicianProfileFormInput,
-    | 'clinicNames'
-    | 'clinicAddresses'
-    | 'clinicLatitudes'
-    | 'clinicLongitudes'
-  >,
-): Clinic[] {
-  const names = splitLines(data.clinicNames);
-  const addresses = splitLines(data.clinicAddresses);
-  const latitudes = splitLines(data.clinicLatitudes);
-  const longitudes = splitLines(data.clinicLongitudes);
-
-  return names.map((name, index) => ({
-    name,
-    address: addresses[index],
-    latitude: Number(latitudes[index]),
-    longitude: Number(longitudes[index]),
-  }));
-}
-
-// Convert form expertise fields into the Expertise[] format used by the database.
-function formValuesToExpertise(
-  data: Pick<
-    PhysicianProfileFormInput,
-    'expertiseTexts' | 'expertiseUrls'
-  >,
-): Expertise[] {
-  const texts = splitLines(data.expertiseTexts);
-  const urls = splitLines(data.expertiseUrls);
-
-  return texts.map((text, index) => ({
-    text,
-    url: urls[index],
-  }));
-}
+/* ---------------------------------------------------------------- */
+/* Payload type                                                     */
+/* ---------------------------------------------------------------- */
 
 // Payload sent to the server action.
 // The four clinic textarea fields and the two expertise textarea fields are form-only fields and are converted into their database structures below
-export type PhysicianProfilePayload = Omit<
-  PhysicianProfileFormInput,
-  | 'clinicNames'
-  | 'clinicAddresses'
-  | 'clinicLatitudes'
-  | 'clinicLongitudes'
-  | 'expertiseTexts'
-  | 'expertiseUrls'
-> & {
-  clinics: Clinic[];
-  expertise: Expertise[];
-};
+export type PhysicianProfilePayload =
+  PhysicianProfileInput;
 
+/* ---------------------------------------------------------------- */
+/* Form → Server Payload                                            */
+/* ---------------------------------------------------------------- */
+
+/**
+ * Convert React Hook Form values into the normalized
+ * physician profile payload.
+ *
+ * The repeatable Clinic Editor and Expertise Editor already
+ * provide arrays, so there is no textarea parsing here.
+ *
+ * Zod's output type is used for the final payload because
+ * form input types may contain undefined/unknown values,
+ * particularly when using z.coerce.number().
+ */
 export function toProfilePayload(
   values: PhysicianProfileFormInput,
 ): PhysicianProfilePayload {
-  const {
-    clinicNames,
-    clinicAddresses,
-    clinicLatitudes,
-    clinicLongitudes,
-    expertiseTexts,
-    expertiseUrls,
-    ...rest
-  } = values;
-
   return {
-    ...rest,
+    logo: values.logo ?? '',
+    name: values.name,
+    boardSpecialty:
+      values.boardSpecialty ?? '',
+    specialty:
+      values.specialty ?? '',
+    title:
+      values.title ?? '',
+    image:
+      values.image ?? '',
 
-    clinics: formValuesToClinics({
-      clinicNames,
-      clinicAddresses,
-      clinicLatitudes,
-      clinicLongitudes,
-    }),
+    clinics: normalizeClinics(
+      values.clinics,
+    ),
 
-    expertise: formValuesToExpertise({
-      expertiseTexts,
-      expertiseUrls,
-    }),
+    phone: values.phone,
+    email: values.email ?? '',
+    linkName:
+      values.linkName ?? '',
+    footCareLink:
+      values.footCareLink ?? '',
+
+    expertise: normalizeExpertise(
+      values.expertise,
+    ),
   };
+}
+
+/* ---------------------------------------------------------------- */
+/* Clinics                                                          */
+/* ---------------------------------------------------------------- */
+
+/**
+ * Normalize clinic form values into the database Clinic type.
+ *
+ * The form schema may expose latitude/longitude as unknown
+ * because Zod coercion operates on input values.
+ *
+ * At this point the form has already passed RHF/Zod validation,
+ * so Number() gives us the final numeric representation.
+ */
+function normalizeClinics(
+  clinics: PhysicianProfileFormInput['clinics'],
+): Clinic[] {
+  if (!clinics) {
+    return [];
+  }
+
+  return clinics.map((clinic) => ({
+    name: clinic.name.trim(),
+    address: clinic.address.trim(),
+    latitude: Number(clinic.latitude),
+    longitude: Number(clinic.longitude),
+  }));
+}
+
+/* ---------------------------------------------------------------- */
+/* Expertise                                                        */
+/* ---------------------------------------------------------------- */
+
+/**
+ * Normalize expertise form values into Expertise[].
+ */
+function normalizeExpertise(
+  expertise: PhysicianProfileFormInput['expertise'],
+): Expertise[] {
+  if (!expertise) {
+    return [];
+  }
+
+  return expertise.map((item) => ({
+    text: item.text.trim(),
+    url: item.url.trim(),
+  }));
 }

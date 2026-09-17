@@ -39,12 +39,44 @@ type Section = InferSelectModel<typeof physicianSections>;
 export default function SectionForm({ section }: SectionFormProps) {
   const router = useRouter();
 
+  // This state update is not urgent. Keep the UI responsive while you update it where some state updates may trigger expensive rendering
+  // For server actions called from RHF, no need to  use useTransition
+  //   const [isPending, startTransition] = useTransition();
+
+  //   const [errors, setErrors] = useState<FormErrors>({});
+
+  //   const [generalError, setGeneralError] = useState<string | null>(null);
+
   const form = useForm<PhysicianSectionFormInput>({
     resolver: zodResolver(physicianSectionUpdateSchema),
     defaultValues: getSectionDefaultValues(section),
   });
 
+  // prev = arbitary name = the previous state that react calls your function and passes in the previous or most recent current state as the argument
+  // square brackets = computed property name syntax, allows you to use the value stored in variable field as the property name; otherwise, javascript treats field as the literal property name, not the variable.
+  //   function updateField(field: keyof SessionFormData, value: string | number) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       [field]: value,
+  //     }));
+  //   }
+
+  // useEffect(() => {
+  //   if (!errors) return;
+
+  //   const timer = setTimeout(() => {
+  //     setErrors({});
+  //     setGeneralError(null);
+  //   }, 4000);
+
+  //   return () => clearTimeout(timer);
+  // }, [errors]);
+
   async function onFormSubmit(values: PhysicianSectionFormInput) {
+    // TESTING:
+    // Use an ID that does not exist in database
+    // const testId = 999999;
+    // console.log('Deleting section id:', testId);
     try {
       const { error } = section
         ? await updatePhysicianSection(section.id, values)
@@ -85,7 +117,7 @@ export default function SectionForm({ section }: SectionFormProps) {
               {sectionFormFields.map((field, index) => (
                 <Field
                   key={field.id}
-                  className={cn('rounded-lg p-4', getCardBackground(index, 1))} // one-column form if size > md:
+                  className={cn('rounded-lg p-4', getCardBackground(index))} // one-column form if size > md:
                 >
                   <SectionField field={field} form={form} />
                 </Field>

@@ -1,5 +1,10 @@
 import { PhysicianProfile } from '@/lib/types/physician-profile';
-import { CurrentUser, ProfileItem } from '@/lib/profile/get-profile-page-data';
+
+import {
+  CurrentUser,
+  ProfileItem,
+} from '@/lib/profile/get-profile-page-data';
+
 import { ProfileDisplayItem } from '@/components/profile/profile-display-item';
 
 export function DesktopProfileGrid({
@@ -8,12 +13,12 @@ export function DesktopProfileGrid({
   currentUser,
 }: {
   profile: PhysicianProfile;
-  items: ProfileItem;
-  currentUser: CurrentUser;
+  items: readonly ProfileItem[];
+  currentUser: CurrentUser | null;
 }) {
   return (
     <div className="hidden gap-4 md:grid md:grid-cols-2">
-      {items.map((item, index: number) => (
+      {items.map((item, index) => (
         <ProfileDisplayItem
           key={item.id}
           item={item}

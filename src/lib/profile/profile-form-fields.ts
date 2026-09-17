@@ -1,16 +1,27 @@
 // Instead of storing register and error, only store metadata
-import { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
+import type { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
+
+/* ---------------------------------------------------------------- */
+/* Base field                                                       */
+/* ---------------------------------------------------------------- */
 
 type BaseField = {
-  //   name: keyof PhysicianProfileFormInput | 'image';
   id: string;
   label: string;
   required?: boolean;
 };
 
+/* ---------------------------------------------------------------- */
+/* Image field                                                       */
+/* ---------------------------------------------------------------- */
+
 type ImageField = BaseField & {
   type: 'image';
 };
+
+/* ---------------------------------------------------------------- */
+/* Input field                                                       */
+/* ---------------------------------------------------------------- */
 
 type InputField = BaseField & {
   type: 'input';
@@ -19,7 +30,27 @@ type InputField = BaseField & {
   helperText?: string;
 };
 
-// export type ProfileFieldConfig  = ImageField | InputField;
+/* ---------------------------------------------------------------- */
+/* Textarea field                                                    */
+/* ---------------------------------------------------------------- */
+
+/**
+ * Kept for future single-value textarea fields.
+ *
+ * IMPORTANT:
+ *
+ * Do not use this for clinics or expertise.
+ *
+ * Clinics are now:
+ *
+ *   clinics: Clinic[]
+ *
+ * Expertise is now:
+ *
+ *   expertise: Expertise[]
+ *
+ * They are rendered by dedicated repeatable editors.
+ */
 type TextareaField = BaseField & {
   type: 'textarea';
   name: keyof PhysicianProfileFormInput;
@@ -27,15 +58,45 @@ type TextareaField = BaseField & {
   helperText?: string;
 };
 
-export type ProfileFieldConfig = ImageField | InputField | TextareaField;
+/* ---------------------------------------------------------------- */
+/* Field configuration                                               */
+/* ---------------------------------------------------------------- */
 
+export type ProfileFieldConfig =
+  | ImageField
+  | InputField
+  | TextareaField;
+
+/* ---------------------------------------------------------------- */
+/* Standard profile fields                                           */
+/* ---------------------------------------------------------------- */
+
+/**
+ * Standard one-value physician profile fields.
+ *
+ * Clinics and expertise are intentionally NOT included here.
+ *
+ * They should be rendered separately by:
+ *
+ *   <ClinicEditor />
+ *   <ExpertiseEditor />
+ */
 // Define field configurations with their properties
 export const profileFormFields: ProfileFieldConfig[] = [
+  /* -------------------------------------------------------------- */
+  /* Profile image                                                   */
+  /* -------------------------------------------------------------- */
+
   {
     id: 'image',
     type: 'image',
     label: 'Image',
   },
+
+  /* -------------------------------------------------------------- */
+  /* Basic information                                               */
+  /* -------------------------------------------------------------- */
+
   {
     id: 'name',
     name: 'name',
@@ -44,6 +105,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., Dr. Nikki Lam, DPM',
     required: true,
   },
+
   {
     id: 'specialty',
     name: 'specialty',
@@ -52,6 +114,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., Foot & Ankle Specialist',
     required: false,
   },
+
   {
     id: 'email',
     name: 'email',
@@ -60,6 +123,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., info@hudsonfootankle.com',
     required: false,
   },
+
   {
     id: 'phone',
     name: 'phone',
@@ -68,6 +132,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., (718) 123-4567',
     required: true,
   },
+
   {
     id: 'title',
     name: 'title',
@@ -76,61 +141,11 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., Board-Certified Podiatric Surgeon',
     required: false,
   },
-  //   {
-  //     id: 'clinicName',
-  //     name: 'clinicName',
-  //     type: 'input',
-  //     label: 'Clinic Name',
-  //     placeholder: 'e.g., Meimo Foot & Ankle',
-  //     required: true,
-  //   },
-  //   {
-  //     id: 'clinicAddress',
-  //     name: 'clinicAddress',
-  //     type: 'input',
-  //     label: 'Clinic Address',
-  //     placeholder: 'e.g., 4802 Tenth Avenue Brooklyn, NY 11219',
-  //     required: true,
-  //   },
-  // Each line represents one clinic
-  {
-    id: 'clinicNames',
-    name: 'clinicNames',
-    type: 'textarea',
-    label: 'Clinic Names',
-    placeholder: 'e.g., Maimonides Foot & Ankle\nQueens Foot & Ankle Center',
-    required: true,
-    helperText: 'Enter one clinic name per line.',
-  },
-  {
-    id: 'clinicAddresses',
-    name: 'clinicAddresses',
-    type: 'textarea',
-    label: 'Clinic Addresses',
-    placeholder:
-      'e.g., 6010 Bay Parkway, 7th & 8th Floors, Brooklyn, NY 11204\nQueens Foot & Ankle Center, 136-20 38th Avenue, Suite 1, Flushing, NY 11354',
-    required: true,
-    helperText:
-      'Enter one address per line in the same order as the clinic names.',
-  },
-  {
-    id: 'clinicLatitudes',
-    name: 'clinicLatitudes',
-    type: 'textarea',
-    label: 'Clinic Latitudes',
-    placeholder: 'e.g., 40.6382\n40.7282',
-    required: true,
-    helperText: 'Enter one latitude per line in the same order as the clinic addresses. Valid range: -90 to 90.',
-  },
-  {
-    id: 'clinicLongitudes',
-    name: 'clinicLongitudes',
-    type: 'textarea',
-    label: 'Clinic Longitudes',
-    placeholder: 'e.g., -74.0115\n-73.7949',
-    required: true,
-    helperText: 'Enter one longitude per line in the same order as the clinic addresses. Valid range: -180 to 180.',
-  },
+
+  /* -------------------------------------------------------------- */
+  /* Logo                                                            */
+  /* -------------------------------------------------------------- */
+
   {
     id: 'logo',
     name: 'logo',
@@ -139,14 +154,25 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., Dr. Nikki Lam',
     required: false,
   },
+
+  /* -------------------------------------------------------------- */
+  /* Board specialty                                                 */
+  /* -------------------------------------------------------------- */
+
   {
     id: 'boardSpecialty',
     name: 'boardSpecialty',
     type: 'input',
     label: 'Board Specialty',
-    placeholder: 'e.g., Board-Certified Foot & Ankle Specialist',
+    placeholder:
+      'e.g., Board-Certified Foot & Ankle Specialist',
     required: false,
   },
+
+  /* -------------------------------------------------------------- */
+  /* Link                                                             */
+  /* -------------------------------------------------------------- */
+
   {
     id: 'linkName',
     name: 'linkName',
@@ -155,40 +181,16 @@ export const profileFormFields: ProfileFieldConfig[] = [
     placeholder: 'e.g., Foot Care',
     required: false,
   },
+
   {
     id: 'footCareLink',
     name: 'footCareLink',
     type: 'input',
     label: 'Foot Care Link',
-    placeholder: 'e.g., https://www.footcaremd.org/',
-    required: false,
-    helperText: 'URL must begin with https:// or http://',
-  },
-  //   {
-  //     id: 'expertise',
-  //     name: 'expertise',
-  //     type: 'input',
-  //     label: 'Expertise',
-  //     placeholder: 'e.g., Sports Injuries, Foot Surgery, bunions',
-  //     required: false,
-  //     helperText: 'Items must be separated by commas',
-  //   },
-  {
-    id: 'expertiseTexts',
-    name: 'expertiseTexts',
-    label: 'Expertise',
-    type: 'textarea',
-    placeholder: 'e.g., Sports Injuries\nFoot Surgery',
-    helperText: 'Enter one expertise text per line.',
-  },
-  {
-    id: 'expertiseUrls',
-    name: 'expertiseUrls',
-    label: 'Expertise URLs',
-    type: 'textarea',
     placeholder:
-      'e.g., https://example.com/sports-injuries\nhttps://example.com/foot-surgery',
+      'e.g., https://www.footcaremd.org/',
+    required: false,
     helperText:
-      'Enter one url per line in the same order as the expertise texts.',
-  },
+      'URL must begin with https:// or http://',
+  }, 
 ];

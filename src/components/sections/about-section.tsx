@@ -1,7 +1,9 @@
 import Image from 'next/image';
+
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+
 import { renderMDX } from '@/lib/mdx';
 import { cn } from '@/lib/utils';
 
@@ -27,11 +29,12 @@ export default async function AboutSection({
   slug,
 }: AboutSectionProps) {
   const mdx = await renderMDX(content);
+
+  // Treat an empty or whitespace-only image URL as missing.
+  const hasImage = image.trim().length > 0;
+
   return (
-    <section
-      id={slug}
-      className={cn("scroll-mt-28 px-6 py-12", background,)}
-    >
+    <section id={slug} className={cn('scroll-mt-28 px-6 py-12', background)}>
       <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-3 md:items-center">
         {/* Doctor's photograph: circle */}
         {/* <div className="mx-auto w-1/2 max-w-sm md:w-full">
@@ -48,16 +51,27 @@ export default async function AboutSection({
         </div> */}
         {/* Doctor's photograph: square portrait */}
         <div className="mx-auto w-1/2 max-w-sm md:w-full">
-          <div className="overflow-hidden rounded-3xl border-4 border-white bg-white shadow-2xl">
-            <Image
-              src={image}
-              alt={`${name} in white coat`}
-              width={600}
-              height={700}
-              priority
-              className="h-auto w-full object-contain"
-            />
-          </div>
+          {hasImage ? (
+            <div className="overflow-hidden rounded-3xl border-4 border-white bg-white shadow-2xl">
+              <Image
+                src={image}
+                alt={`${name} in white coat`}
+                width={600}
+                height={700}
+                priority
+                className="h-auto w-full object-contain"
+              />
+            </div>
+          ) : (
+            <div
+              className="flex aspect-6/7 w-full items-center justify-center rounded-3xl border-4 border-white bg-slate-100 shadow-2xl"
+              aria-label="No profile photograph available"
+            >
+              <span className="px-6 text-center text-sm text-slate-500">
+                No profile photo
+              </span>
+            </div>
+          )}
         </div>
         <Card className="rounded-3xl border-0 p-8 shadow-xl md:col-span-2">
           <div className="space-y-6">
@@ -92,7 +106,7 @@ export default async function AboutSection({
               </div>
               <Separator />
             </div>
-            <div className="prose max-w-none" >{mdx}</div>
+            <div className="prose max-w-none">{mdx}</div>
           </div>
         </Card>
       </div>

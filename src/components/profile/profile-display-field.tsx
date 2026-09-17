@@ -1,9 +1,14 @@
 import Link from 'next/link';
+
 import { Field, FieldLabel } from '@/components/ui/field';
+
 import { ProfileImageCard } from '@/components/profile/profile-image-card';
+
 import { PhysicianProfile } from '@/lib/types/physician-profile';
+
 import { getProfileItems } from '@/lib/profile/get-profile-items';
-import { Badge } from '@/components/ui/badge';
+
+import { cn } from '@/lib/utils';
 
 type CurrentUser = {
   name: string | null;
@@ -40,27 +45,29 @@ export function ProfileDisplayField({
             Expertise
           </FieldLabel>
 
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-3 space-y-3">
             {profile.expertise?.length ? (
-              profile.expertise.map((item, index) => (
-                <Badge
-                  key={`${item.text}-${item.url}-${index}`}
-                  variant="secondary"
-                  className="
-                h-auto
-                rounded-full
-                border
-                border-blue-200
-                bg-blue-50
-                px-5
-                py-2
-                text-sm
-                font-medium
-                text-blue-700
-              "
+              profile.expertise.map((expertise, index) => (
+                <div
+                  key={`${expertise.text}-${expertise.url}-${index}`}
+                  className={cn(
+                    'rounded-lg border px-4 py-3 text-sm font-medium',
+                    index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-200',
+                  )}
                 >
-                  {item.text}
-                </Badge>
+                  {expertise.url ? (
+                    <Link
+                      href={expertise.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-700 hover:underline"
+                    >
+                      {expertise.text}
+                    </Link>
+                  ) : (
+                    expertise.text
+                  )}
+                </div>
               ))
             ) : (
               <p className="text-sm text-muted-foreground">—</p>
@@ -76,12 +83,15 @@ export function ProfileDisplayField({
             Clinics
           </FieldLabel>
 
-          <div className="mt-3 space-y-4">
+          <div className="mt-3 space-y-3">
             {profile.clinics?.length ? (
               profile.clinics.map((clinic, index) => (
                 <div
                   key={`${clinic.name}-${clinic.address}-${index}`}
-                  className="rounded-lg border bg-muted/20 p-4"
+                  className={cn(
+                    'rounded-lg border border-slate-200 p-4',
+                    index % 2 === 0 ? 'bg-white' : 'bg-slate-100',
+                  )}
                 >
                   <p className="font-semibold">{clinic.name}</p>
 
@@ -109,7 +119,7 @@ export function ProfileDisplayField({
               href={item.value}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline break-all"
+              className="break-all text-blue-600 hover:underline"
             >
               {item.value}
             </Link>
