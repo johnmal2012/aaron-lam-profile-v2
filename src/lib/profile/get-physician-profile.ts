@@ -15,34 +15,43 @@ type GetPhysicianProfileResult =
     };
 
 export async function getActivePhysicianProfile(): Promise<GetPhysicianProfileResult> {
-  const profiles = await db.query.physicianProfile.findMany({
-    where: (profile, { and, eq, isNull }) =>
-      and(eq(profile.isActive, true), isNull(profile.deletedAt)),
-  });
+  try {
+    const profiles = await db.query.physicianProfile.findMany({
+      where: (profile, { and, eq, isNull }) =>
+        and(eq(profile.isActive, true), isNull(profile.deletedAt)),
+    });
 
-  if (profiles.length === 0) {
+    if (profiles.length === 0) {
+      return {
+        success: false,
+        message: 'No active physician profile found.',
+      };
+    }
+
+    if (profiles.length > 1) {
+      const message = `Data integrity error: Found ${profiles.length} active physician profiles. Please remove the duplicate profiles.`;
+
+      console.error(
+        `Data integrity error: Found ${profiles.length} active physician profiles.`,
+        profiles.map((p) => p.id),
+      );
+
+      return {
+        success: false,
+        message,
+      };
+    }
+
+    return {
+      success: true,
+      profile: profiles[0],
+    };
+  } catch (error) {
+    console.error('Failed to load active physician profile:', error);
+
     return {
       success: false,
-      message: 'No active physician profile found.',
+      message: 'Failed to load active physician profile.',
     };
   }
-
-  if (profiles.length > 1) {
-    const message = `Data integrity error: Found ${profiles.length} active physician profiles. Please remove the duplicate profiles.`;
-
-    console.error(
-      `Data integrity error: Found ${profiles.length} active physician profiles.`,
-      profiles.map((p) => p.id),
-    );
-
-    return {
-      success: false,
-      message,
-    };
-  }
-
-  return {
-    success: true,
-    profile: profiles[0],
-  };
 }

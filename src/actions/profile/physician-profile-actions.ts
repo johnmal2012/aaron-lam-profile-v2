@@ -67,6 +67,8 @@ export async function createPhysicianProfile(
           validated.data.boardSpecialty,
         specialty: validated.data.specialty,
         title: validated.data.title,
+        // Image is allowed during CREATE
+        // On a newly created profile, the image may be supplied by the initial profile data
         image: validated.data.image,
 
         clinics: validated.data.clinics,
@@ -142,7 +144,9 @@ export async function updatePhysicianProfile(
           validated.data.boardSpecialty,
         specialty: validated.data.specialty,
         title: validated.data.title,
-        image: validated.data.image,
+        // image and imageKey are intentionally NOT included here
+        // which is managed separately by ProfileImageUpload() in profile-image-upload.ts 
+        // image: validated.data.image,
 
         /*
          * Repeatable Clinic Editor data.

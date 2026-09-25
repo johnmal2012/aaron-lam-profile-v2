@@ -2,8 +2,9 @@ import { getActivePhysicianProfile } from '@/lib/profile/get-physician-profile';
 import { getActivePhysicianSections } from '@/lib/sections/get-physician-sections';
 import { buildNavItems } from '@/lib/sections/get-navitems';
 
+// moving all page data loading into one service
 export async function getWebsiteData() {
-  const [profileResult, sections] = await Promise.all([
+  const [profileResult, sectionsResult] = await Promise.all([
     getActivePhysicianProfile(),
     getActivePhysicianSections(),
   ]);
@@ -18,10 +19,20 @@ export async function getWebsiteData() {
     };
   }
 
+  if (!sectionsResult.success) {
+    return {
+      success: false,
+      message: sectionsResult.message,
+      profile: profileResult.profile,
+      sections: null,
+      navItems: [],
+    };
+  }
+
   return {
     success: true,
     profile: profileResult.profile,
-    sections,
-    navItems: sections ? buildNavItems(sections) : [],
+    sections: sectionsResult.sections,
+    navItems: buildNavItems(sectionsResult.sections),
   };
 }

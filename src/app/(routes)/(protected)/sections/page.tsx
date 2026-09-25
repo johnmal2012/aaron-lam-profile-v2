@@ -9,9 +9,33 @@ import { getActivePhysicianSections } from '@/lib/sections/get-physician-section
 import { SectionHeader } from '@/components/sections/section-header';
 
 export default async function SectionsPage() {
-  const sections = await getActivePhysicianSections();
+  const result = await getActivePhysicianSections();
 
-  if (!sections.length) return <NoSectionState />;
+  // Handle database/query failure
+  if (!result.success) {
+    return (
+      <main className="min-h-screen bg-background">
+        <div className="container mx-auto py-10 sm:px-6 lg:px-8">
+          <section className="rounded-2xl border bg-card p-6 shadow-sm">
+            <p className="text-sm text-destructive">{result.message}</p>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
+    // Now TypeScript knows result.sections is the array
+  const sections = result.sections;
+
+  // Handle no active sections
+  if (!sections.length) {
+    return <NoSectionState />;
+  }
+
+  // Create mobile pattern: [gray, white, gray, white, ...]
+  //   const getMobileBackground = (index: number) => {
+  //     return index % 2 === 0 ? 'bg-slate-100' : 'bg-white';
+  //   };
 
   return (
     <main className="min-h-screen bg-background">
