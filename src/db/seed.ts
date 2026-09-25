@@ -81,10 +81,14 @@ async function seed() {
         {
           text: 'Sports Injuries',
           url: 'https://www.footcaremd.org/sports-injuries',
+          image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=500&q=80',
+          imageKey: ''
         },
         {
           text: 'Foot Surgery',
           url: 'https://www.footcaremd.org/foot-surgery',
+          image:'https://images.unsplash.com/photo-1542884748-2b87b36c6b90?auto=format&fit=crop&w=500&q=80',
+          imageKey: ''
         },
       ],
       //   navItems: [

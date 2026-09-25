@@ -13,19 +13,36 @@ function splitLines(value: string): string[] {
     .filter(Boolean);
 }
 
-/* ---------------------------------------------------------------- */
-/* Payload type                                                     */
-/* ---------------------------------------------------------------- */
+// Convert form clinic fields into the Clinic[] format used by the database
+// function formValuesToClinics(
+//   data: Pick<
+//     PhysicianProfileFormInput,
+//     | 'clinicNames'
+//     | 'clinicAddresses'
+//     | 'clinicLatitudes'
+//     | 'clinicLongitudes'
+//   >,
+// ): Clinic[] {
+//   const names = splitLines(data.clinicNames);
+//   const addresses = splitLines(data.clinicAddresses);
+//   const latitudes = splitLines(data.clinicLatitudes);
+//   const longitudes = splitLines(data.clinicLongitudes);
 
+//   return names.map((name, index) => ({
+//     name,
+//     address: addresses[index],
+//     latitude: Number(latitudes[index]),
+//     longitude: Number(longitudes[index]),
+//   }));
+// }
+
+// Payload type
+// Convert form expertise fields into the Expertise
 // Payload sent to the server action.
-// The four clinic textarea fields and the two expertise textarea fields are form-only fields and are converted into their database structures below
-export type PhysicianProfilePayload =
-  PhysicianProfileInput;
+// The four clinic textarea fields and the four expertise textarea with uploadthing fields are form-only fields and are converted into their database structures below
+export type PhysicianProfilePayload = PhysicianProfileInput;
 
-/* ---------------------------------------------------------------- */
-/* Form → Server Payload                                            */
-/* ---------------------------------------------------------------- */
-
+// Form → Server Payload
 /**
  * Convert React Hook Form values into the normalized
  * physician profile payload.
@@ -43,35 +60,21 @@ export function toProfilePayload(
   return {
     logo: values.logo ?? '',
     name: values.name,
-    boardSpecialty:
-      values.boardSpecialty ?? '',
-    specialty:
-      values.specialty ?? '',
-    title:
-      values.title ?? '',
-    image:
-      values.image ?? '',
+    boardSpecialty: values.boardSpecialty ?? '',
+    specialty: values.specialty ?? '',
+    title: values.title ?? '',
+    image: values.image ?? '',
 
-    clinics: normalizeClinics(
-      values.clinics,
-    ),
+    clinics: normalizeClinics(values.clinics),
 
     phone: values.phone,
     email: values.email ?? '',
-    linkName:
-      values.linkName ?? '',
-    footCareLink:
-      values.footCareLink ?? '',
+    linkName: values.linkName ?? '',
+    footCareLink: values.footCareLink ?? '',
 
-    expertise: normalizeExpertise(
-      values.expertise,
-    ),
+    expertise: normalizeExpertise(values.expertise),
   };
 }
-
-/* ---------------------------------------------------------------- */
-/* Clinics                                                          */
-/* ---------------------------------------------------------------- */
 
 /**
  * Normalize clinic form values into the database Clinic type.
@@ -81,7 +84,7 @@ export function toProfilePayload(
  *
  * At this point the form has already passed RHF/Zod validation,
  * so Number() gives us the final numeric representation.
- */
+ **/
 function normalizeClinics(
   clinics: PhysicianProfileFormInput['clinics'],
 ): Clinic[] {
@@ -97,13 +100,7 @@ function normalizeClinics(
   }));
 }
 
-/* ---------------------------------------------------------------- */
-/* Expertise                                                        */
-/* ---------------------------------------------------------------- */
-
-/**
- * Normalize expertise form values into Expertise[].
- */
+// Normalize expertise form values into Expertise[]
 function normalizeExpertise(
   expertise: PhysicianProfileFormInput['expertise'],
 ): Expertise[] {
@@ -114,5 +111,7 @@ function normalizeExpertise(
   return expertise.map((item) => ({
     text: item.text.trim(),
     url: item.url.trim(),
+    image: item.image?.trim() ?? '',
+    imageKey: item.imageKey?.trim() ?? '',
   }));
 }

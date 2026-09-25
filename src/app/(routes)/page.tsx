@@ -1,44 +1,53 @@
-export const dynamic = 'force-dynamic';
-
 import Navbar from '@/components/navigation/navBar';
 import FooterSection from '@/components/sections/footer-section';
-import { SectionRenderer } from '@/components/sections/section-renderer';
-import { NoSectionState } from '@/components/sections/section-empty-state';
+
+import HeroSection from '@/components/home/hero-section';
+import HomepageSections from '@/components/home/homepage-sections';
+
 import { getWebsiteData } from '@/lib/website/get-website-data';
-// import { Button } from '@/components/ui/button';
-// import Link from 'next/link';
+import type { Clinic } from '@/lib/types/clinic';
+
+export const dynamic = 'force-dynamic';
+
+function normalizeClinics(
+  clinics: Clinic[] | null | undefined,
+): Clinic[] {
+  return Array.isArray(clinics) ? clinics : [];
+}
 
 export default async function PhysicianPage() {
   const websiteData = await getWebsiteData();
 
-  if (!websiteData) {
+  if (!websiteData.success || !websiteData.profile) {
     return (
-      <div className="container mx-auto flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
-        <div className="max-w-lg space-y-6">
-          <div className="space-y-2">
-            <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-destructive">
-              {/* {websiteData.message} */}
-              Something went wrong. Please try again.
-            </div>
-          </div>
+      <main className="flex min-h-screen items-center justify-center bg-white px-6">
+        <div className="w-full max-w-md rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+          <h1 className="text-lg font-semibold text-red-800">
+            Website unavailable
+          </h1>
 
-          {/* <div className="flex flex-wrap justify-center gap-3">
-            <Button asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </Button>
-          </div> */}
+          <p className="mt-2 text-sm text-red-700">
+            {websiteData.message ??
+              'Something went wrong. Please try again.'}
+          </p>
         </div>
-      </div>
+      </main>
     );
   }
 
   const { profile, sections, navItems } = websiteData;
 
-//   console.log('sections: ', sections);
-
   if (!sections) {
-    return <NoSectionState />;
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-white">
+        <p className="text-sm text-slate-500">
+          No website sections are currently available.
+        </p>
+      </main>
+    );
   }
+
+  const clinics = normalizeClinics(profile.clinics);
 
   return (
     <main className="min-h-screen bg-white text-slate-900">
@@ -46,26 +55,20 @@ export default async function PhysicianPage() {
         navItems={navItems}
         logo={profile.logo ?? ''}
         specialty={profile.specialty ?? ''}
-        // clinicName={profile.clinicName ?? ''}
-        clinics={profile.clinics ?? []}
+        clinics={clinics}
         linkName={profile.linkName ?? ''}
         footCareLink={profile.footCareLink ?? ''}
       />
 
-      {sections.map((section, index) => (
-        <SectionRenderer
-          key={section.slug}
-          section={section}
-          profile={profile}
-          index={index}
-        />
-      ))}
+      <HeroSection profile={profile} />
 
-      <FooterSection
-        // clinicName={profile.clinicName ?? ''}
-        // clinicAddress={profile.clinicAddress ?? ''}
-        clinics={profile.clinics ?? []}
+      <HomepageSections
+        profile={profile}
+        sections={sections}
+        clinics={clinics}
       />
+
+      <FooterSection clinics={clinics} />
     </main>
   );
 }

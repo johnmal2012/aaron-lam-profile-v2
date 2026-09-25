@@ -2,41 +2,10 @@ import { z } from 'zod';
 
 import { optionalText } from '@/lib/optionalText';
 import { optionalSpecial } from '@/lib/optionalSpecial';
+import { clinicSchema } from '@/lib/validations/clinic';
+import { expertiseSchema } from '@/lib/validations/expertise';
 
-/* ---------------------------------------------------------------- */
-/* Shared schemas                                                   */
-/* ---------------------------------------------------------------- */
-
-export const clinicSchema = z.object({
-  name: z.string().trim().min(1, 'Clinic name is required'),
-
-  address: z.string().trim().min(1, 'Clinic address is required'),
-
-  latitude: z.coerce
-    .number({
-      error: 'Latitude is required',
-    })
-    .min(-90, 'Latitude must be between -90 and 90')
-    .max(90, 'Latitude must be between -90 and 90'),
-
-  longitude: z.coerce
-    .number({
-      error: 'Longitude is required',
-    })
-    .min(-180, 'Longitude must be between -180 and 180')
-    .max(180, 'Longitude must be between -180 and 180'),
-});
-
-export const expertiseSchema = z.object({
-  text: z.string().trim().min(1, 'Expertise text is required'),
-
-  url: z.url('Expertise URL must be a valid URL'),
-});
-
-/* ------------------------------------------------------- */
-/* Server / database schema                                */
-/* ------------------------------------------------------- */
-
+// Server / database schema 
 export const physicianProfileSchema = z.object({
   logo: optionalText(z.string().min(1)),
 
@@ -63,10 +32,7 @@ export const physicianProfileSchema = z.object({
   expertise: z.array(expertiseSchema).default([]),
 });
 
-/* ---------------------------------------------------------------- */
-/* Client / form schema                                             */
-/* ---------------------------------------------------------------- */
-
+// Client / form schema
 // export const physicianProfileFormSchema =
 //   physicianProfileSchema.extend({
 //     /*
@@ -90,16 +56,10 @@ export const physicianProfileFormSchema = z.object({
 
   image: optionalText(z.string().min(1)),
 
-  /* -------------------------------------------------- */
-  /* Clinics                                            */
-  /* -------------------------------------------------- */
-
+  // Clinics
   clinics: z.array(clinicSchema).default([]),
 
-  /* -------------------------------------------------- */
-  /* Contact                                            */
-  /* -------------------------------------------------- */
-
+  // Contact
   phone: z.string().trim().min(1, 'Phone is required'),
 
   email: optionalSpecial(z.email()),
@@ -108,16 +68,11 @@ export const physicianProfileFormSchema = z.object({
 
   footCareLink: optionalSpecial(z.url()),
 
-  /* -------------------------------------------------- */
-  /* Expertise                                          */
-  /* -------------------------------------------------- */
-
+  // Expertise
   expertise: z.array(expertiseSchema).default([]),
 });
-/* ------------------------------------------------------ */
-/* Types                                                  */
-/* ------------------------------------------------------ */
 
+// Types
 export type PhysicianProfileFormInput = z.input<
   typeof physicianProfileFormSchema
 >;

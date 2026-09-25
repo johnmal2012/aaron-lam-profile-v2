@@ -9,25 +9,56 @@ import { toast } from 'sonner';
 import { UploadDropzone } from '@/lib/uploadthing';
 import { updateProfileImage } from '@/actions/profile/profile-update-image';
 
-export function ProfileImageUpload() {
+interface ProfileImageUploadProps {
+  image?: string | null;
+  userName?: string | null;
+}
+
+export function ProfileImageUpload({
+  image,
+  userName,
+}: ProfileImageUploadProps) {
   const router = useRouter();
+
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+
   const isBusy = isUploading || isSaving;
 
   return (
     <div className="space-y-3">
+      {/* Image thumbnail */}
+      <div className="flex justify-center">
+        {image ? (
+          //   <img
+          //     src={image}
+          //     alt={userName || 'Profile image'}
+          //     className="size-12 rounded-full border object-cover"
+          //   />
+          <img
+            src={image}
+            alt={userName || 'Profile image'}
+            className="size-12 border object-cover"
+          />
+        ) : (
+          <div className="flex size-24 items-center justify-center rounded-full border bg-muted text-sm text-muted-foreground">
+            No image
+          </div>
+        )}
+      </div>
+
+      {/* Upload */}
       <UploadDropzone
         endpoint="profileImage"
         config={{
           mode: 'auto',
         }}
         input={{}}
-        disabled={isUploading}
+        disabled={isBusy}
         appearance={{
           container:
-            'w-full border-2 border-dashed border-primary rounded-lg bg-muted/30 cursor-pointer',
+            'w-full rounded-lg border-2 border-dashed border-primary bg-muted/30 cursor-pointer',
           uploadIcon: 'text-primary',
           label: 'text-base font-medium text-foreground',
           allowedContent: 'text-sm text-muted-foreground',
@@ -47,13 +78,11 @@ export function ProfileImageUpload() {
         }}
         onClientUploadComplete={async (res) => {
           try {
-            // UploadThing upload is complete.
+            // UploadThing upload is complete
             setUploadProgress(100);
-
-            // UploadThing is now finished.
+            // UploadThing is now finished
             setIsUploading(false);
-
-            // Database update is now starting.
+            // Database update is now starting
             setIsSaving(true);
 
             toast.loading('Saving image...', {
@@ -71,17 +100,11 @@ export function ProfileImageUpload() {
               imageKey: file.key,
             });
 
-            /*
-             * Refresh the Server Component tree.
-             *
-             * The database now contains the new image URL/key.
-             */
+            // Refresh the Server Component tree
+            // The database now contains the new image URL/key
             router.refresh();
 
-            /*
-             * Give the Server Component tree a chance to
-             * render the updated image.
-             */
+            // Give the Server Component tree a chance to render the updated image
             toast.success('Profile image updated successfully.', {
               id: 'profile-image-upload',
             });
@@ -92,7 +115,8 @@ export function ProfileImageUpload() {
           } finally {
             setIsUploading(false);
             setIsSaving(false);
-            // Reset after the completion message has been shown.
+
+            // Reset after the completion message has been shown
             setTimeout(() => {
               setUploadProgress(0);
             }, 500);
@@ -109,20 +133,14 @@ export function ProfileImageUpload() {
         }}
       />
 
-      {/* {isUploading && (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Please wait while your image is being uploaded...</span>
-        </div>
-      )} */}
-
+      {/* Upload progress */}
       {isBusy && (
         <div className="space-y-2">
           {/* Status */}
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              
+              <Loader2 className="size-4 animate-spin" />
+
               <span>
                 {isUploading ? 'Uploading image...' : 'Saving image...'}
               </span>
