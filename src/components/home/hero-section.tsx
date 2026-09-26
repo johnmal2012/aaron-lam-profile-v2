@@ -65,21 +65,18 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
               </p>
             )}
 
-            <div className="mt-5 flex flex-wrap gap-3">
-              <div className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#17608e] px-4 text-sm font-semibold text-white shadow-sm">
-                <CalendarDays className="size-4" />
-                Schedule an Appointment
-              </div>
+            <div className="flex flex-col gap-3 py-6 sm:flex-row sm:items-center">
+              <a
+                href={`tel:${profile.phone}`}
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#286487] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1f5270] sm:w-auto"
+              >
+                <Phone className="size-4" />
+                Call to Schedule an Appointment
+              </a>
 
-              {profile.phone && (
-                <a
-                  href={`tel:${profile.phone.replace(/[^\d+]/g, '')}`}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[#17608e] bg-white px-4 text-sm font-semibold text-[#17476b] transition hover:bg-[#f4f9fc]"
-                >
-                  <Phone className="size-4" />
-                  Call {profile.phone}
-                </a>
-              )}
+              <span className="text-center text-sm font-medium text-[#174f75] sm:text-left">
+                {profile.phone}
+              </span>
             </div>
 
             <div className="mt-7 grid gap-4 border-t border-slate-300/80 pt-5 sm:grid-cols-3">
