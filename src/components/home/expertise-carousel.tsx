@@ -112,7 +112,7 @@ function ConditionCard({ item, index }: { item: Expertise; index: number }) {
           src={imageSrc}
           alt=""
           aria-hidden="true"
-          className="block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="block h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
         />
       </div>
 
