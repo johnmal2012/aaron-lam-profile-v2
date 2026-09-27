@@ -1,40 +1,11 @@
 import type { Clinic } from '@/lib/types/clinic';
 import type { Expertise } from '@/lib/types/expertise';
+import type { Credential } from '@/lib/types/credential';
 
 import type {
   PhysicianProfileFormInput,
   PhysicianProfileInput,
 } from '@/lib/validations/physician-profile';
-
-function splitLines(value: string): string[] {
-  return value
-    .split('\n')
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-// Convert form clinic fields into the Clinic[] format used by the database
-// function formValuesToClinics(
-//   data: Pick<
-//     PhysicianProfileFormInput,
-//     | 'clinicNames'
-//     | 'clinicAddresses'
-//     | 'clinicLatitudes'
-//     | 'clinicLongitudes'
-//   >,
-// ): Clinic[] {
-//   const names = splitLines(data.clinicNames);
-//   const addresses = splitLines(data.clinicAddresses);
-//   const latitudes = splitLines(data.clinicLatitudes);
-//   const longitudes = splitLines(data.clinicLongitudes);
-
-//   return names.map((name, index) => ({
-//     name,
-//     address: addresses[index],
-//     latitude: Number(latitudes[index]),
-//     longitude: Number(longitudes[index]),
-//   }));
-// }
 
 // Payload type
 // Convert form expertise fields into the Expertise
@@ -73,6 +44,8 @@ export function toProfilePayload(
     footCareLink: values.footCareLink ?? '',
 
     expertise: normalizeExpertise(values.expertise),
+
+    credential: normalizeCredentials(values.credential),
   };
 }
 
@@ -84,7 +57,7 @@ export function toProfilePayload(
  *
  * At this point the form has already passed RHF/Zod validation,
  * so Number() gives us the final numeric representation.
- **/
+ */
 function normalizeClinics(
   clinics: PhysicianProfileFormInput['clinics'],
 ): Clinic[] {
@@ -108,9 +81,27 @@ function normalizeExpertise(
     return [];
   }
 
+  // Normalize credential form values into credential[]
   return expertise.map((item) => ({
     text: item.text.trim(),
     url: item.url.trim(),
+    image: item.image?.trim() ?? '',
+    imageKey: item.imageKey?.trim() ?? '',
+  }));
+}
+
+function normalizeCredentials(
+  credential: PhysicianProfileFormInput['credential'],
+): Credential[] {
+  if (!credential) {
+    return [];
+  }
+
+  return credential.map((item) => ({
+    type: item.type,
+    label: item.label.trim(),
+    institution: item.institution.trim(),
+    breakAfter: item.breakAfter?.trim() ?? '',
     image: item.image?.trim() ?? '',
     imageKey: item.imageKey?.trim() ?? '',
   }));

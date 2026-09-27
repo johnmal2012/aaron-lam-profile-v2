@@ -2,6 +2,8 @@ import { createUploadthing, type FileRouter } from 'uploadthing/next';
 
 import { UploadThingError } from 'uploadthing/server';
 
+// import { auth } from "@/lib/auth";
+// import { headers } from "next/headers";
 import z from 'zod';
 import { requireAdmin } from '@/lib/auth/auth-utils';
 
@@ -63,6 +65,35 @@ export const ourFileRouter = {
         userId: metadata.userId,
         imageUrl: file.ufsUrl,
         imageKey: file.key,
+      };
+    }),
+
+  // Credential Image
+  credentialImage: f({
+    image: {
+      maxFileSize: '2MB',
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async ({ req }) => {
+      // Use the same authentication/authorization
+      // middleware you already use for expertiseImage.
+      const session = await requireAdmin();
+
+      if (!session) {
+        throw new UploadThingError('Unauthorized');
+      }
+
+      return {
+        userId: session.user.id,
+      };
+    })
+    .onUploadComplete(async ({ file }) => {
+      console.log('Credential image uploaded:', file.ufsUrl);
+
+      return {
+        url: file.ufsUrl,
+        key: file.key,
       };
     }),
 } satisfies FileRouter;

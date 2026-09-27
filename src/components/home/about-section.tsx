@@ -1,13 +1,18 @@
+// types/credential.ts > validations/credential.ts > profile/profile-default-values.ts/getProfileDefaultValues() > profile/profile-mappers.ts > credential-editor.tsx > admin edit profile page > make sure validations/physician-profile.ts/physicianProfileSchema with credential z.array > make sure actions/profile/physician-profile-actions.ts with credential: validated.data.credential > home\about-section.tsx
 import { Quote } from 'lucide-react';
+
 import Image from 'next/image';
 
 import { renderMDX } from '@/lib/mdx';
+
 import { getWebsiteData } from '@/lib/website/get-website-data';
+
 import { cn } from '@/lib/utils';
 
 import SectionHeading from '@/components/home/section-heading';
 
-// ABOUT
+import type { Credential as CredentialType } from '@/lib/types/credential';
+
 export default async function AboutSection({
   profile,
   section,
@@ -15,25 +20,30 @@ export default async function AboutSection({
   className,
 }: {
   profile: NonNullable<Awaited<ReturnType<typeof getWebsiteData>>['profile']>;
+
   section?: {
     title: string | null;
     content: string | null;
   };
+
   education?: {
     title: string | null;
     content: string | null;
   };
+
   className?: string;
 }) {
-  console.log('profile:', profile);
-  console.log('section:', section);
-  console.log('education:', education);
-  if (!section && !education) return null;
+  if (!section && !education) {
+    return null;
+  }
 
   const sectionContent = await renderMDX(section?.content ?? '');
+
   const educationContent = await renderMDX(education?.content ?? '');
-  //   const paragraphs = splitContent(section?.content);
-  //   const educationItems = splitContent(education?.content);
+
+  const credentials = Array.isArray(profile.credential)
+    ? profile.credential
+    : [];
 
   return (
     <section
@@ -41,16 +51,11 @@ export default async function AboutSection({
       className={cn('px-6 py-14 sm:px-10 lg:px-14', className)}
     >
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.25fr_1.15fr_0.85fr]">
-        {/* About */}
+        {/* ABOUT */}
         <div>
           <SectionHeading title={section?.title ?? 'About Dr. Lam'} />
 
           <div className="mt-6 space-y-4 text-sm leading-6 text-slate-600">
-            {/* {paragraphs.length > 0 ? (
-              paragraphs
-                .slice(0, 3)
-                .map((paragraph, index) => <p key={index}>{paragraph}</p>)
-            ) : ( */}
             {section?.content ? (
               <div className="prose prose-sm max-w-none prose-slate">
                 {sectionContent}
@@ -72,72 +77,35 @@ export default async function AboutSection({
               </>
             )}
           </div>
-
-          {/* <Link
-            href="/about"
-            className="mt-6 inline-flex h-10 items-center gap-2 rounded-md border border-[#17608e] px-4 text-sm font-semibold text-[#174b70] transition hover:bg-[#f2f7fa]"
-          >
-            Read More About Dr. Lam
-            <ArrowRight className="size-4" />
-          </Link> */}
         </div>
 
-        {/* Education */}
+        {/* TRAINING & CREDENTIALS */}
         <div className="border-y border-slate-200 py-8 lg:border-x lg:border-y-0 lg:px-8 lg:py-0">
           <SectionHeading
             title={education?.title ?? 'Training & Credentials'}
           />
 
           <div className="mt-8">
-            {/* Optional education content */}
             {education?.content && (
               <div className="prose prose-sm max-w-none prose-slate">
                 {educationContent}
               </div>
             )}
 
-            {/* Always display the credentials */}
-            <div className={cn('space-y-8', education?.content && 'mt-8')}>
-              <Credential
-                image="/images/Albert-Einstein.png"
-                label="MEDICAL SCHOOL"
-                institution={
-                  <>
-                    Albert Einstein
-                    <br />
-                    College of Medicine
-                  </>
-                }
-              />
-
-              <Credential
-                image="/images/maimonides.png"
-                label="ORTHOPEDIC SURGERY RESIDENCY"
-                institution={
-                  <>
-                    Maimonides
-                    <br />
-                    Medical Center
-                  </>
-                }
-              />
-
-              <Credential
-                image="/images/baylor.png"
-                label="FOOT AND ANKLE SURGERY FELLOWSHIP"
-                institution={
-                  <>
-                    Baylor University
-                    <br />
-                    Medical Center
-                  </>
-                }
-              />
-            </div>
+            {credentials.length > 0 && (
+              <div className={cn('space-y-8', education?.content && 'mt-8')}>
+                {credentials.map((credential, index) => (
+                  <CredentialItem
+                    key={`${credential.institution}-${index}`}
+                    credential={credential}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Quote */}
+        {/* QUOTE */}
         <div className="flex flex-col pt-23.5">
           <Quote className="size-8 text-[#9bb8ca]" />
 
@@ -157,54 +125,64 @@ export default async function AboutSection({
   );
 }
 
-// function Credential({ image, text }: { image: string; text: React.ReactNode }) {
-//   return (
-//     <div className="flex flex-col gap-3">
-//       <p className="text-sm leading-5 text-slate-700">{text}</p>
+/* -------------------------------------------------------------------------- */
+/* Credential Item                                                            */
+/* -------------------------------------------------------------------------- */
 
-//       <div className="relative h-14 w-36 shrink-0 overflow-hidden rounded-md">
-//         <Image
-//           src={image}
-//           alt=""
-//           fill
-//           sizes="144px"
-//           className="object-contain object-left"
-//         />
-//       </div>
-//     </div>
-//   );
-// }
-function Credential({
-  image,
-  label,
-  institution,
-}: {
-  image: string;
-  label: string;
-  institution: React.ReactNode;
-}) {
+function CredentialItem({ credential }: { credential: CredentialType }) {
+  const lines =
+    credential.breakAfter &&
+    credential.institution.startsWith(credential.breakAfter)
+      ? [
+          credential.breakAfter,
+          credential.institution.slice(credential.breakAfter.length).trim(),
+        ]
+      : [credential.institution];
+
   return (
     <div className="flex items-center gap-4">
-      {/* Logo */}
+      {/* Credential image */}
       <div className="relative h-24 w-28 shrink-0">
-        <Image
-          src={image}
-          alt=""
-          fill
-          sizes="112px"
-          className="object-contain object-center"
-        />
+        {credential.image ? (
+          <Image
+            src={credential.image}
+            alt={credential.institution || credential.label || 'Credential'}
+            fill
+            sizes="112px"
+            className="object-contain object-center"
+          />
+        ) : (
+          <div className="flex h-24 w-28 items-center justify-center">
+            <span className="text-xs font-semibold text-slate-400">
+              {credential.type === 'education'
+                ? 'EDU'
+                : credential.type === 'residency'
+                  ? 'RES'
+                  : credential.type === 'fellowship'
+                    ? 'FEL'
+                    : 'CERT'}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Credential text */}
       <div className="min-w-0">
-        <p className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-[#71869a]">
-          {label}
-        </p>
+        {credential.label && (
+          <p className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-[#71869a]">
+            {credential.label}
+          </p>
+        )}
 
-        <p className="mt-1 whitespace-nowrap font-serif text-[21px] font-semibold leading-[1.05] text-[#173f5f]">
-          {institution}
-        </p>
+        {credential.institution && (
+          <p className="mt-1 font-serif text-[21px] font-semibold leading-[1.05] text-[#173f5f]">
+            {lines.map((line, index) => (
+              <span key={index} className="block whitespace-nowrap">
+                {line}
+              </span>
+            ))}
+          </p>
+        )}
       </div>
     </div>
   );

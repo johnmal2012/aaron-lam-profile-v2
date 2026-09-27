@@ -36,5 +36,15 @@ export function getProfileDefaultValues(
         image: item.image ?? '',
         imageKey: item.imageKey ?? '',
       })) ?? [],
+
+    credential:
+      profile?.credential?.map((item) => ({
+        type: item.type ?? 'education',
+        label: item.label ?? '',
+        institution: item.institution ?? '',
+        breakAfter: item.breakAfter ?? '',
+        image: item.image ?? '',
+        imageKey: item.imageKey ?? '',
+      })) ?? [],
   };
 }

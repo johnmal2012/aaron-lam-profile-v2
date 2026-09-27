@@ -4,8 +4,39 @@ import { optionalText } from '@/lib/optionalText';
 import { optionalSpecial } from '@/lib/optionalSpecial';
 import { clinicSchema } from '@/lib/validations/clinic';
 import { expertiseSchema } from '@/lib/validations/expertise';
+import { credentialSchema } from '@/lib/validations/credential';
 
-// Server / database schema 
+// Shared schemas
+// export const clinicSchema = z.object({
+//   name: z.string().trim().min(1, 'Clinic name is required'),
+
+//   address: z.string().trim().min(1, 'Clinic address is required'),
+
+//   latitude: z.coerce
+//     .number({
+//       error: 'Latitude is required',
+//     })
+//     .min(-90, 'Latitude must be between -90 and 90')
+//     .max(90, 'Latitude must be between -90 and 90'),
+
+//   longitude: z.coerce
+//     .number({
+//       error: 'Longitude is required',
+//     })
+//     .min(-180, 'Longitude must be between -180 and 180')
+//     .max(180, 'Longitude must be between -180 and 180'),
+// });
+
+// export const expertiseSchema = z.object({
+//   text: z.string().trim().min(1, 'Expertise text is required'),
+
+//   url: z.url('Expertise URL must be a valid URL'),
+// });
+
+// The form schema and server schema are 2 different layers and must both understand credential etc
+// form schema = Validates user input in a form; layer: often nested, UI/Client-side; looser: empty strings, partial data;  form-specific
+// server schema = Validates data at rest / API payloads; layer: domain/Server/Database; stricter: no empty strings, required fields; shared across app
+// Server / database schema
 export const physicianProfileSchema = z.object({
   logo: optionalText(z.string().min(1)),
 
@@ -30,9 +61,11 @@ export const physicianProfileSchema = z.object({
   footCareLink: optionalSpecial(z.url()),
 
   expertise: z.array(expertiseSchema).default([]),
+
+  // credential
+  credential: z.array(credentialSchema).default([]),
 });
 
-// Client / form schema
 // export const physicianProfileFormSchema =
 //   physicianProfileSchema.extend({
 //     /*
@@ -43,6 +76,7 @@ export const physicianProfileSchema = z.object({
 //      * the resulting form values are numbers.
 //      */
 //   });
+// Client / form schema
 export const physicianProfileFormSchema = z.object({
   logo: optionalText(z.string().min(1)),
 
@@ -56,7 +90,7 @@ export const physicianProfileFormSchema = z.object({
 
   image: optionalText(z.string().min(1)),
 
-  // Clinics
+  // Clinics 
   clinics: z.array(clinicSchema).default([]),
 
   // Contact
@@ -70,7 +104,10 @@ export const physicianProfileFormSchema = z.object({
 
   // Expertise
   expertise: z.array(expertiseSchema).default([]),
+  // Credential
+  credential: z.array(credentialSchema).default([]),
 });
+
 
 // Types
 export type PhysicianProfileFormInput = z.input<

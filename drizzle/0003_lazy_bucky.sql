@@ -1,0 +1,1 @@
+ALTER TABLE "physician_profile" ADD COLUMN "credential" jsonb DEFAULT '[]'::jsonb NOT NULL;

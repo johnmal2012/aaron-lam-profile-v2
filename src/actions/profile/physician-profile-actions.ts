@@ -7,22 +7,14 @@ import { APIError } from 'better-auth/api';
 import { db } from '@/db/db';
 import { physicianProfile } from '@/db/schema/physician-profile';
 
-import {
-  physicianProfileSchema,
-} from '@/lib/validations/physician-profile';
+import { physicianProfileSchema } from '@/lib/validations/physician-profile';
 
-import {
-  requireAdmin,
-} from '@/lib/auth/auth-utils';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 
-import type {
-  PhysicianProfilePayload,
-} from '@/lib/profile/profile-mappers';
+import type { PhysicianProfilePayload } from '@/lib/profile/profile-mappers';
 
 // CREATE
-export async function createPhysicianProfile(
-  values: PhysicianProfilePayload,
-) {
+export async function createPhysicianProfile(values: PhysicianProfilePayload) {
   try {
     await requireAdmin();
 
@@ -36,51 +28,43 @@ export async function createPhysicianProfile(
      *
      * There is no textarea-to-array conversion anymore.
      */
-    const validated =
-      physicianProfileSchema.safeParse(values);
+    const validated = physicianProfileSchema.safeParse(values);
 
     if (!validated.success) {
-      console.error(
-        'Invalid physician profile data:',
-        validated.error.flatten(),
-      );
+      console.error('Invalid physician profile data:', validated.error.issues);
 
       return {
         error: 'Invalid profile data',
       };
     }
 
-    /*
-     * requireAdmin() has already authenticated the user,
-     * so retrieve the session only after validation.
-     */
+    // requireAdmin() has already authenticated the user,
+    // so retrieve the session only after validation.
     const session = await requireAdmin();
 
-    await db
-      .insert(physicianProfile)
-      .values({
-        userId: session.user.id,
+    await db.insert(physicianProfile).values({
+      userId: session.user.id,
 
-        logo: validated.data.logo,
-        name: validated.data.name,
-        boardSpecialty:
-          validated.data.boardSpecialty,
-        specialty: validated.data.specialty,
-        title: validated.data.title,
-        // Image is allowed during CREATE
-        // On a newly created profile, the image may be supplied by the initial profile data
-        image: validated.data.image,
+      logo: validated.data.logo,
+      name: validated.data.name,
+      boardSpecialty: validated.data.boardSpecialty,
+      specialty: validated.data.specialty,
+      title: validated.data.title,
+      // Image is allowed during CREATE
+      // On a newly created profile, the image may be supplied by the initial profile data
+      image: validated.data.image,
 
-        clinics: validated.data.clinics,
+      clinics: validated.data.clinics,
 
-        phone: validated.data.phone,
-        email: validated.data.email,
-        linkName: validated.data.linkName,
-        footCareLink:
-          validated.data.footCareLink,
+      phone: validated.data.phone,
+      email: validated.data.email,
+      linkName: validated.data.linkName,
+      footCareLink: validated.data.footCareLink,
 
-        expertise: validated.data.expertise,
-      });
+      expertise: validated.data.expertise,
+
+      credential: validated.data.credential,
+    });
 
     revalidateProfilePaths();
 
@@ -88,10 +72,7 @@ export async function createPhysicianProfile(
       error: null,
     };
   } catch (err) {
-    console.error(
-      'createPhysicianProfile error:',
-      err,
-    );
+    console.error('createPhysicianProfile error:', err);
 
     if (err instanceof APIError) {
       return {
@@ -112,17 +93,14 @@ export async function updatePhysicianProfile(
 ) {
   try {
     await requireAdmin();
-
-    /*
-     * Server-side validation.
-     */
-    const validated =
-      physicianProfileSchema.safeParse(values);
+    // Server-side validation.
+    const validated = physicianProfileSchema.safeParse(values);
 
     if (!validated.success) {
       console.error(
         'Invalid physician profile data:',
-        validated.error.flatten(),
+        // validated.error.flatten(),
+        validated.error.issues,
       );
 
       return {
@@ -130,41 +108,34 @@ export async function updatePhysicianProfile(
       };
     }
 
-    /*
-     * Only update fields belonging to the physician profile.
-     *
-     * In particular, userId is NOT changed during an update.
-     */
+    // Only update fields belonging to the physician profile.
+    // In particular, userId is NOT changed during an update.
     await db
       .update(physicianProfile)
       .set({
         logo: validated.data.logo,
         name: validated.data.name,
-        boardSpecialty:
-          validated.data.boardSpecialty,
+        boardSpecialty: validated.data.boardSpecialty,
         specialty: validated.data.specialty,
         title: validated.data.title,
         // image and imageKey are intentionally NOT included here
-        // which is managed separately by ProfileImageUpload() in profile-image-upload.ts 
+        // which is managed separately by ProfileImageUpload() in profile-image-upload.ts
         // image: validated.data.image,
 
-        /*
-         * Repeatable Clinic Editor data.
-         *
-         * This is written directly to the JSONB column.
-         */
+        // Repeatable Clinic Editor data.
+        // This is written directly to the JSONB column.
         clinics: validated.data.clinics,
 
         phone: validated.data.phone,
         email: validated.data.email,
         linkName: validated.data.linkName,
-        footCareLink:
-          validated.data.footCareLink,
+        footCareLink: validated.data.footCareLink,
 
-        /*
-         * Repeatable Expertise Editor data.
-         */
+        // Repeatable Expertise Editor data
         expertise: validated.data.expertise,
+
+        // Repeatable Credential editor data
+        credential: validated.data.credential,
 
         updatedAt: new Date(),
       })
@@ -176,10 +147,7 @@ export async function updatePhysicianProfile(
       error: null,
     };
   } catch (err) {
-    console.error(
-      'updatePhysicianProfile error:',
-      err,
-    );
+    console.error('updatePhysicianProfile error:', err);
 
     if (err instanceof APIError) {
       return {
@@ -193,11 +161,8 @@ export async function updatePhysicianProfile(
   }
 }
 
-
-// DELETE / SOFT 
-export async function deletePhysicianProfile(
-  profileId: number,
-) {
+// DELETE / SOFT
+export async function deletePhysicianProfile(profileId: number) {
   try {
     await requireAdmin();
 
@@ -208,9 +173,7 @@ export async function deletePhysicianProfile(
         deletedAt: new Date(),
         updatedAt: new Date(),
       })
-      .where(
-        eq(physicianProfile.id, profileId),
-      );
+      .where(eq(physicianProfile.id, profileId));
 
     revalidateProfilePaths();
 
@@ -218,10 +181,7 @@ export async function deletePhysicianProfile(
       error: null,
     };
   } catch (err) {
-    console.error(
-      'deletePhysicianProfile error:',
-      err,
-    );
+    console.error('deletePhysicianProfile error:', err);
 
     if (err instanceof APIError) {
       return {

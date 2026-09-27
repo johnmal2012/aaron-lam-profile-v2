@@ -91,7 +91,8 @@ export function ExpertiseCarousel({ items }: { items: Expertise[] }) {
 function ConditionCard({ item, index }: { item: Expertise; index: number }) {
   const content = item.text || 'Foot & Ankle Care';
 
-  const imageSrc = item.image?.trim();
+  const imageSrc =
+    item.image?.trim();
 
   const card = (
     <article className="group flex h-full min-w-0 flex-col items-center">

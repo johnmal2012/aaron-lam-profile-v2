@@ -1,3 +1,4 @@
+// ADMIN PROFILE EDIT > ProfileForm (RHF) > Credentials Credential[] etc > toProfilePayload() > physicianProfileSchema > Server Action > Drizzle/Neon > physician_profile table > credential jsonb column > getWebsiteData() > HomepageSections > AboutSection > Training & Credentials
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -40,6 +41,7 @@ import { ExpertiseEditor } from '@/components/profile/expertise-editor';
 import { getProfileDefaultValues } from '@/lib/profile/profile-default-values';
 
 import { toProfilePayload } from '@/lib/profile/profile-mappers';
+import { CredentialEditor } from '@/components/profile/credential-editor';
 
 // Types
 type Profile = InferSelectModel<typeof physicianProfile>;
@@ -52,6 +54,7 @@ type ProfileFormProps = {
 
 const clinicsSectionIndex = profileFormFields.length;
 const expertiseSectionIndex = clinicsSectionIndex + 1;
+const credentialSectionIndex = expertiseSectionIndex + 1;
 
 // Component
 export function ProfileForm({
@@ -117,10 +120,6 @@ export function ProfileForm({
     toast.error('Please correct the highlighted fields.');
   }
 
-  /* -------------------------------------------------------------- */
-  /*                                                          */
-  /* -------------------------------------------------------------- */
-
   // temporary development - only error logger
   //   const isDevelopment = process.env.NODE_ENV === 'development';
   // Render
@@ -130,7 +129,6 @@ export function ProfileForm({
       className="container mx-auto space-y-6 py-10"
       noValidate
     >
-
       {/* Page heading */}
       <div>
         <h1 className="py-6 text-3xl font-bold">
@@ -184,6 +182,21 @@ export function ProfileForm({
         />
       </section>
 
+      {/* Training & Credentials */}
+      <section
+        className={cn(
+          'rounded-lg border p-4',
+          getCardBackground(credentialSectionIndex),
+        )}
+      >
+        <CredentialEditor
+          control={form.control}
+          register={form.register}
+          setValue={form.setValue}
+          errors={form.formState.errors}
+        />
+      </section>
+      
       {/* Form actions */}
       <div className="flex items-center justify-start gap-2">
         <Button
