@@ -104,10 +104,21 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
         </div>
 
         {/* Right side - complete profile photograph */}
-        <div className="relative flex min-h-105 items-start justify-center overflow-hidden bg-[#eef5fa] sm:min-h-115 md:min-h-105 lg:min-h-125">
+        <div
+          className={cn(
+            'relative flex min-h-105 items-start justify-center overflow-hidden bg-[#eef5fa]',
+            // Phone: add space around the photograph
+            'px-6 py-5',
+            // Small screens
+            'sm:min-h-115 sm:px-8 sm:py-6',
+            // Tablet and desktop: return to the original tighter layout
+            'md:min-h-105 md:px-0 md:py-0',
+            'lg:min-h-125',
+          )}
+        >
           <div
             className={cn(
-              'relative aspect-square w-full',
+              'relative aspect-square w-full overflow-hidden rounded-2xl',
               // Keep the photo from becoming excessively large
               'max-w-105',
               'sm:max-w-115',
