@@ -52,7 +52,7 @@ export function ExpertiseCarousel({ items }: { items: Expertise[] }) {
         className="relative w-full px-10 sm:px-12 lg:px-14"
       >
         <CarouselContent className="-ml-2">
-          {items.slice(0, 16).map((item, index) => (
+          {items.map((item, index) => (
             <CarouselItem
               key={`${item.text}-${index}`}
               className="min-w-0 shrink-0 basis-1/2 pl-2 md:basis-1/4 md:pl-3 lg:basis-[12.5%]"
@@ -89,25 +89,13 @@ export function ExpertiseCarousel({ items }: { items: Expertise[] }) {
 }
 
 function ConditionCard({ item, index }: { item: Expertise; index: number }) {
-  const imageSources = [
-    'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=500&q=80',
-    'https://www.footcaremd.org/images/librariesprovider2/article-images/achillesrupture.png?sfvrsn=5c7d297d_0',
-    'https://footcaremd.org/images/librariesprovider2/banners/ankle-conditions.jpg?sfvrsn=9ff79bc_4',
-    'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=500&q=80',
-    'https://www.footcaremd.org/images/librariesprovider2/article-images/halluxrigidus.png?sfvrsn=1a74a198_0&MaxWidth=350&MaxHeight=200&ScaleUp=false&Quality=High&Method=ResizeFitToAreaArguments&Signature=9F6B62D061285B96711B66E23230A843B80579D5',
-    'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=500&q=80',
-    'https://images.unsplash.com/photo-1542884748-2b87b36c6b90?auto=format&fit=crop&w=500&q=80',
-    'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=500&q=80',
-  ];
-
   const content = item.text || 'Foot & Ankle Care';
 
-  const imageSrc =
-    item.image?.trim() || imageSources[index % imageSources.length];
+  const imageSrc = item.image?.trim();
 
   const card = (
     <article className="group flex h-full min-w-0 flex-col items-center">
-      <div className="aspect-[1.55/1] w-[88%] shrink-0 overflow-hidden rounded-md bg-slate-200 sm:w-[86%] lg:w-[82%]">
+      <div className="aspect-[1.55/1] w-[88%] shrink-0 overflow-hidden rounded-md sm:w-[86%] lg:w-[82%]">
         <img
           src={imageSrc}
           alt=""
