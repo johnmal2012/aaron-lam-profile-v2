@@ -3,11 +3,18 @@ import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PhysicianProfileDeleteButton } from '@/components/profile/profile-delete-button';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { CurrentUser } from '@/lib/profile/get-profile-page-data';
 
-export function ProfileCardHeader({ profile }: { profile: PhysicianProfile }) {
+export function ProfileCardHeader({
+  profile,
+  currentUser,
+}: {
+  profile: PhysicianProfile;
+  currentUser: CurrentUser | null;
+}) {
   return (
     <CardHeader className="space-y-2">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <CardTitle className="text-2xl">{profile.name}</CardTitle>
 
@@ -15,6 +22,14 @@ export function ProfileCardHeader({ profile }: { profile: PhysicianProfile }) {
             {profile.specialty}
           </CardDescription>
         </div>
+
+        {currentUser?.image && (
+          <img
+            src={currentUser.image}
+            alt={currentUser.name ?? 'Profile image'}
+            className="size-16 shrink-0 rounded-full border object-cover"
+          />
+        )}
 
         <div className="flex gap-2">
           <Button

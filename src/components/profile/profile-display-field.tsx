@@ -2,8 +2,6 @@ import Link from 'next/link';
 
 import { Field, FieldLabel } from '@/components/ui/field';
 
-import { ProfileImageCard } from '@/components/profile/profile-image-card';
-
 import { PhysicianProfile } from '@/lib/types/physician-profile';
 
 import { getProfileItems } from '@/lib/profile/get-profile-items';
@@ -26,18 +24,8 @@ type ProfileDisplayFieldProps = {
 export function ProfileDisplayField({
   item,
   profile,
-  currentUser,
 }: ProfileDisplayFieldProps) {
   switch (item.type) {
-    case 'image':
-      return (
-        <ProfileImageCard
-          label={item.label}
-          userName={currentUser?.name}
-          userImage={currentUser?.image}
-        />
-      );
-
     case 'expertise':
       return (
         <Field>
@@ -45,28 +33,42 @@ export function ProfileDisplayField({
             Expertise
           </FieldLabel>
 
-          <div className="mt-3 space-y-3">
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {profile.expertise?.length ? (
               profile.expertise.map((expertise, index) => (
                 <div
                   key={`${expertise.text}-${expertise.url}-${index}`}
                   className={cn(
-                    'rounded-lg border px-4 py-3 text-sm font-medium',
+                    'flex items-center gap-4 rounded-lg border p-3',
                     index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-200',
                   )}
                 >
-                  {expertise.url ? (
-                    <Link
-                      href={expertise.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-700 hover:underline"
-                    >
-                      {expertise.text}
-                    </Link>
+                  {expertise.image ? (
+                    <img
+                      src={expertise.image}
+                      alt={expertise.text}
+                      className="size-20 shrink-0 rounded-md border bg-white object-cover"
+                    />
                   ) : (
-                    expertise.text
+                    <div className="flex size-20 shrink-0 items-center justify-center rounded-md border bg-white text-xs text-muted-foreground">
+                      No image
+                    </div>
                   )}
+
+                  <div className="min-w-0 flex-1">
+                    {expertise.url ? (
+                      <Link
+                        href={expertise.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium text-blue-700 hover:underline"
+                      >
+                        {expertise.text}
+                      </Link>
+                    ) : (
+                      <p className="text-sm font-medium">{expertise.text}</p>
+                    )}
+                  </div>
                 </div>
               ))
             ) : (

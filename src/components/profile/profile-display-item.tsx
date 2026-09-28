@@ -27,6 +27,7 @@ export function ProfileDisplayItem({
       className={cn(
         'rounded-xl border p-4',
         getCardBackground(index, 2),
+        item.type === 'expertise' && 'col-span-1 sm:col-span-2',
       )}
     >
       <ProfileDisplayField

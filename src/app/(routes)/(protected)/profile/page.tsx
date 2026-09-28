@@ -76,23 +76,12 @@ export default async function ProfilePage() {
   }
 
   const { profile, currentUser, items } = profileData;
-
-  // Helper function for alternating backgrounds on mobile
-  //   const getMobileBackground = (index: number) => {
-  //     return index % 2 === 0 ? 'bg-slate-100' : 'bg-white';
-  //   };
-
-  //   const desktopRows = [];
-  //   for (let i = 0; i < allItems.length; i += 2) {
-  //     desktopRows.push(allItems.slice(i, i + 2));
-  //   }
-
   return (
     <div className="container mx-auto space-y-6 py-10">
       <ProfileHeader />
 
       <Card className="rounded-2xl shadow-sm">
-        <ProfileCardHeader profile={profile} />
+        <ProfileCardHeader profile={profile} currentUser={currentUser} />
 
         <Separator className="h-1 bg-slate-300" />
 
