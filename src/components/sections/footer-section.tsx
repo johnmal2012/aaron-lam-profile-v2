@@ -28,7 +28,7 @@ export default function FooterSection({
     // </footer>
     <footer className="bg-slate-200 px-6 py-10 text-gray-600">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {clinics.map((clinic, index) => (
             <div key={`${clinic.name}-${clinic.address}-${index}`}>
               <h3 className="text-sm font-semibold text-slate-800">
