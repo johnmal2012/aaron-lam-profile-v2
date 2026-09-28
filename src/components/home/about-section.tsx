@@ -80,14 +80,14 @@ export default async function AboutSection({
         </div>
 
         {/* TRAINING & CREDENTIALS */}
-        <div className="border-y border-slate-200 py-8 lg:border-x lg:border-y-0 lg:px-8 lg:py-0">
+        <div className="border-y border-slate-200 py-8 text-center lg:border-x lg:border-y-0 lg:px-8 lg:py-0 lg:text-left">
           <SectionHeading
             title={education?.title ?? 'Training & Credentials'}
           />
 
           <div className="mt-8">
             {education?.content && (
-              <div className="prose prose-sm max-w-none prose-slate">
+              <div className="prose prose-sm mx-auto max-w-none prose-slate lg:mx-0">
                 {educationContent}
               </div>
             )}
@@ -106,7 +106,7 @@ export default async function AboutSection({
         </div>
 
         {/* QUOTE */}
-        <div className="flex flex-col pt-23.5">
+        <div className="flex flex-col items-center pt-8 text-center lg:items-start lg:pt-23.5 lg:text-left">
           <Quote className="size-8 text-[#9bb8ca]" />
 
           <blockquote className="mt-4 font-serif text-xl italic leading-8 text-[#214b6c]">
@@ -125,10 +125,7 @@ export default async function AboutSection({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Credential Item                                                            */
-/* -------------------------------------------------------------------------- */
-
+// Credential Item                                                            */
 function CredentialItem({ credential }: { credential: CredentialType }) {
   const lines =
     credential.breakAfter &&
@@ -140,7 +137,7 @@ function CredentialItem({ credential }: { credential: CredentialType }) {
       : [credential.institution];
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex w-full items-center justify-center gap-4 text-center lg:justify-start lg:text-left">
       {/* Credential image */}
       <div className="relative h-24 w-28 shrink-0">
         {credential.image ? (
@@ -169,7 +166,7 @@ function CredentialItem({ credential }: { credential: CredentialType }) {
       {/* Credential text */}
       <div className="min-w-0">
         {credential.label && (
-          <p className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-[#71869a]">
+          <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#71869a]">
             {credential.label}
           </p>
         )}
@@ -177,7 +174,7 @@ function CredentialItem({ credential }: { credential: CredentialType }) {
         {credential.institution && (
           <p className="mt-1 font-serif text-[21px] font-semibold leading-[1.05] text-[#173f5f]">
             {lines.map((line, index) => (
-              <span key={index} className="block whitespace-nowrap">
+              <span key={index} className="block whitespace-normal">
                 {line}
               </span>
             ))}
