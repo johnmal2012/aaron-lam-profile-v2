@@ -137,7 +137,7 @@ function CredentialItem({ credential }: { credential: CredentialType }) {
       : [credential.institution];
 
   return (
-    <div className="flex w-full items-center justify-center gap-4 text-center lg:justify-start lg:text-left">
+    <div className="mx-auto flex w-full max-w-90 items-center gap-4 text-left lg:mx-0">
       {/* Credential image */}
       <div className="relative h-24 w-28 shrink-0">
         {credential.image ? (
@@ -164,7 +164,7 @@ function CredentialItem({ credential }: { credential: CredentialType }) {
       </div>
 
       {/* Credential text */}
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1 text-left">
         {credential.label && (
           <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#71869a]">
             {credential.label}
