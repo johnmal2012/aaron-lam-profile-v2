@@ -1,11 +1,9 @@
-import {
-  CheckCircle2,
-} from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 import { renderMDX } from '@/lib/mdx';
 import { cn } from '@/lib/utils';
 
-import SectionHeading from './section-heading';
+import SectionHeading from '@/components/home/section-heading';
 
 // RESEARCH
 export default async function ResearchSection({
@@ -15,6 +13,8 @@ export default async function ResearchSection({
   section?: {
     title: string | null;
     content: string | null;
+    image?: string | null;
+    imageKey?: string | null;
   };
   className?: string;
 }) {
@@ -60,12 +60,18 @@ export default async function ResearchSection({
           </Link> */}
         </div>
 
-        <div className="overflow-hidden rounded-md bg-slate-100">
-          <img
-            src="/images/research.jpg"
-            alt="Medical research imaging"
-            className="h-full min-h-55 w-full object-cover"
-          />
+        <div className="relative min-h-55 overflow-hidden rounded-md bg-slate-100">
+          {section.image ? (
+            <img
+              src={section.image}
+              alt="Medical research imaging"
+              className="absolute inset-0 size-full object-cover"
+            />
+          ) : (
+            <div className="flex min-h-55 items-center justify-center text-sm text-slate-500">
+              Research image not uploaded
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col justify-center">
@@ -99,4 +105,3 @@ function ResearchItem({ text }: { text: string }) {
     </li>
   );
 }
-

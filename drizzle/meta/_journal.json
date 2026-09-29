@@ -29,6 +29,13 @@
       "when": 1790540611823,
       "tag": "0003_lazy_bucky",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790646979822,
+      "tag": "0004_steady_hercules",
+      "breakpoints": true
     }
   ]
 }
