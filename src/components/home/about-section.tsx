@@ -24,6 +24,7 @@ export default async function AboutSection({
   section?: {
     title: string | null;
     content: string | null;
+    quote?: string | null;
   };
 
   education?: {
@@ -109,10 +110,11 @@ export default async function AboutSection({
         <div className="flex flex-col items-center pt-8 text-center lg:items-start lg:pt-23.5 lg:text-left">
           <Quote className="size-8 text-[#9bb8ca]" />
 
-          <blockquote className="mt-4 font-serif text-xl italic leading-8 text-[#214b6c]">
-            “My goal is to help every patient get back to the activities they
-            love with individualized, evidence-based care.”
-          </blockquote>
+          {section?.quote && (
+            <blockquote className="mt-4 font-serif text-xl italic leading-8 text-[#214b6c]">
+              “{section.quote}”
+            </blockquote>
+          )}
 
           <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">
             — {profile.name ?? 'Aaron Lam, MD'}
@@ -125,7 +127,7 @@ export default async function AboutSection({
   );
 }
 
-// Credential Item                                                            */
+// Credential Item
 function CredentialItem({ credential }: { credential: CredentialType }) {
   const lines =
     credential.breakAfter &&

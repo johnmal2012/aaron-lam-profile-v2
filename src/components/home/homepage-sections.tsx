@@ -1,4 +1,6 @@
+
 import AboutSection from '@/components/home/about-section';
+import HeroSection from '@/components/home/hero-section';
 import ExpertiseSection from '@/components/home/expertise-section';
 import PhilosophySection from '@/components/home/philosophy-section';
 import ResearchSection from '@/components/home/research-section';
@@ -9,6 +11,7 @@ import InsuranceSection from '@/components/sections/insurance-section';
 import ContactSection from '@/components/sections/contact-section';
 
 import type { Clinic } from '@/lib/types/clinic';
+import type { HeroFact } from '@/lib/types/hero-fact';
 import { getWebsiteData } from '@/lib/website/get-website-data';
 
 const SECTION_BACKGROUNDS = [
@@ -27,7 +30,10 @@ type WebsiteData = Awaited<
 >;
 
 type Profile = NonNullable<WebsiteData['profile']>;
-type WebsiteSection = NonNullable<WebsiteData['sections']>[number];
+
+type WebsiteSection = NonNullable<
+  WebsiteData['sections']
+>[number];
 
 type HomepageSectionsProps = {
   profile: Profile;
@@ -40,6 +46,7 @@ export default function HomepageSections({
   sections,
   clinics,
 }: HomepageSectionsProps) {
+  // Only active sections should be displayed.
   const activeSections = sections.filter(
     (section) => section.isActive,
   );
@@ -48,6 +55,13 @@ export default function HomepageSections({
     activeSections.find(
       (section) => section.slug === slug,
     );
+
+  // Support both possible hero slugs.
+  const hero = activeSections.find(
+    (section) =>
+      section.slug === 'home' ||
+      section.slug === 'hero',
+  );
 
   const about = getSection('about');
   const education = getSection('education');
@@ -61,7 +75,28 @@ export default function HomepageSections({
 
   const renderedSections: React.ReactNode[] = [];
 
-  // ABOUT + EDUCATION: intentionally displayed together as one visual section
+  // HERO
+  // Render before all other homepage sections.
+  if (hero) {
+    const heroFacts: HeroFact[] | null =
+      Array.isArray(hero.heroFacts)
+        ? (hero.heroFacts as HeroFact[])
+        : null;
+
+    renderedSections.push(
+      <HeroSection
+        key="home"
+        profile={profile}
+        heroFacts={heroFacts}
+      />,
+    );
+  }
+
+  // Exclude the hero from the alternating background index.
+  const backgroundIndex = () =>
+    renderedSections.length - (hero ? 1 : 0);
+
+  // ABOUT + EDUCATION
   if (about || education) {
     renderedSections.push(
       <AboutSection
@@ -70,7 +105,7 @@ export default function HomepageSections({
         section={about}
         education={education}
         className={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
       />,
     );
@@ -84,7 +119,7 @@ export default function HomepageSections({
         profile={profile}
         section={expertise}
         className={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
       />,
     );
@@ -97,7 +132,7 @@ export default function HomepageSections({
         key="philosophy"
         section={philosophy}
         className={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
       />,
     );
@@ -110,7 +145,7 @@ export default function HomepageSections({
         key="research"
         section={research}
         className={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
       />,
     );
@@ -124,7 +159,7 @@ export default function HomepageSections({
         title={hours.title ?? 'Office Hours'}
         content={hours.content ?? ''}
         background={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
         slug={hours.slug ?? 'hours'}
       />,
@@ -139,7 +174,7 @@ export default function HomepageSections({
         title={insurance.title ?? 'Insurance'}
         content={insurance.content ?? ''}
         background={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
         slug={insurance.slug ?? 'insurance'}
       />,
@@ -157,7 +192,7 @@ export default function HomepageSections({
         clinics={clinics}
         address={profile.location ?? undefined}
         background={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
         slug={contact.slug ?? 'contact'}
       />,
@@ -171,10 +206,11 @@ export default function HomepageSections({
         key="location"
         clinics={clinics}
         className={getSectionBackground(
-          renderedSections.length,
+          backgroundIndex(),
         )}
       />,
     );
   }
+
   return <>{renderedSections}</>;
 }

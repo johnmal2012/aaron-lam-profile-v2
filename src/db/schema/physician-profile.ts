@@ -38,21 +38,37 @@ export const physicianProfile = pgTable(
 
     imageKey: text('image_key'),
 
+    // clinicName: text('clinic_name'),
+
+    // clinicAddress: text('clinic_address'),
     clinics: jsonb('clinics').$type<Clinic[]>().notNull().default([]),
 
-    expertise: jsonb('expertise').$type<Expertise[]>().notNull().default([]),
+    // expertise: jsonb('expertise').$type<string[]>().default([]),
+    expertise: jsonb('expertises').$type<Expertise[]>().notNull().default([]),
 
-    credential: jsonb('credential').$type<Credential[]>().notNull().default([]),
+    credential: jsonb('credentials').$type<Credential[]>().notNull().default([]),
 
     phone: text('phone'),
 
     email: text('email'),
+
+    // address: text('address'),
 
     location: text('location'),
 
     linkName: text('link_name'),
 
     footCareLink: text('footcare_link'),
+
+    //   navItems: jsonb('nav_items')
+    //     .$type<
+    //       {
+    //         label: string;
+    //         href: string;
+    //       }[]
+    //     >()
+    //     .default([]),
+    // navItems: jsonb('nav_items').$type<string[]>().default([]),
 
     isActive: boolean('is_active').notNull().default(true),
 

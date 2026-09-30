@@ -1,125 +1,79 @@
 'use client';
 
-// React
-// import { useTransition } from 'react';
-// Next
 import { useRouter } from 'next/navigation';
-// Form
-import { useForm } from 'react-hook-form';
+import { useForm, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-// Database
+import type { InferSelectModel } from 'drizzle-orm';
+import { toast } from 'sonner';
+
 import { physicianSections } from '@/db/schema';
-import { InferSelectModel } from 'drizzle-orm';
-// Actions
+
 import {
   createPhysicianSection,
   updatePhysicianSection,
 } from '@/actions/section/physician-section-actions';
-// UI
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup } from '@/components/ui/field';
-// Validation
-import {
-  PhysicianSectionFormInput,
-  physicianSectionUpdateSchema,
-} from '@/lib/validations/physician-section';
-// Utils
-import { cn, getCardBackground } from '@/lib/utils';
-// const
+
+import { HighlightEditor } from '@/components/sections/highlight-editor';
+import { HeroFactEditor } from '@/components/sections/hero-fact-editor';
 import { SectionField } from '@/components/sections/section-form-field';
-// Misc
-import { toast } from 'sonner';
+
+import {
+  physicianSectionUpdateSchema,
+  type PhysicianSectionFormInput,
+} from '@/lib/validations/physician-section';
+
+import { cn, getCardBackground } from '@/lib/utils';
 import { getSectionDefaultValues } from '@/lib/sections/section-default-values';
 import { sectionFormFields } from '@/lib/sections/section-form-fields';
-import { SectionImageUpload } from '@/components/sections/section-image-upload';
-
-type SectionFormProps = {
-  section?: Section;
-};
 
 type Section = InferSelectModel<typeof physicianSections>;
 
-// type SessionFormData = {
-//   title: string;
-//   slug: string;
-//   content: string;
-//   displayOrder: number;
-// };
-
-// type FormErrors = {
-//   slug?: string;
-//   title?: string;
-//   content?: string;
-//   displayOrder?: string;
-//   general?: string;
-// };
-
-// type ApiFieldError = {
-//   path: string[];
-//   message: string;
-// };
+interface SectionFormProps {
+  section?: Section;
+}
 
 export default function SectionForm({ section }: SectionFormProps) {
   const router = useRouter();
 
-  // This state update is not urgent. Keep the UI responsive while you update it where some state updates may trigger expensive rendering
-  // For server actions called from RHF, no need to  use useTransition
-  //   const [isPending, startTransition] = useTransition();
-
-  //   const [errors, setErrors] = useState<FormErrors>({});
-
-  //   const [generalError, setGeneralError] = useState<string | null>(null);
-
+  // Initialize React Hook Form
   const form = useForm<PhysicianSectionFormInput>({
     resolver: zodResolver(physicianSectionUpdateSchema),
     defaultValues: getSectionDefaultValues(section),
   });
 
-  // prev = arbitary name = the previous state that react calls your function and passes in the previous or most recent current state as the argument
-  // square brackets = computed property name syntax, allows you to use the value stored in variable field as the property name; otherwise, javascript treats field as the literal property name, not the variable.
-  //   function updateField(field: keyof SessionFormData, value: string | number) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       [field]: value,
-  //     }));
-  //   }
+  // Watch section slug to render the appropriate JSONB editor
+  const watchedSlug = form.watch('slug');
+  const slug = watchedSlug?.trim() || section?.slug || '';
 
-  // useEffect(() => {
-  //   if (!errors) return;
+  const isExistingSection = Boolean(section);
 
-  //   const timer = setTimeout(() => {
-  //     setErrors({});
-  //     setGeneralError(null);
-  //   }, 4000);
-
-  //   return () => clearTimeout(timer);
-  // }, [errors]);
-
+  // Submit section data
   async function onFormSubmit(values: PhysicianSectionFormInput) {
-    // TESTING:
-    // Use an ID that does not exist in database
-    // const testId = 999999;
-    // console.log('Deleting section id:', testId);
     try {
-      // const result = await createPhysicianSection(formData);
-      const { error } = section
+      const result = section
         ? await updatePhysicianSection(section.id, values)
         : await createPhysicianSection(values);
 
-      if (error) {
-        toast.error(error);
+      if (result.error) {
+        toast.error(result.error);
         return;
       }
-      toast.success('Section created/updated successfully');
-      //   (evt.target as HTMLFormElement).reset();
-      //   setCurrentPassword('');
-      //   setNewPassword('');
+
+      toast.success(
+        section
+          ? 'Section updated successfully'
+          : 'Section created successfully',
+      );
+
       router.push('/sections');
-      // router.refresh();
-    } catch (err) {
+      router.refresh();
+    } catch (error) {
+      console.error('Section form submission failed:', error);
       toast.error('Something went wrong. Please try again.');
-      console.error(err);
     }
   }
 
@@ -127,65 +81,141 @@ export default function SectionForm({ section }: SectionFormProps) {
     <div className="mx-auto w-full max-w-4xl">
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 md:p-8">
-          {/* Header */}
-          <div className="mb-8 space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">Edit Section</h1>
-
-            <p className="text-sm text-muted-foreground">
-              Update physician section content, metadata, and display order.
-            </p>
-          </div>
+          <SectionFormHeader
+            isExistingSection={isExistingSection}
+          />
 
           <form
             onSubmit={form.handleSubmit(onFormSubmit)}
             className="space-y-6"
             noValidate
           >
+            {/* Common Section Fields */}
             <FieldGroup className="space-y-4">
               {sectionFormFields.map((field, index) => (
                 <Field
                   key={field.id}
-                  className={cn('rounded-lg p-4', getCardBackground(index))}
+                  className={cn(
+                    'rounded-lg p-4',
+                    getCardBackground(index),
+                  )}
                 >
                   <SectionField field={field} form={form} />
                 </Field>
               ))}
             </FieldGroup>
 
-            {/* Image Upload for Philosophy and Research */}
-            {section &&
-              (section.slug === 'philosophy' ||
-                section.slug === 'research') && (
-                <div className="rounded-lg border bg-slate-50 p-4">
-                  <SectionImageUpload
-                    slug={section.slug}
-                    image={section.image ?? null}
-                  />
-                </div>
-              )}
+            {/* Section-Specific JSONB Editors */}
+            <SectionCustomFields
+              slug={slug}
+              form={form}
+            />
 
-            {/* Actions */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <Button
-                type="submit"
-                disabled={form.formState.isSubmitting}
-                className="h-10 w-28 bg-green-600! hover:bg-green-700!"
-              >
-                {section ? 'Update' : 'Create'}
-              </Button>
-
-              <Button
-                type="button"
-                className="h-10 w-24"
-                variant="outline"
-                onClick={() => router.push('/sections')}
-              >
-                Cancel
-              </Button>
-            </div>
+            {/* Form Actions */}
+            <SectionFormActions
+              isSubmitting={form.formState.isSubmitting}
+              isExistingSection={isExistingSection}
+              onCancel={() => router.push('/sections')}
+            />
           </form>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+// Form Header
+interface SectionFormHeaderProps {
+  isExistingSection: boolean;
+}
+
+function SectionFormHeader({
+  isExistingSection,
+}: SectionFormHeaderProps) {
+  return (
+    <div className="mb-8 space-y-2">
+      <h1 className="text-3xl font-bold tracking-tight">
+        {isExistingSection ? 'Edit Section' : 'Create Section'}
+      </h1>
+
+      <p className="text-sm text-muted-foreground">
+        Update physician section content, metadata, and display order.
+      </p>
+    </div>
+  );
+}
+
+// Section-Specific Editors
+interface SectionCustomFieldsProps {
+  slug: string;
+  form: UseFormReturn<PhysicianSectionFormInput>;
+}
+
+function SectionCustomFields({
+  slug,
+  form,
+}: SectionCustomFieldsProps) {
+  // Hero Facts JSONB editor
+  if (slug === 'home' || slug === 'hero') {
+    return (
+      <HeroFactEditor
+        control={form.control}
+        register={form.register}
+        errors={form.formState.errors}
+      />
+    );
+  }
+
+  // Research Highlights JSONB editor
+  if (slug === 'research') {
+    return (
+      <HighlightEditor
+        control={form.control}
+        register={form.register}
+        setValue={form.setValue}
+        errors={form.formState.errors}
+      />
+    );
+  }
+
+  return null;
+}
+
+// Form Actions
+interface SectionFormActionsProps {
+  isSubmitting: boolean;
+  isExistingSection: boolean;
+  onCancel: () => void;
+}
+
+function SectionFormActions({
+  isSubmitting,
+  isExistingSection,
+  onCancel,
+}: SectionFormActionsProps) {
+  return (
+    <div className="flex flex-wrap items-center gap-3 pt-2">
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="h-10 w-28 bg-green-600! hover:bg-green-700!"
+      >
+        {isSubmitting
+          ? 'Saving...'
+          : isExistingSection
+            ? 'Update'
+            : 'Create'}
+      </Button>
+
+      <Button
+        type="button"
+        className="h-10 w-24"
+        variant="outline"
+        disabled={isSubmitting}
+        onClick={onCancel}
+      >
+        Cancel
+      </Button>
     </div>
   );
 }

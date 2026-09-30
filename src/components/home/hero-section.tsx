@@ -1,14 +1,16 @@
+
 import {
   Building2,
   CalendarDays,
   GraduationCap,
   MapPin,
   Phone,
+  type LucideIcon,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-
 import { getWebsiteData } from '@/lib/website/get-website-data';
+import type { HeroFact } from '@/lib/types/hero-fact';
 
 type Profile = NonNullable<
   Awaited<ReturnType<typeof getWebsiteData>>['profile']
@@ -16,11 +18,47 @@ type Profile = NonNullable<
 
 type HeroSectionProps = {
   profile: Profile;
+  heroFacts?: HeroFact[] | null;
   className?: string;
 };
 
+// Map saved icon names to Lucide components.
+const heroFactIconMap: Record<string, LucideIcon> = {
+  'building-2': Building2,
+  'graduation-cap': GraduationCap,
+  'map-pin': MapPin,
+};
+
 // Hero
-export default function HeroSection({ profile, className }: HeroSectionProps) {
+export default function HeroSection({
+  profile,
+  heroFacts,
+  className,
+}: HeroSectionProps) {
+  // Fallback facts for when no facts have been saved yet.
+  const defaultFacts: HeroFact[] = [
+    {
+      icon: 'building-2',
+      title: profile.clinics?.[0]?.name ?? 'Maimonides Medical Center',
+      subtitle: 'Primary Affiliation',
+    },
+    {
+      icon: 'graduation-cap',
+      title: 'Fellowship Trained',
+      subtitle: profile.specialty ?? 'Foot & Ankle',
+    },
+    {
+      icon: 'map-pin',
+      title: profile.location ?? 'Brooklyn, NY',
+      subtitle: 'and surrounding communities',
+    },
+  ];
+
+  const displayFacts =
+    heroFacts && heroFacts.length > 0
+      ? heroFacts.slice(0, 3)
+      : defaultFacts;
+
   return (
     <section
       id="home"
@@ -31,12 +69,8 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
     >
       <div
         className={cn(
-          'mx-auto grid max-w-7xl',
-          // Phone: one column
-          'grid-cols-1',
-          // Tablet: balanced left/right layout
+          'mx-auto grid max-w-7xl grid-cols-1',
           'md:grid-cols-[1fr_1fr]',
-          // Desktop: give the photograph slightly more room
           'lg:grid-cols-[0.95fr_1.05fr]',
         )}
       >
@@ -65,62 +99,41 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
               </p>
             )}
 
-            <div className="flex flex-col gap-3 py-6 sm:flex-row sm:items-center">
-              <a
-                href={`tel:${profile.phone}`}
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#286487] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1f5270] sm:w-auto"
-              >
-                <Phone className="size-4" />
-                Call to Schedule an Appointment
-              </a>
+            {/* Appointment and phone */}
+            <div className="mt-5 flex flex-wrap gap-3">
+              <div className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#17608e] px-4 text-sm font-semibold text-white shadow-sm">
+                <CalendarDays className="size-4" />
+                Schedule an Appointment
+              </div>
 
-              <span className="text-center text-sm font-medium text-[#174f75] sm:text-left">
-                {profile.phone}
-              </span>
+              {profile.phone && (
+                <a
+                  href={`tel:${profile.phone.replace(/[^\d+]/g, '')}`}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[#17608e] bg-white px-4 text-sm font-semibold text-[#17476b] transition hover:bg-[#f4f9fc]"
+                >
+                  <Phone className="size-4" />
+                  Call {profile.phone}
+                </a>
+              )}
             </div>
 
-            <div className="mt-7 grid gap-4 border-t border-slate-300/80 pt-5 sm:grid-cols-3">
-              <HeroFact
-                icon={<Building2 className="size-5" />}
-                title={
-                  profile.clinics?.[0]?.name ?? 'Maimonides Medical Center'
-                }
-                subtitle="Primary Affiliation"
-              />
-
-              <HeroFact
-                icon={<GraduationCap className="size-5" />}
-                title="Fellowship Trained"
-                subtitle="Foot & Ankle"
-              />
-
-              <HeroFact
-                icon={<MapPin className="size-5" />}
-                title={profile.location ?? 'Brooklyn, NY'}
-                subtitle="and surrounding communities"
-              />
+            {/* Hero Facts */}
+            <div className="mt-7 grid grid-cols-1 gap-4 border-t border-slate-300/80 pt-5 sm:grid-cols-3 sm:gap-3">
+              {displayFacts.map((fact, index) => (
+                <HeroFactItem
+                  key={`${fact.icon}-${index}`}
+                  fact={fact}
+                />
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Right side - complete profile photograph */}
-        <div
-          className={cn(
-            'relative flex min-h-105 items-start justify-center overflow-hidden bg-[#eef5fa]',
-            // Phone: add space around the photograph
-            'px-6 py-5',
-            // Small screens
-            'sm:min-h-115 sm:px-8 sm:py-6',
-            // Tablet and desktop: return to the original tighter layout
-            'md:min-h-105 md:px-0 md:py-0',
-            'lg:min-h-125',
-          )}
-        >
+        {/* Right side - profile photograph */}
+        <div className="relative flex min-h-105 items-start justify-center overflow-hidden bg-[#eef5fa] sm:min-h-115 md:min-h-105 lg:min-h-125">
           <div
             className={cn(
-              'relative aspect-square w-full overflow-hidden rounded-2xl',
-              // Keep the photo from becoming excessively large
-              'max-w-105',
+              'relative aspect-square w-full max-w-105',
               'sm:max-w-115',
               'md:max-w-105',
               'lg:max-w-125',
@@ -136,16 +149,10 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
               <div className="absolute inset-0 bg-linear-to-br from-slate-300 to-slate-500" />
             )}
 
-            {/* Message - positioned relative to the actual photograph */}
+            {/* Message positioned over the photograph */}
             <div
               className={cn(
-                'absolute z-10 text-right',
-                // Always stay inside the photograph
-                'right-[3%]',
-                // Around eyebrow / eye level
-                'top-[18%]',
-                // Responsive width
-                'w-[34%]',
+                'absolute right-[3%] top-[18%] z-10 w-[34%] text-right',
                 'sm:w-[35%]',
                 'md:w-[34%]',
                 'lg:w-[35%]',
@@ -163,7 +170,8 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
                 Expert Care.
                 <br />
                 Real Progress.
-                <br />A More Active You.
+                <br />
+                A More Active You.
               </p>
             </div>
           </div>
@@ -173,25 +181,26 @@ export default function HeroSection({ profile, className }: HeroSectionProps) {
   );
 }
 
-function HeroFact({
-  icon,
-  title,
-  subtitle,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <div className="flex gap-3">
-      <div className="mt-0.5 shrink-0 text-[#21658f]">{icon}</div>
+// Individual Hero Fact
+function HeroFactItem({ fact }: { fact: HeroFact }) {
+  const Icon = heroFactIconMap[fact.icon] ?? Building2;
 
-      <div>
-        <p className="text-sm font-semibold leading-5 text-slate-800">
-          {title}
+  return (
+    <div className="flex min-w-0 items-start gap-3">
+      <div className="mt-0.5 shrink-0 text-[#21658f]">
+        <Icon className="size-5" strokeWidth={1.8} />
+      </div>
+
+      <div className="min-w-0">
+        <p className="text-sm font-medium leading-5 text-slate-800">
+          {fact.title}
         </p>
 
-        <p className="mt-0.5 text-xs leading-4 text-slate-500">{subtitle}</p>
+        {fact.subtitle && (
+          <p className="mt-0.5 text-xs leading-4 text-slate-500">
+            {fact.subtitle}
+          </p>
+        )}
       </div>
     </div>
   );

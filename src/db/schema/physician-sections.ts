@@ -1,3 +1,4 @@
+import { HeroFact } from '@/lib/types/hero-fact';
 import {
   pgTable,
   serial,
@@ -6,6 +7,7 @@ import {
   integer,
   boolean,
   timestamp,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 
 // table name = physician_sections
@@ -28,6 +30,15 @@ export const physicianSections = pgTable('physician_sections', {
   image: text('image'),
 
   imageKey: text('image_key'),
+
+  quote: text('quote'),
+
+  highlights: jsonb('highlights').$type<string[]>().notNull().default([]),
+
+  message: text(' message'),
+
+  heroFacts: jsonb('hero_facts')
+  .$type<HeroFact[]>(),
 
   displayOrder: integer('display_order').notNull().default(0),
 

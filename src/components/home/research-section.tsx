@@ -15,13 +15,19 @@ export default async function ResearchSection({
     content: string | null;
     image?: string | null;
     imageKey?: string | null;
+    highlights?: string[] | null;
+    message?: string | null;
   };
   className?: string;
 }) {
   if (!section) return null;
 
-  //   const paragraphs = splitContent(section.content);
-  const researchContent = await renderMDX(section?.content ?? '');
+  const researchContent = await renderMDX(section.content ?? '');
+
+  // Use saved JSONB highlights and exclude empty entries.
+  const highlights = (section.highlights ?? [])
+    .map((highlight) => highlight.trim())
+    .filter((highlight) => highlight.length > 0);
 
   return (
     <section
@@ -29,16 +35,12 @@ export default async function ResearchSection({
       className={cn('px-6 py-14 sm:px-10 lg:px-14', className)}
     >
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.2fr_0.75fr_0.65fr]">
+        {/* Research Content */}
         <div>
           <SectionHeading title={section.title ?? 'Research & Academic Work'} />
 
           <div className="mt-6 max-w-2xl space-y-4 text-sm leading-6 text-slate-600">
-            {/* {paragraphs.length > 0 ? (
-              paragraphs
-                .slice(0, 3)
-                .map((paragraph, index) => <p key={index}>{paragraph}</p>)
-            ) : ( */}
-            {section?.content ? (
+            {section.content ? (
               <div className="prose prose-sm max-w-none prose-slate">
                 {researchContent}
               </div>
@@ -50,16 +52,9 @@ export default async function ResearchSection({
               </p>
             )}
           </div>
-
-          {/* <Link
-            href="/research"
-            className="mt-7 inline-flex h-10 items-center gap-2 rounded-md border border-[#17608e] px-4 text-sm font-semibold text-[#174b70] transition hover:bg-[#f2f7fa]"
-          >
-            View Research &amp; Publications
-            <ArrowRight className="size-4" />
-          </Link> */}
         </div>
 
+        {/* Research Image */}
         <div className="relative min-h-55 overflow-hidden rounded-md bg-slate-100">
           {section.image ? (
             <img
@@ -74,23 +69,28 @@ export default async function ResearchSection({
           )}
         </div>
 
-        <div className="flex flex-col justify-center">
-          <ul className="space-y-3 text-sm text-slate-700">
-            <ResearchItem text="Reconstructive Techniques" />
-            <ResearchItem text="Deformity Correction" />
-            <ResearchItem text="Clinical Outcomes" />
-            <ResearchItem text="Education & Innovation" />
-          </ul>
+        {/* Research Highlights and Message */}
+        <div className="flex flex-col justify-start pt-3 lg:pt-3">
+          {highlights.length > 0 && (
+            <ul className="space-y-3 text-sm text-slate-700">
+              {highlights.map((highlight, index) => (
+                <ResearchItem key={`${highlight}-${index}`} text={highlight} />
+              ))}
+            </ul>
+          )}
 
-          <div className="mt-7 rounded-md bg-[#eef5f9] p-6">
-            <p className="font-serif text-lg italic leading-7 text-[#234e6f]">
-              Advancing care through research.
-              <br />
-              Improving outcomes
-              <br />
-              for every step ahead.
-            </p>
-          </div>
+          {section.message?.trim() && (
+            <div
+              className={cn(
+                'rounded-md bg-[#eef5f9] p-6',
+                highlights.length > 0 && 'mt-7',
+              )}
+            >
+              <p className="font-serif text-lg italic leading-7 text-[#234e6f]">
+                {section.message}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>

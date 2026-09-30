@@ -20,9 +20,7 @@ type TextareaField = BaseField & {
   helperText?: string;
 };
 
-export type SectionFormField =
-  | InputField
-  | TextareaField;
+export type SectionFormField = InputField | TextareaField;
 
 export const sectionFormFields: SectionFormField[] = [
   {
@@ -32,8 +30,7 @@ export const sectionFormFields: SectionFormField[] = [
     label: 'Section Heading Text',
     required: false,
     placeholder: 'Section title',
-    helperText:
-      'Specify the heading displayed at the top of this section.',
+    helperText: 'Specify the heading displayed at the top of this section.',
   },
   {
     id: 'slug',
@@ -50,10 +47,28 @@ export const sectionFormFields: SectionFormField[] = [
     name: 'content',
     type: 'textarea',
     label: 'Content',
-    required: true,
+    required: false,
     placeholder: 'Write MDX content here...',
     helperText:
       'Use Markdown formatting such as # headings, **bold**, *italic*, lists, and links.',
+  },
+  {
+    id: 'quote',
+    name: 'quote',
+    type: 'input',
+    label: 'Quote',
+    required: false,
+    placeholder: 'Write quotes here...',
+    helperText: 'Display quotes.',
+  },
+  {
+    id: 'message',
+    name: 'message',
+    type: 'input',
+    label: 'Message',
+    required: false,
+    placeholder: 'Write message here...',
+    helperText: 'Display message.',
   },
   {
     id: 'displayOrder',
@@ -61,7 +76,6 @@ export const sectionFormFields: SectionFormField[] = [
     type: 'number',
     label: 'Display Order',
     required: true,
-    helperText:
-      'Controls the order shown on the public website.',
+    helperText: 'Controls the order shown on the public website.',
   },
 ];

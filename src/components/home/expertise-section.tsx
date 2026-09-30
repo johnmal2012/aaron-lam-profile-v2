@@ -21,6 +21,7 @@ export default function ExpertiseSection({
   section?: {
     title: string | null;
     content: string | null;
+    message: string | null;
   };
   className?: string;
 }) {
@@ -62,7 +63,7 @@ export default function ExpertiseSection({
             </div>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Specialized care for a wide range of foot and ankle conditions.
+              {section?.message ?? ''}
             </p>
           </div>
 

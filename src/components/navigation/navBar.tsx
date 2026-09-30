@@ -105,7 +105,7 @@ export default function Navbar({
         </div>
 
         {/* Desktop Nav */}
-        <nav className="ml-auto hidden items-center gap-0.5 md:flex lg:gap-1.5">
+        <nav className="ml-auto hidden items-center gap-3 md:flex lg:gap-4">
           {navItems.map((item) => {
             const isActive = activeSection === item.id;
 
