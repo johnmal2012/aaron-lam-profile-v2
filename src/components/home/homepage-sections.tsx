@@ -89,6 +89,8 @@ export default function HomepageSections({
         profile={profile}
         heroFacts={heroFacts}
         title={hero.title ?? 'Specialized Care for Foot & Ankle Conditions'}
+        quote={hero.quote ?? ''}
+        message={hero.message ?? ''}
       />,
     );
   }

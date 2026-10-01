@@ -55,7 +55,7 @@ export const sectionFormFields: SectionFormField[] = [
   {
     id: 'quote',
     name: 'quote',
-    type: 'input',
+    type: 'textarea',
     label: 'Quote',
     required: false,
     placeholder: 'Write quotes here...',
@@ -64,7 +64,7 @@ export const sectionFormFields: SectionFormField[] = [
   {
     id: 'message',
     name: 'message',
-    type: 'input',
+    type: 'textarea',
     label: 'Message',
     required: false,
     placeholder: 'Write message here...',
