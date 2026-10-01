@@ -19,6 +19,7 @@ type HeroSectionProps = {
   profile: Profile;
   heroFacts?: HeroFact[] | null;
   className?: string;
+  title?: string;
 };
 
 // Map saved icon names to Lucide components.
@@ -33,6 +34,7 @@ export default function HeroSection({
   profile,
   heroFacts,
   className,
+  title,
 }: HeroSectionProps) {
   // Fallback facts for when no facts have been saved yet.
   const defaultFacts: HeroFact[] = [
@@ -75,9 +77,7 @@ export default function HeroSection({
         <div className="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-12 md:px-8 md:py-12 lg:px-12 lg:py-14">
           <div className="max-w-2xl">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-[#173b5d]">
-              Specialized Care for
-              <br />
-              Foot &amp; Ankle Conditions
+              {title}
             </p>
 
             <h1 className="font-serif text-4xl leading-[0.98] tracking-[-0.03em] text-[#0d3152] sm:text-5xl lg:text-6xl">

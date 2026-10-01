@@ -88,6 +88,7 @@ export default function HomepageSections({
         key="home"
         profile={profile}
         heroFacts={heroFacts}
+        title={hero.title ?? 'Specialized Care for Foot & Ankle Conditions'}
       />,
     );
   }
