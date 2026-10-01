@@ -1,4 +1,3 @@
-
 import {
   Building2,
   CalendarDays,
@@ -55,9 +54,7 @@ export default function HeroSection({
   ];
 
   const displayFacts =
-    heroFacts && heroFacts.length > 0
-      ? heroFacts.slice(0, 3)
-      : defaultFacts;
+    heroFacts && heroFacts.length > 0 ? heroFacts.slice(0, 3) : defaultFacts;
 
   return (
     <section
@@ -120,20 +117,17 @@ export default function HeroSection({
             {/* Hero Facts */}
             <div className="mt-7 grid grid-cols-1 gap-4 border-t border-slate-300/80 pt-5 sm:grid-cols-3 sm:gap-3">
               {displayFacts.map((fact, index) => (
-                <HeroFactItem
-                  key={`${fact.icon}-${index}`}
-                  fact={fact}
-                />
+                <HeroFactItem key={`${fact.icon}-${index}`} fact={fact} />
               ))}
             </div>
           </div>
         </div>
 
         {/* Right side - profile photograph */}
-        <div className="relative flex min-h-105 items-start justify-center overflow-hidden bg-[#eef5fa] sm:min-h-115 md:min-h-105 lg:min-h-125">
+        <div className="relative flex min-h-105 items-start justify-center bg-[#eef5fa] px-5 py-5 sm:min-h-115 sm:px-8 sm:py-6 md:min-h-105 md:px-6 md:py-6 lg:min-h-125 lg:px-10 lg:py-8">
           <div
             className={cn(
-              'relative aspect-square w-full max-w-105',
+              'relative aspect-square w-full max-w-105 overflow-hidden rounded-2xl',
               'sm:max-w-115',
               'md:max-w-105',
               'lg:max-w-125',
@@ -170,8 +164,7 @@ export default function HeroSection({
                 Expert Care.
                 <br />
                 Real Progress.
-                <br />
-                A More Active You.
+                <br />A More Active You.
               </p>
             </div>
           </div>
