@@ -26,7 +26,7 @@ export const sectionFormFields: SectionFormField[] = [
   {
     id: 'title',
     name: 'title',
-    type: 'input',
+    type: 'textarea',
     label: 'Section Heading Text',
     required: false,
     placeholder: 'Section title',

@@ -1,6 +1,9 @@
 import { db } from '@/db/db';
+
 import { physicianSections } from '@/db/schema/physician-sections';
+
 import { eq } from 'drizzle-orm';
+
 import SectionForm from '@/components/sections/section-form';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { LayoutTemplate } from 'lucide-react';
@@ -20,6 +23,9 @@ export default async function SectionsEditPage({
     .where(eq(physicianSections.id, Number(id)))
     .then((rows) => rows[0]);
 
+  //   if (!section) {
+  //     return <div>Section not found</div>;
+  //   }
   if (!section) {
     return (
       <EmptyState
@@ -32,16 +38,11 @@ export default async function SectionsEditPage({
 
   return (
     <main
-      className="
-        container mx-auto py-10 space-y-6
-      "
+      className="container mx-auto py-10 space-y-6"
     >
       <div className="space-y-2">
         <h1
-          className="
-            text-4xl
-            font-bold
-          "
+          className="text-4xl font-bold"
         >
           Edit Section
         </h1>

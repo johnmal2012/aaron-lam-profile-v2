@@ -1,10 +1,14 @@
 'use client';
 
 import { UseFormReturn } from 'react-hook-form';
+
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+
 import { PhysicianSectionFormInput } from '@/lib/validations/physician-section';
+
 import { SectionFormField } from '@/lib/sections/section-form-fields';
 
 type SectionFormProps = {
@@ -14,7 +18,7 @@ type SectionFormProps = {
 
 export function SectionField({ field, form }: SectionFormProps) {
   const error = form.formState.errors[field.name]?.message;
-
+  console.log('section form field: ', field);
   return (
     <Field>
       <FieldLabel
@@ -30,7 +34,7 @@ export function SectionField({ field, form }: SectionFormProps) {
         <Textarea
           id={field.id}
           placeholder={field.placeholder}
-          className="min-h-96 resize-y font-mono text-sm"
+          className="min-h-48 resize-y font-mono text-sm"
           aria-invalid={!!error}
           {...form.register(field.name)}
         />
