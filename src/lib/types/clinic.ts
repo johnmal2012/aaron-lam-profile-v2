@@ -1,6 +1,6 @@
 export interface Clinic {
   name: string;
   address: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 }

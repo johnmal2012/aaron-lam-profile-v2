@@ -7,7 +7,7 @@ export const credentialSchema = z.object({
 
   institution: z.string().trim().min(1, 'Institution is required'),
 
-  breakAfter: z.string().trim().optional().default(''),
+  //   breakAfter: z.string().trim().optional().default(''),
 
   image: z.string().trim().optional().default(''),
 

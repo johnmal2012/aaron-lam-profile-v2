@@ -1,3 +1,4 @@
+
 import { Card } from '@/components/ui/card';
 import type { Clinic } from '@/lib/types/clinic';
 import { cn } from '@/lib/utils';
@@ -10,23 +11,41 @@ interface MapSectionProps {
   slug: string;
 }
 
+// Clinic type with coordinates guaranteed to be numbers.
+type MappedClinic = Clinic & {
+  latitude: number;
+  longitude: number;
+};
+
+// Type guard to validate clinic information and coordinates.
+function isValidClinic(
+  clinic: Clinic,
+): clinic is MappedClinic {
+  const { latitude, longitude, name, address } = clinic;
+
+  return (
+    typeof name === 'string' &&
+    name.trim().length > 0 &&
+    typeof address === 'string' &&
+    address.trim().length > 0 &&
+    typeof latitude === 'number' &&
+    typeof longitude === 'number' &&
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude) &&
+    latitude >= -90 &&
+    latitude <= 90 &&
+    longitude >= -180 &&
+    longitude <= 180
+  );
+}
+
 export default function MapSection({
   location,
   clinics,
   background,
   slug,
 }: MapSectionProps) {
-  const validClinics = clinics.filter(
-    (clinic) =>
-      clinic.name?.trim() &&
-      clinic.address?.trim() &&
-      Number.isFinite(clinic.latitude) &&
-      Number.isFinite(clinic.longitude) &&
-      clinic.latitude >= -90 &&
-      clinic.latitude <= 90 &&
-      clinic.longitude >= -180 &&
-      clinic.longitude <= 180,
-  );
+  const validClinics = clinics.filter(isValidClinic);
 
   if (validClinics.length === 0) {
     return null;
@@ -48,7 +67,7 @@ export default function MapSection({
         </h2>
 
         {/* OpenStreetMap / Leaflet map */}
-		{/* One OpenStreetMap map containing every clinic */}
+        {/* One OpenStreetMap map containing every clinic */}
         <Card
           className="
             relative
@@ -109,7 +128,8 @@ export default function MapSection({
                     href={`https://www.openstreetmap.org/?mlat=${clinic.latitude}&mlon=${clinic.longitude}#map=17/${clinic.latitude}/${clinic.longitude}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-block text-sm font-medium text-teal-700 hover:underline">
+                    className="mt-2 inline-block text-sm font-medium text-teal-700 hover:underline"
+                  >
                     Open map location
                   </a>
                 </div>

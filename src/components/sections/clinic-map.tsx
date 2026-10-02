@@ -7,26 +7,41 @@ import {
   TileLayer,
   useMap,
 } from 'react-leaflet';
-
 import L from 'leaflet';
-
-import {
-  useEffect,
-  useMemo,
-} from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { Clinic } from '@/lib/types/clinic';
-
 import 'leaflet/dist/leaflet.css';
 
 type ClinicMapProps = {
   clinics: Clinic[];
 };
 
+// A clinic with coordinates guaranteed to be present.
+type MappedClinic = Clinic & {
+  latitude: number;
+  longitude: number;
+};
+
+// Type guard: only clinics with valid numeric coordinates pass.
+function hasCoordinates(
+  clinic: Clinic,
+): clinic is MappedClinic {
+  return (
+    typeof clinic.latitude === 'number' &&
+    Number.isFinite(clinic.latitude) &&
+    typeof clinic.longitude === 'number' &&
+    Number.isFinite(clinic.longitude) &&
+    clinic.latitude >= -90 &&
+    clinic.latitude <= 90 &&
+    clinic.longitude >= -180 &&
+    clinic.longitude <= 180
+  );
+}
+
 function createClinicIcon() {
   return L.divIcon({
     className: 'clinic-marker-wrapper',
-
     html: `
       <div
         style="
@@ -46,7 +61,7 @@ function createClinicIcon() {
           aria-hidden="true"
         >
           <path
-            d="M21 1C10.0 1 1 9.8 1 20.5
+            d="M21 1C10 1 1 9.8 1 20.5
                C1 34.5 21 51 21 51
                C21 51 41 34.5 41 20.5
                C41 9.8 32 1 21 1Z"
@@ -54,14 +69,12 @@ function createClinicIcon() {
             stroke="#0f172a"
             stroke-width="2"
           />
-
           <circle
             cx="21"
             cy="20"
             r="12"
             fill="#0f766e"
           />
-
           <path
             d="M21 12V28M13 20H29"
             stroke="white"
@@ -71,11 +84,8 @@ function createClinicIcon() {
         </svg>
       </div>
     `,
-
     iconSize: [42, 52],
-
     iconAnchor: [21, 51],
-
     popupAnchor: [0, -48],
   });
 }
@@ -83,24 +93,20 @@ function createClinicIcon() {
 function FitMapToClinics({
   clinics,
 }: {
-  clinics: Clinic[];
+  clinics: MappedClinic[];
 }) {
   const map = useMap();
 
   useEffect(() => {
-    if (clinics.length === 0) {
-      return;
-    }
+    if (clinics.length === 0) return;
 
     if (clinics.length === 1) {
+      const clinic = clinics[0];
+
       map.setView(
-        [
-          clinics[0].latitude,
-          clinics[0].longitude,
-        ],
+        [clinic.latitude, clinic.longitude],
         14,
       );
-
       return;
     }
 
@@ -128,11 +134,18 @@ export function ClinicMap({
     [],
   );
 
-  if (clinics.length === 0) {
+  // Exclude clinics that don't have usable coordinates.
+  const mappedClinics = useMemo(
+    () => clinics.filter(hasCoordinates),
+    [clinics],
+  );
+
+  // No map is rendered if there are no clinics with coordinates.
+  if (mappedClinics.length === 0) {
     return null;
   }
 
-  const firstClinic = clinics[0];
+  const firstClinic = mappedClinics[0];
 
   return (
     <div className="h-105 w-full overflow-hidden rounded-2xl border border-slate-200 shadow-sm sm:h-125">
@@ -150,11 +163,9 @@ export function ClinicMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <FitMapToClinics
-          clinics={clinics}
-        />
+        <FitMapToClinics clinics={mappedClinics} />
 
-        {clinics.map((clinic, index) => (
+        {mappedClinics.map((clinic, index) => (
           <Marker
             key={`${clinic.name}-${clinic.latitude}-${clinic.longitude}-${index}`}
             position={[
@@ -189,4 +200,3 @@ export function ClinicMap({
     </div>
   );
 }
-

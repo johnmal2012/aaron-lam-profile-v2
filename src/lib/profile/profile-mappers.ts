@@ -7,10 +7,55 @@ import type {
   PhysicianProfileInput,
 } from '@/lib/validations/physician-profile';
 
+// function splitLines(value: string): string[] {
+//   return value
+//     .split('\n')
+//     .map((item) => item.trim())
+//     .filter(Boolean);
+// }
+
+// // Convert form clinic fields into the Clinic[] format used by the database
+// function formValuesToClinics(
+//   data: Pick<
+//     PhysicianProfileFormInput,
+//     | 'clinicNames'
+//     | 'clinicAddresses'
+//     | 'clinicLatitudes'
+//     | 'clinicLongitudes'
+//   >,
+// ): Clinic[] {
+//   const names = splitLines(data.clinicNames);
+//   const addresses = splitLines(data.clinicAddresses);
+//   const latitudes = splitLines(data.clinicLatitudes);
+//   const longitudes = splitLines(data.clinicLongitudes);
+
+//   return names.map((name, index) => ({
+//     name,
+//     address: addresses[index],
+//     latitude: Number(latitudes[index]),
+//     longitude: Number(longitudes[index]),
+//   }));
+// }
+
+// // Convert form expertise fields into the Expertise[] format used by the database.
+// function formValuesToExpertise(
+//   data: Pick<
+//     PhysicianProfileFormInput,
+//     'expertiseTexts' | 'expertiseUrls'
+//   >,
+// ): Expertise[] {
+//   const texts = splitLines(data.expertiseTexts);
+//   const urls = splitLines(data.expertiseUrls);
+
+//   return texts.map((text, index) => ({
+//     text,
+//     url: urls[index],
+//   }));
+// }
+
 // Payload type
-// Convert form expertise fields into the Expertise
 // Payload sent to the server action.
-// The four clinic textarea fields and the four expertise textarea with uploadthing fields are form-only fields and are converted into their database structures below
+// The four clinic textarea fields, the two expertise textarea and crendential textarea fields are form-only fields and are converted into their database structures below
 export type PhysicianProfilePayload = PhysicianProfileInput;
 
 // Form → Server Payload
@@ -18,7 +63,7 @@ export type PhysicianProfilePayload = PhysicianProfileInput;
  * Convert React Hook Form values into the normalized
  * physician profile payload.
  *
- * The repeatable Clinic Editor and Expertise Editor already
+ * The repeatable Clinic Editor, Expertise Editor and Credential Editor already
  * provide arrays, so there is no textarea parsing here.
  *
  * Zod's output type is used for the final payload because
@@ -101,7 +146,7 @@ function normalizeCredentials(
     type: item.type,
     label: item.label.trim(),
     institution: item.institution.trim(),
-    breakAfter: item.breakAfter?.trim() ?? '',
+    // breakAfter: item.breakAfter?.trim() ?? '',
     image: item.image?.trim() ?? '',
     imageKey: item.imageKey?.trim() ?? '',
   }));
