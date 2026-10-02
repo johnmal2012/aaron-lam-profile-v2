@@ -42,7 +42,7 @@ export function getProfileDefaultValues(
         type: item.type ?? 'education',
         label: item.label ?? '',
         institution: item.institution ?? '',
-        breakAfter: item.breakAfter ?? '',
+        // breakAfter: item.breakAfter ?? '',
         image: item.image ?? '',
         imageKey: item.imageKey ?? '',
       })) ?? [],

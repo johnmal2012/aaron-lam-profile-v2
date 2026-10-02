@@ -1,30 +1,67 @@
 import { z } from 'zod';
 
-export const clinicSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Clinic name is required.'),
+const optionalCoordinate = z.preprocess(
+  (value) =>
+    value === '' ||
+    value === null ||
+    (typeof value === 'number' && Number.isNaN(value))
+      ? undefined
+      : value,
+  z.number().optional(),
+);
 
-  address: z
-    .string()
-    .trim()
-    .min(1, 'Clinic address is required.'),
+export const clinicSchema = z
+  .object({
+    name: z.string().trim().min(1, 'Clinic name is required.'),
 
-  latitude: z
-    .number()
-    .min(-90, 'Latitude must be between -90 and 90.')
-    .max(90, 'Latitude must be between -90 and 90.'),
+    address: z.string().trim().min(1, 'Clinic address is required.'),
 
-  longitude: z
-    .number()
-    .min(-180, 'Longitude must be between -180 and 180.')
-    .max(180, 'Longitude must be between -180 and 180.'),
-});
+    latitude: optionalCoordinate,
 
-// export const clinicsSchema = z
-//   .array(clinicSchema)
-//   .max(20, 'A maximum of 20 clinic locations is allowed.');
+    longitude: optionalCoordinate,
+  })
+  .superRefine((clinic, ctx) => {
+    const { latitude, longitude } = clinic;
+
+    // Both coordinates are optional.
+    if (latitude === undefined && longitude === undefined) {
+      return;
+    }
+
+    // If either is provided, both are required.
+    if (latitude === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['latitude'],
+        message: 'Latitude is required when longitude is provided.',
+      });
+    }
+
+    if (longitude === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['longitude'],
+        message: 'Longitude is required when latitude is provided.',
+      });
+    }
+
+    // Validate latitude range.
+    if (latitude !== undefined && (latitude < -90 || latitude > 90)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['latitude'],
+        message: 'Latitude must be between -90 and 90.',
+      });
+    }
+
+    // Validate longitude range.
+    if (longitude !== undefined && (longitude < -180 || longitude > 180)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['longitude'],
+        message: 'Longitude must be between -180 and 180.',
+      });
+    }
+  });
 
 export type ClinicInput = z.infer<typeof clinicSchema>;
-// export type ClinicsInput = z.infer<typeof clinicsSchema>;

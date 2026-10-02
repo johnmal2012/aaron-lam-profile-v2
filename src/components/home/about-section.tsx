@@ -129,14 +129,10 @@ export default async function AboutSection({
 
 // Credential Item
 function CredentialItem({ credential }: { credential: CredentialType }) {
-  const lines =
-    credential.breakAfter &&
-    credential.institution.startsWith(credential.breakAfter)
-      ? [
-          credential.breakAfter,
-          credential.institution.slice(credential.breakAfter.length).trim(),
-        ]
-      : [credential.institution];
+  const lines = credential.institution
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   return (
     <div className="mx-auto flex w-full max-w-90 items-center gap-4 text-left lg:mx-0">

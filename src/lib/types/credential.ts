@@ -8,7 +8,7 @@ export type Credential = {
   type: CredentialType;
   label: string;
   institution: string;
-  breakAfter: string;
+  //   breakAfter: string;
   image: string;
   imageKey: string;
 };
