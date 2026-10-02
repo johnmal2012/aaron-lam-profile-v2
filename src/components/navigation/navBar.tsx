@@ -37,12 +37,15 @@ export default function Navbar({
   footCareLink,
 }: NavbarProps) {
   const [activeSection, setActiveSection] = useState('hero');
-  const sections = useMemo(
-    () =>
-      navItems.map((item) => ({
-        id: item.id,
-      })),
+  
+  const visibleNavItems = useMemo(
+    () => navItems.filter((item) => item.id?.trim()),
     [navItems],
+  );
+
+  const sections = useMemo(
+    () => visibleNavItems.map((item) => ({ id: item.id })),
+    [visibleNavItems],
   );
 
   useEffect(() => {
@@ -105,8 +108,8 @@ export default function Navbar({
         </div>
 
         {/* Desktop Nav */}
-        <nav className="ml-auto hidden items-center gap-3 md:flex lg:gap-4">
-          {navItems.map((item) => {
+        <nav className="ml-auto hidden items-center gap-0.5 md:flex lg:gap-1.5">
+          {visibleNavItems.map((item) => {
             const isActive = activeSection === item.id;
 
             return (
@@ -210,7 +213,7 @@ export default function Navbar({
               </SheetHeader>
 
               <nav className="mt-2 flex flex-col gap-2">
-                {navItems.map((item) => {
+                {visibleNavItems.map((item) => {
                   const isActive = activeSection === item.id;
 
                   return (
