@@ -1,6 +1,8 @@
 // CredentialEditor > React Hook Form > form.getValues() > toProfilePayload() > normalizeCredentials() > credential: Credential[] > physicianProfileSchema.safeParse() > validated.data.credential > updatePhysicianProfile() > credential: validated.data.credential > Drizzle UPDATE > physician_profile.credential JSONB
 'use client';
 
+import { updateCredentialImage } from '@/actions/profile/profile-update-credential-image';
+
 import { useState } from 'react';
 
 import { Award, ImageIcon, Loader2, Plus, Trash2 } from 'lucide-react';
@@ -26,6 +28,8 @@ import { Button } from '@/components/ui/button';
 
 import { Card } from '@/components/ui/card';
 
+import { useRouter } from 'next/navigation';
+
 import {
   Select,
   SelectContent,
@@ -44,8 +48,10 @@ import { UploadDropzone } from '@/lib/uploadthing';
 
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
+import router from 'next/router';
 
 interface CredentialEditorProps {
+  profileId: number;
   control: Control<PhysicianProfileFormInput>;
   register: UseFormRegister<PhysicianProfileFormInput>;
   setValue: UseFormSetValue<PhysicianProfileFormInput>;
@@ -53,6 +59,7 @@ interface CredentialEditorProps {
 }
 
 export function CredentialEditor({
+  profileId,
   control,
   register,
   setValue,
@@ -126,6 +133,7 @@ export function CredentialEditor({
       {fields.map((field, index) => (
         <CredentialCard
           key={field.id}
+          profileId={profileId}
           control={control}
           field={field}
           index={index}
@@ -155,6 +163,7 @@ export function CredentialEditor({
 
 // Credential Card
 interface CredentialCardProps {
+  profileId: number;
   control: Control<PhysicianProfileFormInput>;
   field: FieldArrayWithId<PhysicianProfileFormInput, 'credential', 'id'>;
   index: number;
@@ -165,6 +174,7 @@ interface CredentialCardProps {
 }
 
 function CredentialCard({
+  profileId,
   control,
   field,
   index,
@@ -305,6 +315,7 @@ function CredentialCard({
           <FieldLabel>Credential Image</FieldLabel>
 
           <CredentialImageUpload
+            profileId={profileId}
             image={image}
             institution={institution}
             index={index}
@@ -320,6 +331,7 @@ function CredentialCard({
 
 // Credential Image Upload
 interface CredentialImageUploadProps {
+  profileId: number;
   image?: string;
   institution?: string;
   index: number;
@@ -327,11 +339,14 @@ interface CredentialImageUploadProps {
 }
 
 function CredentialImageUpload({
+  profileId,
   image,
   institution,
   index,
   setValue,
 }: CredentialImageUploadProps) {
+  const router = useRouter();
+
   const [isUploading, setIsUploading] = useState(false);
 
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -396,16 +411,24 @@ function CredentialImageUpload({
             setIsUploading(false);
             setIsSaving(true);
 
-            toast.loading('Saving credential image...', {
-              id: toastId,
-            });
-
-            if (!res || res.length === 0) {
+            if (!res?.length) {
               throw new Error('No uploaded file was returned.');
             }
 
             const file = res[0];
 
+            const result = await updateCredentialImage({
+              profileId,
+              credentialIndex: index,
+              imageUrl: file.ufsUrl,
+              imageKey: file.key,
+            });
+
+            if (result.error) {
+              throw new Error(result.error);
+            }
+
+            // Update React Hook Form immediately.
             setValue(`credential.${index}.image`, file.ufsUrl, {
               shouldDirty: true,
               shouldValidate: true,
@@ -413,24 +436,26 @@ function CredentialImageUpload({
 
             setValue(`credential.${index}.imageKey`, file.key, {
               shouldDirty: true,
+              shouldValidate: true,
             });
 
-            toast.success('Credential image uploaded successfully.', {
+            // Refresh Server Components.
+            router.refresh();
+
+            toast.success('Credential image updated successfully.', {
               id: toastId,
             });
           } catch (error) {
-            console.error('Credential image upload failed:', error);
-
-            toast.error('Failed to upload credential image.', {
-              id: toastId,
-            });
+            toast.error(
+              error instanceof Error
+                ? error.message
+                : 'Failed to update credential image.',
+              { id: 'credential-image-upload' },
+            );
           } finally {
             setIsUploading(false);
             setIsSaving(false);
-
-            setTimeout(() => {
-              setUploadProgress(0);
-            }, 500);
+            setTimeout(() => setUploadProgress(0), 500);
           }
         }}
         onUploadError={(error) => {

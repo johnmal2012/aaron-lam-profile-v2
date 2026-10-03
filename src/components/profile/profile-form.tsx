@@ -64,6 +64,10 @@ export function ProfileForm({
 }: ProfileFormProps) {
   const router = useRouter();
 
+  if (!profile) {
+    return <div>Profile not found.</div>;
+  }
+
   // Form
   const form = useForm<PhysicianProfileFormInput>({
     resolver: zodResolver(physicianProfileFormSchema),
@@ -190,13 +194,14 @@ export function ProfileForm({
         )}
       >
         <CredentialEditor
+          profileId={profile.id}
           control={form.control}
           register={form.register}
           setValue={form.setValue}
           errors={form.formState.errors}
         />
       </section>
-      
+
       {/* Form actions */}
       <div className="flex items-center justify-start gap-2">
         <Button
