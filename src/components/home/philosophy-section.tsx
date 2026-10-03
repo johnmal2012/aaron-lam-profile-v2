@@ -1,4 +1,3 @@
-
 import { renderMDX } from '@/lib/mdx';
 import { cn } from '@/lib/utils';
 import SectionHeading from '@/components/home/section-heading';

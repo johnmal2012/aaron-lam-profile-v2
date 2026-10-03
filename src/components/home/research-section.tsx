@@ -55,12 +55,12 @@ export default async function ResearchSection({
         </div>
 
         {/* Research Image */}
-        <div className="relative min-h-55 overflow-hidden rounded-md bg-slate-100">
+        <div className="relative self-start overflow-hidden rounded-md bg-slate-100">
           {section.image ? (
             <img
               src={section.image}
               alt="Medical research imaging"
-              className="absolute inset-0 size-full object-cover"
+              className="block h-auto w-full object-contain"
             />
           ) : (
             <div className="flex min-h-55 items-center justify-center text-sm text-slate-500">
