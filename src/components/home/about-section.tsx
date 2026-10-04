@@ -46,8 +46,6 @@ export default async function AboutSection({
     ? profile.credential
     : [];
 
-  console.log('about title: ', section?.title);
-
   return (
     <section
       id="about"

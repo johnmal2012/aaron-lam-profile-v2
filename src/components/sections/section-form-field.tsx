@@ -18,7 +18,7 @@ type SectionFormProps = {
 
 export function SectionField({ field, form }: SectionFormProps) {
   const error = form.formState.errors[field.name]?.message;
-  console.log('section form field: ', field);
+
   return (
     <Field>
       <FieldLabel

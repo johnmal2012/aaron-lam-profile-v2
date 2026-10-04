@@ -93,8 +93,6 @@ export const ourFileRouter = {
       };
     })
     .onUploadComplete(async ({ file }) => {
-      console.log('Credential image uploaded:', file.ufsUrl);
-
       return {
         url: file.ufsUrl,
         key: file.key,

@@ -5,7 +5,7 @@ import { updateCredentialImage } from '@/actions/profile/profile-update-credenti
 
 import { useState } from 'react';
 
-import { Award, ImageIcon, Loader2, Plus, Trash2 } from 'lucide-react';
+import { Award, CircleDot, ImageIcon, Loader2, Plus, Trash2 } from 'lucide-react';
 
 import {
   Control,
@@ -379,6 +379,14 @@ function CredentialImageUpload({
         endpoint="credentialImage"
         config={{
           mode: 'auto',
+        }}
+        content={{
+          button: (
+            <span className="inline-flex items-center justify-center gap-2">
+              <CircleDot className="size-4 shrink-0" aria-hidden="true" />
+              <span>Choose File</span>
+            </span>
+          ),
         }}
         disabled={isBusy}
         appearance={{

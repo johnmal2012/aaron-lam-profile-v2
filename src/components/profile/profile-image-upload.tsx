@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { CircleDot, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { UploadDropzone } from '@/lib/uploadthing';
@@ -53,6 +53,14 @@ export function ProfileImageUpload({
         endpoint="profileImage"
         config={{
           mode: 'auto',
+        }}
+        content={{
+          button: (
+            <span className="inline-flex items-center justify-center gap-2">
+              <CircleDot className="size-4 shrink-0" aria-hidden="true" />
+              <span>Choose File</span>
+            </span>
+          ),
         }}
         input={{}}
         disabled={isBusy}
