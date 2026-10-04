@@ -48,7 +48,7 @@ export default async function PhilosophySection({
           <div className="flex items-center px-6 py-14 sm:px-10 lg:px-16">
             <div className="max-w-xl">
               <SectionHeading
-                title={section.title ?? 'A Patient-Centered Philosophy'}
+                title={section?.title?.trim() || 'A Patient-Centered Philosophy'}
               />
 
               <div className="mt-6 space-y-4 text-sm leading-6 text-slate-600">

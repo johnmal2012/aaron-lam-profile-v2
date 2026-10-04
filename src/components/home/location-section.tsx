@@ -27,7 +27,7 @@ export default function LocationSection({
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeading
-          title={title ?? 'Our Locations'}
+          title={title?.trim() || 'Our Locations'}
           //   href="/locations"
           //   linkLabel="View All Locations"
         />

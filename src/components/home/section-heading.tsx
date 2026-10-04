@@ -16,7 +16,7 @@ export default function SectionHeading({
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="flex items-center gap-4">
-        <h2 className="font-serif text-2xl font-semibold tracking-tight text-[#123b5c] sm:text-3xl">
+        <h2 className="font-serif text-2xl font-semibold tracking-tight text-[#123b5c] text-nowrap sm:text-3xl">
           {title}
         </h2>
 

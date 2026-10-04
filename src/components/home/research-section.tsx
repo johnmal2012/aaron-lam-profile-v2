@@ -37,7 +37,7 @@ export default async function ResearchSection({
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.2fr_0.75fr_0.65fr]">
         {/* Research Content */}
         <div>
-          <SectionHeading title={section.title ?? 'Research & Academic Work'} />
+          <SectionHeading title={section?.title?.trim() || 'Research & Academic Work'} />
 
           <div className="mt-6 max-w-2xl space-y-4 text-sm leading-6 text-slate-600">
             {section.content ? (

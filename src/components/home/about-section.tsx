@@ -46,6 +46,8 @@ export default async function AboutSection({
     ? profile.credential
     : [];
 
+  console.log('about title: ', section?.title);
+
   return (
     <section
       id="about"
@@ -54,7 +56,7 @@ export default async function AboutSection({
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.25fr_1.15fr_0.85fr]">
         {/* ABOUT */}
         <div>
-          <SectionHeading title={section?.title ?? 'About Dr. Lam'} />
+          <SectionHeading title={section?.title?.trim() || 'About Dr. Lam'} />
 
           <div className="mt-6 space-y-4 text-sm leading-6 text-slate-600">
             {section?.content ? (
