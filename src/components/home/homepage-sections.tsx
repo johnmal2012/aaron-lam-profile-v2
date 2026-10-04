@@ -191,6 +191,7 @@ export default function HomepageSections({
           renderedSections.push(
             <LocationSection
               key="location"
+              title={section.title ?? 'Our Locations'}
               clinics={clinics}
               className={background}
             />,

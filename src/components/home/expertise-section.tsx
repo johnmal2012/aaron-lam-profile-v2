@@ -56,7 +56,7 @@ export default function ExpertiseSection({
           <div>
             <div className="flex items-center gap-4">
               <h2 className="font-serif text-2xl font-semibold tracking-tight text-[#123b5c] sm:text-3xl">
-                {section?.title ?? 'Conditions We Treat'}
+                {section?.title ?? 'Areas of Expertise'}
               </h2>
 
               <span className="hidden h-px w-10 bg-[#286487] sm:block" />
