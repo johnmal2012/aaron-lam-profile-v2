@@ -15,12 +15,12 @@ export function SectionHeader() {
 
       {/* Right Side */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Button
+        {/* <Button
           className="h-10 px-4 bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:ring-emerald-500/20"
           asChild
         >
           <Link href="/sections/create">{CREATE_BUTTON_LABEL}</Link>
-        </Button>
+        </Button> */}
 
         <ReturnButton href="/" label="Physician Portal" />
       </div>

@@ -29,6 +29,12 @@ import {
 import { cn, getCardBackground } from '@/lib/utils';
 import { getSectionDefaultValues } from '@/lib/sections/section-default-values';
 import { sectionFormFields } from '@/lib/sections/section-form-fields';
+import {
+  FilePlus2,
+  X,
+  Save,
+  LoaderCircle,
+} from 'lucide-react';
 
 type Section = InferSelectModel<typeof physicianSections>;
 
@@ -81,9 +87,7 @@ export default function SectionForm({ section }: SectionFormProps) {
     <div className="mx-auto w-full max-w-4xl">
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 md:p-8">
-          <SectionFormHeader
-            isExistingSection={isExistingSection}
-          />
+          <SectionFormHeader isExistingSection={isExistingSection} />
 
           <form
             onSubmit={form.handleSubmit(onFormSubmit)}
@@ -95,10 +99,7 @@ export default function SectionForm({ section }: SectionFormProps) {
               {sectionFormFields.map((field, index) => (
                 <Field
                   key={field.id}
-                  className={cn(
-                    'rounded-lg p-4',
-                    getCardBackground(index),
-                  )}
+                  className={cn('rounded-lg p-4', getCardBackground(index))}
                 >
                   <SectionField field={field} form={form} />
                 </Field>
@@ -106,10 +107,7 @@ export default function SectionForm({ section }: SectionFormProps) {
             </FieldGroup>
 
             {/* Section-Specific JSONB Editors */}
-            <SectionCustomFields
-              slug={slug}
-              form={form}
-            />
+            <SectionCustomFields slug={slug} form={form} />
 
             {/* Form Actions */}
             <SectionFormActions
@@ -129,9 +127,7 @@ interface SectionFormHeaderProps {
   isExistingSection: boolean;
 }
 
-function SectionFormHeader({
-  isExistingSection,
-}: SectionFormHeaderProps) {
+function SectionFormHeader({ isExistingSection }: SectionFormHeaderProps) {
   return (
     <div className="mb-8 space-y-2">
       <h1 className="text-3xl font-bold tracking-tight">
@@ -151,10 +147,7 @@ interface SectionCustomFieldsProps {
   form: UseFormReturn<PhysicianSectionFormInput>;
 }
 
-function SectionCustomFields({
-  slug,
-  form,
-}: SectionCustomFieldsProps) {
+function SectionCustomFields({ slug, form }: SectionCustomFieldsProps) {
   // Hero Facts JSONB editor
   if (slug === 'home' || slug === 'hero') {
     return (
@@ -200,11 +193,22 @@ function SectionFormActions({
         disabled={isSubmitting}
         className="h-10 w-28 bg-green-600! hover:bg-green-700!"
       >
-        {isSubmitting
-          ? 'Saving...'
-          : isExistingSection
-            ? 'Update'
-            : 'Create'}
+        {isSubmitting ? (
+          <>
+            <LoaderCircle className="h-4 w-4 animate-spin" />
+            Saving...
+          </>
+        ) : isExistingSection ? (
+          <>
+            <Save className="h-4 w-4" />
+            Update
+          </>
+        ) : (
+          <>
+            <FilePlus2 className="h-4 w-4" />
+            Create
+          </>
+        )}
       </Button>
 
       <Button
@@ -214,6 +218,7 @@ function SectionFormActions({
         disabled={isSubmitting}
         onClick={onCancel}
       >
+        <X className="h-4 w-4" />
         Cancel
       </Button>
     </div>

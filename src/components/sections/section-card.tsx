@@ -2,6 +2,7 @@ import type { PhysicianSection } from '@/lib/types/physician-section';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { SectionDeleteButton } from '@/components/sections/section-delete-button';
+import { SquarePen } from 'lucide-react';
 
 type Props = {
   section: PhysicianSection;
@@ -11,7 +12,7 @@ export function SectionCard({ section }: Props) {
   return (
     <div className="rounded-2xl border bg-background p-5">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold">{section.title}</h2>
+        <h2 className="text-2xl min-h-16 font-semibold">{section.title}</h2>
 
         <p className="text-sm text-muted-foreground">
           Menu Label:{' '}
@@ -32,7 +33,7 @@ export function SectionCard({ section }: Props) {
           size="lg"
           asChild
         >
-          <Link href={`/sections/${section.id}/edit`}>Edit</Link>
+          <Link href={`/sections/${section.id}/edit`}><SquarePen className="h-4 w-4" />Edit</Link>
         </Button>
 
         <SectionDeleteButton sectionId={section.id} />

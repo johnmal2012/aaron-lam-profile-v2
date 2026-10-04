@@ -42,6 +42,7 @@ import { getProfileDefaultValues } from '@/lib/profile/profile-default-values';
 
 import { toProfilePayload } from '@/lib/profile/profile-mappers';
 import { CredentialEditor } from '@/components/profile/credential-editor';
+import { FilePlus2, LoaderCircle, Save, X } from 'lucide-react';
 
 // Types
 type Profile = InferSelectModel<typeof physicianProfile>;
@@ -209,11 +210,22 @@ export function ProfileForm({
           disabled={form.formState.isSubmitting}
           className="h-10 w-24 bg-green-600! px-4 hover:bg-green-700!"
         >
-          {form.formState.isSubmitting
-            ? 'Saving...'
-            : profile
-              ? 'Update'
-              : 'Create'}
+          {form.formState.isSubmitting ? (
+            <>
+              <LoaderCircle className="h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : profile ? (
+            <>
+              <Save className="h-4 w-4" />
+              Update
+            </>
+          ) : (
+            <>
+              <FilePlus2 className="h-4 w-4" />
+              Create
+            </>
+          )}
         </Button>
 
         <Button
@@ -222,6 +234,7 @@ export function ProfileForm({
           disabled={form.formState.isSubmitting}
           onClick={() => router.push('/profile')}
         >
+          <X className="h-4 w-4" />
           Cancel
         </Button>
       </div>

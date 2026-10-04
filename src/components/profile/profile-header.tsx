@@ -25,9 +25,9 @@ export function ProfileHeader() {
       </div>
 
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center lg:self-start">
-        <Button asChild className="h-10 px-4">
+        {/* <Button asChild className="h-10 px-4">
           <Link href="/profile/create">{CREATE_BUTTON_LABEL}</Link>
-        </Button>
+        </Button> */}
 
         <ReturnButton href="/" label="Physician Portal" />
       </div>
