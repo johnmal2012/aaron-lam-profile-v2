@@ -14,4 +14,4 @@ export const credentialSchema = z.object({
   imageKey: z.string().trim().optional().default(''),
 });
 
-export type CredentialInput = z.infer<typeof credentialSchema>;
+export type Credential = z.infer<typeof credentialSchema>;

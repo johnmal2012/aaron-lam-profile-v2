@@ -96,7 +96,7 @@ export default function Navbar({
             <Stethoscope className="h-5 w-5 shrink-0 text-blue-700" />
           </div>
 
-          <div className="shrink-0">
+          <div className="shrink-0 hover:animate-pulse">
             <h1 className="whitespace-nowrap text-sm font-bold text-slate-900 sm:text-base lg:text-lg">
               <Link href="#hero">{logo}</Link>
             </h1>

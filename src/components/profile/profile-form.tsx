@@ -195,7 +195,6 @@ export function ProfileForm({
         )}
       >
         <CredentialEditor
-          profileId={profile.id}
           control={form.control}
           register={form.register}
           setValue={form.setValue}

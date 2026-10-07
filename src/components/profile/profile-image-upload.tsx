@@ -86,6 +86,12 @@ export function ProfileImageUpload({
         }}
         onClientUploadComplete={async (res) => {
           try {
+            if (!res?.length) {
+              throw new Error('No uploaded file was returned.');
+            }
+
+            const file = res[0];
+
             // UploadThing upload is complete
             setUploadProgress(100);
             // UploadThing is now finished
@@ -96,12 +102,6 @@ export function ProfileImageUpload({
             toast.loading('Saving image...', {
               id: 'profile-image-upload',
             });
-
-            if (!res || res.length === 0) {
-              throw new Error('No uploaded file was returned.');
-            }
-
-            const file = res[0];
 
             await updateProfileImage({
               imageUrl: file.ufsUrl,

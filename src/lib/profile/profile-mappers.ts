@@ -126,7 +126,7 @@ function normalizeExpertise(
     return [];
   }
 
-  // Normalize credential form values into credential[]
+  // Normalize expertise form values into Expertise[]
   return expertise.map((item) => ({
     text: item.text.trim(),
     url: item.url.trim(),

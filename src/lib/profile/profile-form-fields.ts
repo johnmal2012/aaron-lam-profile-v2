@@ -1,28 +1,19 @@
 // Instead of storing register and error, only store metadata
 import type { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
 
-/* ---------------------------------------------------------------- */
-/* Base field                                                       */
-/* ---------------------------------------------------------------- */
-
+// Base field
 type BaseField = {
   id: string;
   label: string;
   required?: boolean;
 };
 
-/* ---------------------------------------------------------------- */
-/* Image field                                                       */
-/* ---------------------------------------------------------------- */
-
+// Image field
 type ImageField = BaseField & {
   type: 'image';
 };
 
-/* ---------------------------------------------------------------- */
-/* Input field                                                       */
-/* ---------------------------------------------------------------- */
-
+// Input field
 type InputField = BaseField & {
   type: 'input';
   name: keyof PhysicianProfileFormInput;
@@ -30,9 +21,7 @@ type InputField = BaseField & {
   helperText?: string;
 };
 
-/* ---------------------------------------------------------------- */
-/* Textarea field                                                    */
-/* ---------------------------------------------------------------- */
+// Textarea field
 
 /**
  * Kept for future single-value textarea fields.
@@ -58,19 +47,10 @@ type TextareaField = BaseField & {
   helperText?: string;
 };
 
-/* ---------------------------------------------------------------- */
-/* Field configuration                                               */
-/* ---------------------------------------------------------------- */
+// Field configuration
+export type ProfileFieldConfig = ImageField | InputField | TextareaField;
 
-export type ProfileFieldConfig =
-  | ImageField
-  | InputField
-  | TextareaField;
-
-/* ---------------------------------------------------------------- */
-/* Standard profile fields                                           */
-/* ---------------------------------------------------------------- */
-
+// Standard profile fields
 /**
  * Standard one-value physician profile fields.
  *
@@ -83,20 +63,14 @@ export type ProfileFieldConfig =
  */
 // Define field configurations with their properties
 export const profileFormFields: ProfileFieldConfig[] = [
-  /* -------------------------------------------------------------- */
-  /* Profile image                                                   */
-  /* -------------------------------------------------------------- */
-
+  // Profile image
   {
     id: 'image',
     type: 'image',
     label: 'Image',
   },
 
-  /* -------------------------------------------------------------- */
-  /* Basic information                                               */
-  /* -------------------------------------------------------------- */
-
+  // Basic information
   {
     id: 'name',
     name: 'name',
@@ -142,10 +116,7 @@ export const profileFormFields: ProfileFieldConfig[] = [
     required: false,
   },
 
-  /* -------------------------------------------------------------- */
-  /* Logo                                                            */
-  /* -------------------------------------------------------------- */
-
+  // Logo
   {
     id: 'logo',
     name: 'logo',
@@ -155,24 +126,17 @@ export const profileFormFields: ProfileFieldConfig[] = [
     required: false,
   },
 
-  /* -------------------------------------------------------------- */
-  /* Board specialty                                                 */
-  /* -------------------------------------------------------------- */
-
+  // Board specialty
   {
     id: 'boardSpecialty',
     name: 'boardSpecialty',
     type: 'input',
     label: 'Board Specialty',
-    placeholder:
-      'e.g., Board-Certified Foot & Ankle Specialist',
+    placeholder: 'e.g., Board-Certified Foot & Ankle Specialist',
     required: false,
   },
 
-  /* -------------------------------------------------------------- */
-  /* Link                                                             */
-  /* -------------------------------------------------------------- */
-
+  // Link
   {
     id: 'linkName',
     name: 'linkName',
@@ -187,10 +151,8 @@ export const profileFormFields: ProfileFieldConfig[] = [
     name: 'footCareLink',
     type: 'input',
     label: 'Foot Care Link',
-    placeholder:
-      'e.g., https://www.footcaremd.org/',
+    placeholder: 'e.g., https://www.footcaremd.org/',
     required: false,
-    helperText:
-      'URL must begin with https:// or http://',
-  }, 
+    helperText: 'URL must begin with https:// or http://',
+  },
 ];

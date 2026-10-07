@@ -21,5 +21,5 @@ export const expertiseSchema = z.object({
 //   .image: z.string().trim().or(z.literal(''))
 //   .imageKey: z.string().trim().or(z.literal('')),;
 
-export type ExpertiseInput = z.infer<typeof expertiseSchema>;
+export type Expertise = z.infer<typeof expertiseSchema>;
 // export type ExpertisesInput = z.infer<typeof expertisesSchema>;

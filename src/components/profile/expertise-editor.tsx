@@ -2,7 +2,14 @@
 
 import { useState } from 'react';
 
-import { Plus, Trash2, Stethoscope, ImageIcon, Loader2, CircleDot } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Stethoscope,
+  ImageIcon,
+  Loader2,
+  CircleDot,
+} from 'lucide-react';
 
 import {
   Control,
@@ -263,9 +270,6 @@ function ExpertiseImageUpload({
 }: ExpertiseImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [isSaving, setIsSaving] = useState(false);
-
-  const isBusy = isUploading || isSaving;
 
   const toastId = `expertise-image-upload-${index}`;
 
@@ -300,7 +304,7 @@ function ExpertiseImageUpload({
           ),
         }}
         input={{}}
-        disabled={isBusy}
+        disabled={isUploading}
         appearance={{
           container:
             'w-full rounded-lg border-2 border-dashed border-purple-600 bg-muted/30 cursor-pointer',
@@ -311,7 +315,6 @@ function ExpertiseImageUpload({
         }}
         onUploadBegin={() => {
           setIsUploading(true);
-          setIsSaving(false);
           setUploadProgress(0);
 
           toast.loading('Uploading expertise image...', {
@@ -323,21 +326,35 @@ function ExpertiseImageUpload({
         }}
         onClientUploadComplete={async (res) => {
           try {
-            setUploadProgress(100);
-            setIsUploading(false);
-            setIsSaving(true);
-
-            toast.loading('Saving expertise image...', {
-              id: toastId,
-            });
-
-            if (!res || res.length === 0) {
+            if (!res?.length) {
               throw new Error('No uploaded file was returned.');
             }
 
             const file = res[0];
+
             // Store the UploadThing URL and key in React Hook Form
             // The actual physician profile database update happens when the main ProfileForm is submitted
+            /*
+             * UploadThing is finished.
+             *
+             * Store the uploaded file information in React Hook Form.
+             *
+             * UploadThing
+             *     ↓
+             * setValue()
+             *     ↓
+             * RHF expertise[index]
+             *     ↓
+             * Main ProfileForm submit
+             *     ↓
+             * Zod validation
+             *     ↓
+             * Server Action
+             *     ↓
+             * Drizzle
+             *     ↓
+             * Neon
+             */
             setValue(`expertise.${index}.image`, file.ufsUrl, {
               shouldDirty: true,
               shouldValidate: true,
@@ -345,7 +362,10 @@ function ExpertiseImageUpload({
 
             setValue(`expertise.${index}.imageKey`, file.key, {
               shouldDirty: true,
+              shouldValidate: true,
             });
+
+            setUploadProgress(100);
 
             toast.success('Expertise image uploaded successfully.', {
               id: toastId,
@@ -358,7 +378,6 @@ function ExpertiseImageUpload({
             });
           } finally {
             setIsUploading(false);
-            setIsSaving(false);
 
             setTimeout(() => {
               setUploadProgress(0);
@@ -367,7 +386,6 @@ function ExpertiseImageUpload({
         }}
         onUploadError={(error) => {
           setIsUploading(false);
-          setIsSaving(false);
           setUploadProgress(0);
 
           toast.error(error.message, {
@@ -376,15 +394,13 @@ function ExpertiseImageUpload({
         }}
       />
       {/* Upload progress */}
-      {isBusy && (
+      {isUploading && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Loader2 className="size-4 animate-spin" />
 
-              <span>
-                {isUploading ? 'Uploading image...' : 'Saving image...'}
-              </span>
+              <span>Uploading image...</span>
             </div>
 
             <span className="font-medium tabular-nums">{uploadProgress}%</span>

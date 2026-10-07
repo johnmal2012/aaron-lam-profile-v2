@@ -1,11 +1,51 @@
-// CredentialEditor > React Hook Form > form.getValues() > toProfilePayload() > normalizeCredentials() > credential: Credential[] > physicianProfileSchema.safeParse() > validated.data.credential > updatePhysicianProfile() > credential: validated.data.credential > Drizzle UPDATE > physician_profile.credential JSONB
+// CredentialEditor
+// React Hook Form
+//   ↓
+// form.getValues()
+//   ↓
+// toProfilePayload()
+//   ↓
+// normalizeCredentials()
+//   ↓
+// credential: Credential[]
+//   ↓
+// physicianProfileSchema.safeParse()
+//   ↓
+// validated.data.credential
+//   ↓
+// updatePhysicianProfile()
+//   ↓
+// Drizzle UPDATE
+//   ↓
+// physician_profile.credential JSONB
+//
+// Image flow:
+// UploadThing
+//   ↓
+// onClientUploadComplete()
+//   ↓
+// setValue(credential[index].image)
+// setValue(credential[index].imageKey)
+//   ↓
+// React Hook Form
+//   ↓
+// Main ProfileForm submit
+//   ↓
+// Neon JSONB
+// UploadThing → onClientUploadComplete → set RHF image + imageKey → RHF form state remains the source of truth → main ProfileForm submits the complete array → Zod validates → server action → Drizzle/Neon JSONB
+// UploadThing owns the file upload. RHF owns the form data. Neon owns the persisted copy.
 'use client';
-
-import { updateCredentialImage } from '@/actions/profile/profile-update-credential-image';
 
 import { useState } from 'react';
 
-import { Award, CircleDot, ImageIcon, Loader2, Plus, Trash2 } from 'lucide-react';
+import {
+  Award,
+  CircleDot,
+  ImageIcon,
+  Loader2,
+  Plus,
+  Trash2,
+} from 'lucide-react';
 
 import {
   Control,
@@ -21,14 +61,9 @@ import { toast } from 'sonner';
 import type { PhysicianProfileFormInput } from '@/lib/validations/physician-profile';
 
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-
 import { Input } from '@/components/ui/input';
-
 import { Button } from '@/components/ui/button';
-
 import { Card } from '@/components/ui/card';
-
-import { useRouter } from 'next/navigation';
 
 import {
   Select,
@@ -47,19 +82,36 @@ import {
 import { UploadDropzone } from '@/lib/uploadthing';
 
 import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
-import router from 'next/router';
 
+import { Textarea } from '@/components/ui/textarea';
+
+// Types
 interface CredentialEditorProps {
-  profileId: number;
   control: Control<PhysicianProfileFormInput>;
   register: UseFormRegister<PhysicianProfileFormInput>;
   setValue: UseFormSetValue<PhysicianProfileFormInput>;
   errors?: any;
 }
 
+interface CredentialCardProps {
+  control: Control<PhysicianProfileFormInput>;
+  field: FieldArrayWithId<PhysicianProfileFormInput, 'credential', 'id'>;
+  index: number;
+  register: UseFormRegister<PhysicianProfileFormInput>;
+  setValue: UseFormSetValue<PhysicianProfileFormInput>;
+  remove: (index: number) => void;
+  error?: any;
+}
+
+interface CredentialImageUploadProps {
+  image?: string;
+  institution?: string;
+  index: number;
+  setValue: UseFormSetValue<PhysicianProfileFormInput>;
+}
+
+// Credential Editor
 export function CredentialEditor({
-  profileId,
   control,
   register,
   setValue,
@@ -75,7 +127,6 @@ export function CredentialEditor({
       type: 'education',
       label: '',
       institution: '',
-      //   breakAfter: '',
       image: '',
       imageKey: '',
     });
@@ -113,8 +164,8 @@ export function CredentialEditor({
             <p className="font-medium">No credentials added</p>
 
             <p className="text-sm text-muted-foreground">
-              Add training or credential information to display on the physician
-              website.
+              Add training or credential information to display on the
+              physician website.
             </p>
           </div>
 
@@ -133,7 +184,6 @@ export function CredentialEditor({
       {fields.map((field, index) => (
         <CredentialCard
           key={field.id}
-          profileId={profileId}
           control={control}
           field={field}
           index={index}
@@ -162,19 +212,7 @@ export function CredentialEditor({
 }
 
 // Credential Card
-interface CredentialCardProps {
-  profileId: number;
-  control: Control<PhysicianProfileFormInput>;
-  field: FieldArrayWithId<PhysicianProfileFormInput, 'credential', 'id'>;
-  index: number;
-  register: UseFormRegister<PhysicianProfileFormInput>;
-  setValue: UseFormSetValue<PhysicianProfileFormInput>;
-  remove: (index: number) => void;
-  error?: any;
-}
-
 function CredentialCard({
-  profileId,
   control,
   field,
   index,
@@ -183,17 +221,22 @@ function CredentialCard({
   remove,
   error,
 }: CredentialCardProps) {
+  // Keep the Select synchronized with React Hook Form.
   const type = useWatch({
     control,
     name: `credential.${index}.type`,
     defaultValue: field.type,
   });
 
+  // Keep the image preview synchronized with React Hook Form.
+  // UploadThing calls setValue() after upload completes.
+  // useWatch() causes this card to re-render with the new image.
   const image = useWatch({
     control,
     name: `credential.${index}.image`,
   });
 
+  // Used for the image alt text.
   const institution = useWatch({
     control,
     name: `credential.${index}.institution`,
@@ -206,7 +249,7 @@ function CredentialCard({
         index % 2 === 0 ? 'bg-white' : 'bg-slate-100',
       )}
     >
-      {/* Header */}
+      {/* Card header */}
       <div className="mb-5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex size-8 items-center justify-center rounded-full bg-muted text-sm font-semibold">
@@ -235,12 +278,14 @@ function CredentialCard({
             </Button>
           </TooltipTrigger>
 
-          <TooltipContent side="left">Delete credential</TooltipContent>
+          <TooltipContent side="left">
+            Delete credential
+          </TooltipContent>
         </Tooltip>
       </div>
 
       <div className="space-y-5">
-        {/* Type */}
+        {/* Credential type */}
         <Field>
           <FieldLabel>Credential Type</FieldLabel>
 
@@ -266,13 +311,21 @@ function CredentialCard({
             </SelectTrigger>
 
             <SelectContent>
-              <SelectItem value="education">Medical Education</SelectItem>
+              <SelectItem value="education">
+                Medical Education
+              </SelectItem>
 
-              <SelectItem value="residency">Residency</SelectItem>
+              <SelectItem value="residency">
+                Residency
+              </SelectItem>
 
-              <SelectItem value="fellowship">Fellowship</SelectItem>
+              <SelectItem value="fellowship">
+                Fellowship
+              </SelectItem>
 
-              <SelectItem value="certification">Certification</SelectItem>
+              <SelectItem value="certification">
+                Certification
+              </SelectItem>
             </SelectContent>
           </Select>
 
@@ -297,7 +350,7 @@ function CredentialCard({
 
           <Textarea
             {...register(`credential.${index}.institution`)}
-            placeholder={`Baylor University College of Medicine`}
+            placeholder="Baylor University College of Medicine"
             rows={2}
             className="min-h-16 resize-y"
           />
@@ -310,12 +363,11 @@ function CredentialCard({
           <FieldError>{error?.institution?.message}</FieldError>
         </Field>
 
-        {/* Image */}
+        {/* Credential image */}
         <Field>
           <FieldLabel>Credential Image</FieldLabel>
 
           <CredentialImageUpload
-            profileId={profileId}
             image={image}
             institution={institution}
             index={index}
@@ -330,41 +382,28 @@ function CredentialCard({
 }
 
 // Credential Image Upload
-interface CredentialImageUploadProps {
-  profileId: number;
-  image?: string;
-  institution?: string;
-  index: number;
-  setValue: UseFormSetValue<PhysicianProfileFormInput>;
-}
-
 function CredentialImageUpload({
-  profileId,
   image,
   institution,
   index,
   setValue,
 }: CredentialImageUploadProps) {
-  const router = useRouter();
-
   const [isUploading, setIsUploading] = useState(false);
-
   const [uploadProgress, setUploadProgress] = useState(0);
-
-  const [isSaving, setIsSaving] = useState(false);
-
-  const isBusy = isUploading || isSaving;
 
   const toastId = `credential-image-upload-${index}`;
 
   return (
     <div className="space-y-3">
-      {/* Preview */}
+      {/* Image preview */}
       <div className="flex justify-center">
         {image ? (
           <img
             src={image}
-            alt={institution || `Credential ${index + 1} image`}
+            alt={
+              institution ||
+              `Credential ${index + 1} image`
+            }
             className="size-24 rounded-md border object-contain bg-white p-2"
           />
         ) : (
@@ -383,12 +422,16 @@ function CredentialImageUpload({
         content={{
           button: (
             <span className="inline-flex items-center justify-center gap-2">
-              <CircleDot className="size-4 shrink-0" aria-hidden="true" />
+              <CircleDot
+                className="size-4 shrink-0"
+                aria-hidden="true"
+              />
+
               <span>Choose File</span>
             </span>
           ),
         }}
-        disabled={isBusy}
+        disabled={isUploading}
         appearance={{
           container:
             'w-full rounded-lg border-2 border-dashed border-blue-600 bg-muted/30 cursor-pointer',
@@ -399,11 +442,11 @@ function CredentialImageUpload({
 
           allowedContent: 'text-sm text-muted-foreground',
 
-          button: 'bg-blue-600 text-white hover:bg-blue-700',
+          button:
+            'bg-blue-600 text-white hover:bg-blue-700',
         }}
         onUploadBegin={() => {
           setIsUploading(true);
-          setIsSaving(false);
           setUploadProgress(0);
 
           toast.loading('Uploading credential image...', {
@@ -413,62 +456,76 @@ function CredentialImageUpload({
         onUploadProgress={(progress) => {
           setUploadProgress(progress);
         }}
-        onClientUploadComplete={async (res) => {
+        onClientUploadComplete={(res) => {
           try {
             setUploadProgress(100);
             setIsUploading(false);
-            setIsSaving(true);
 
-            if (!res?.length) {
-              throw new Error('No uploaded file was returned.');
+            if (!res || res.length === 0) {
+              throw new Error(
+                'No uploaded file was returned.',
+              );
             }
 
             const file = res[0];
 
-            const result = await updateCredentialImage({
-              profileId,
-              credentialIndex: index,
-              imageUrl: file.ufsUrl,
-              imageKey: file.key,
-            });
+            /*
+             * UploadThing has completed the upload.
+             *
+             * IMPORTANT:
+             * We do NOT update Neon here.
+             * We only update React Hook Form.
+             * The parent ProfileForm will later
+             * submit the complete credential
+             * array to the server action.
+             */
 
-            if (result.error) {
-              throw new Error(result.error);
-            }
+            setValue(
+              `credential.${index}.image`,
+              file.ufsUrl,
+              {
+                shouldDirty: true,
+                shouldValidate: true,
+              },
+            );
 
-            // Update React Hook Form immediately.
-            setValue(`credential.${index}.image`, file.ufsUrl, {
-              shouldDirty: true,
-              shouldValidate: true,
-            });
+            setValue(
+              `credential.${index}.imageKey`,
+              file.key,
+              {
+                shouldDirty: true,
+                shouldValidate: true,
+              },
+            );
 
-            setValue(`credential.${index}.imageKey`, file.key, {
-              shouldDirty: true,
-              shouldValidate: true,
-            });
-
-            // Refresh Server Components.
-            router.refresh();
-
-            toast.success('Credential image updated successfully.', {
-              id: toastId,
-            });
+            toast.success(
+              'Credential image uploaded successfully.',
+              {
+                id: toastId,
+              },
+            );
           } catch (error) {
+            console.error(
+              'Credential image upload failed:',
+              error,
+            );
+
             toast.error(
-              error instanceof Error
-                ? error.message
-                : 'Failed to update credential image.',
-              { id: 'credential-image-upload' },
+              'Failed to upload credential image.',
+              {
+                id: toastId,
+              },
             );
           } finally {
             setIsUploading(false);
-            setIsSaving(false);
-            setTimeout(() => setUploadProgress(0), 500);
+
+            setTimeout(() => {
+              setUploadProgress(0);
+            }, 500);
           }
         }}
         onUploadError={(error) => {
           setIsUploading(false);
-          setIsSaving(false);
           setUploadProgress(0);
 
           toast.error(error.message, {
@@ -477,19 +534,19 @@ function CredentialImageUpload({
         }}
       />
 
-      {/* Progress */}
-      {isBusy && (
+      {/* Upload progress */}
+      {isUploading && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Loader2 className="size-4 animate-spin" />
 
-              <span>
-                {isUploading ? 'Uploading image...' : 'Saving image...'}
-              </span>
+              <span>Uploading image...</span>
             </div>
 
-            <span className="font-medium tabular-nums">{uploadProgress}%</span>
+            <span className="font-medium tabular-nums">
+              {uploadProgress}%
+            </span>
           </div>
 
           <div

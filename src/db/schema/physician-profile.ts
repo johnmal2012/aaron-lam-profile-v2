@@ -11,7 +11,7 @@ import {
 import { user } from '@/db/schema/auth-schema';
 import { Clinic } from '@/lib/types/clinic';
 import { Expertise } from '@/lib/types/expertise';
-import { Credential } from '@/lib/types/credential';
+import { Credential } from '@/lib/validations/credential';
 
 export const physicianProfile = pgTable(
   'physician_profile',
