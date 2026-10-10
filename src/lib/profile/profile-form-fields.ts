@@ -54,12 +54,13 @@ export type ProfileFieldConfig = ImageField | InputField | TextareaField;
 /**
  * Standard one-value physician profile fields.
  *
- * Clinics and expertise are intentionally NOT included here.
+ * Clinics, expertise, and credentials are intentionally NOT included here.
  *
  * They should be rendered separately by:
  *
  *   <ClinicEditor />
  *   <ExpertiseEditor />
+ *   <CredentialEditor />
  */
 // Define field configurations with their properties
 export const profileFormFields: ProfileFieldConfig[] = [

@@ -114,4 +114,4 @@ export type PhysicianProfileFormInput = z.input<
   typeof physicianProfileFormSchema
 >;
 
-export type PhysicianProfileInput = z.output<typeof physicianProfileSchema>;
+export type PhysicianProfile = z.output<typeof physicianProfileSchema>;

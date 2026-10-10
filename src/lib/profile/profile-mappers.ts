@@ -4,7 +4,7 @@ import type { Credential } from '@/lib/types/credential';
 
 import type {
   PhysicianProfileFormInput,
-  PhysicianProfileInput,
+  PhysicianProfile,
 } from '@/lib/validations/physician-profile';
 
 // function splitLines(value: string): string[] {
@@ -56,19 +56,15 @@ import type {
 // Payload type
 // Payload sent to the server action.
 // The four clinic textarea fields, the two expertise textarea and crendential textarea fields are form-only fields and are converted into their database structures below
-export type PhysicianProfilePayload = PhysicianProfileInput;
+export type PhysicianProfilePayload = PhysicianProfile;
 
 // Form → Server Payload
 /**
- * Convert React Hook Form values into the normalized
- * physician profile payload.
+ * Convert React Hook Form values into the normalized physician profile payload.
  *
- * The repeatable Clinic Editor, Expertise Editor and Credential Editor already
- * provide arrays, so there is no textarea parsing here.
+ * The repeatable Clinic Editor, Expertise Editor and Credential Editor already provide arrays, so there is no textarea parsing here.
  *
- * Zod's output type is used for the final payload because
- * form input types may contain undefined/unknown values,
- * particularly when using z.coerce.number().
+ * Zod's output type is used for the final payload because form input types may contain undefined/unknown values, particularly when using z.coerce.number().
  */
 export function toProfilePayload(
   values: PhysicianProfileFormInput,

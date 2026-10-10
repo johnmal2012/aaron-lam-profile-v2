@@ -52,7 +52,7 @@ export const ourFileRouter = {
       maxFileSize: '2MB',
     },
   })
-    .input(z.object({}))
+    // .input(z.object({}))
     .middleware(async () => {
       const session = await requireAdmin();
 

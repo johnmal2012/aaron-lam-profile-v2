@@ -1,4 +1,4 @@
-// ADMIN PROFILE EDIT > ProfileForm (RHF) > Credentials Credential[] etc > toProfilePayload() > physicianProfileSchema > Server Action > Drizzle/Neon > physician_profile table > credential jsonb column > getWebsiteData() > HomepageSections > AboutSection > Training & Credentials
+// ADMIN PROFILE EDIT > ProfileForm (RHF) > useForm() > RHF form state > CredentialEditor/ClinicEditor/ExpertiseEditor > form.handleSubmit() > onFormSubmit(RHF form data) > toProfilePayload(RHF form data) > Server Action > server-side validation: physicianProfileSchema.safe.Parse(RHF form data) > CRUD > Drizzle/Neon > physician_profile table > credential jsonb column > getWebsiteData() > HomepageSections > AboutSection > Training & Credentials
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -75,18 +75,20 @@ export function ProfileForm({
 
     defaultValues: getProfileDefaultValues(profile),
 
-    // Important for dynamically added/removed clinics and expertise records
-    mode: 'onSubmit',
+    // explicit setting modes are about the desired validation UX e.g. mode: 'onChange' for login, registration, short form, form where immediate feeback is important
+    // explicit settings both modes are optional for our case as they are defaults and so can be omitted
+    // mode: 'onSubmit',
 
-    reValidateMode: 'onChange',
+    // reValidateMode: 'onChange',
   });
 
   // Submit
   // For server actions called from RHF, no need to  use useTransition
   async function onFormSubmit(values: PhysicianProfileFormInput) {
     try {
-      // Clinics and expertise are already arrays
-      // No textarea parsing is performed here
+      // values.expertise or values.clinic are already arrays using useFieldArray()
+      // No textarea parsing is performed here such as values.expertise.split('\n')
+      // use toProfilePayload() to convert React Hook Form values into the normalized physician profile payload
       const payload = toProfilePayload(values);
 
       const result = profile
@@ -128,6 +130,8 @@ export function ProfileForm({
   // temporary development - only error logger
   //   const isDevelopment = process.env.NODE_ENV === 'development';
   // Render
+  // RHF calls this success callback function = onFormSubmit only when validation succeeds
+  // RHF calls this failure callback function = onInvalidSubmit only when validation fails
   return (
     <form
       onSubmit={form.handleSubmit(onFormSubmit, onInvalidSubmit)}
