@@ -64,7 +64,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          'group/accordion-trigger relative flex min-w-0 flex-1 items-center justify-start gap-3 rounded-lg border border-transparent py-3 pr-12 text-left text-sm font-medium transition-colors outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring/50',
+          'group/accordion-trigger relative flex min-w-0 flex-1 items-start justify-start gap-3 rounded-lg border border-transparent py-3 pr-12 text-left text-sm font-medium transition-colors outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring/50',
           className,
         )}
         {...props}
@@ -73,12 +73,12 @@ function AccordionTrigger({
 
         <ChevronDownIcon
           data-slot="accordion-trigger-icon"
-          className="pointer-events-none absolute right-2 top-1/2 size-8 -translate-y-1/2 rounded-full border border-border bg-muted p-2 text-foreground shadow-sm transition-colors group-hover/accordion-trigger:bg-accent group-aria-expanded/accordion-trigger:hidden"
+          className="pointer-events-none absolute right-2 top-3 size-8 rounded-full border border-border bg-muted p-2 text-foreground shadow-sm transition-colors group-hover/accordion-trigger:bg-accent group-aria-expanded/accordion-trigger:hidden"
         />
 
         <ChevronUpIcon
           data-slot="accordion-trigger-icon"
-          className="pointer-events-none absolute right-2 top-1/2 hidden size-8 -translate-y-1/2 rounded-full border border-border bg-muted p-2 text-foreground shadow-sm transition-colors group-hover/accordion-trigger:bg-accent group-aria-expanded/accordion-trigger:inline"
+          className="pointer-events-none absolute right-2 top-3 hidden size-8 rounded-full border border-border bg-muted p-2 text-foreground shadow-sm transition-colors group-hover/accordion-trigger:bg-accent group-aria-expanded/accordion-trigger:inline"
         />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>

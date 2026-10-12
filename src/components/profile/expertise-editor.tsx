@@ -89,7 +89,7 @@ export function ExpertiseEditor({
               </p>
             </div>
 
-            <span className="relative -top-2 shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
+            <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
               {fields.length}
             </span>
           </AccordionTrigger>
