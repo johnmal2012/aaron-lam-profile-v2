@@ -56,7 +56,7 @@ export function ExpertiseCard({
   return (
     <Card
       className={cn(
-        'rounded-xl border border-slate-200 p-5',
+        'min-w-0 overflow-visible rounded-xl border border-slate-200 p-5',
         index % 2 === 0 ? 'bg-white' : 'bg-slate-100',
       )}
     >
@@ -93,7 +93,7 @@ export function ExpertiseCard({
         </Tooltip>
       </div>
 
-      <div className="space-y-5">
+      <div className="min-w-0 space-y-5">
         {/* Expertise text */}
         <Field>
           <FieldLabel>Expertise</FieldLabel>

@@ -1,8 +1,8 @@
 import { LoginForm } from '@/components/auth/login-form';
-import { MagicLinkLoginForm } from '@/components/auth/magic-link-login-form';
+// import { MagicLinkLoginForm } from '@/components/auth/magic-link-login-form';
 import { ReturnButton } from '@/components/navigation/return-button';
-import { SignInOauthButton } from '@/components/auth/sign-in-oauth-button';
-import Link from 'next/link';
+// import { SignInOauthButton } from '@/components/auth/sign-in-oauth-button';
+// import Link from 'next/link';
 import { getSession } from '@/lib/auth/auth-utils';
 import { redirect } from 'next/navigation';
 import { USER_ROLE } from '@/db/schema/auth-schema';

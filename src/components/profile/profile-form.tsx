@@ -43,6 +43,7 @@ import { getProfileDefaultValues } from '@/lib/profile/profile-default-values';
 import { toProfilePayload } from '@/lib/profile/profile-mappers';
 import { CredentialEditor } from '@/components/profile/credential-editor';
 import { FilePlus2, LoaderCircle, Save, X } from 'lucide-react';
+import { useState } from 'react';
 
 // Types
 type Profile = InferSelectModel<typeof physicianProfile>;
@@ -63,6 +64,10 @@ export function ProfileForm({
   userName,
   userImage,
 }: ProfileFormProps) {
+  const [activeAccordion, setActiveAccordion] = useState<
+    'clinics' | 'expertise' | 'credentials' | ''
+  >('');
+
   const router = useRouter();
 
   if (!profile) {
@@ -173,6 +178,8 @@ export function ProfileForm({
           control={form.control}
           register={form.register}
           errors={form.formState.errors}
+          open={activeAccordion === 'clinics'}
+          onOpenChange={(open) => setActiveAccordion(open ? 'clinics' : '')}
         />
       </section>
 
@@ -188,6 +195,8 @@ export function ProfileForm({
           register={form.register}
           setValue={form.setValue}
           errors={form.formState.errors}
+          open={activeAccordion === 'expertise'}
+          onOpenChange={(open) => setActiveAccordion(open ? 'expertise' : '')}
         />
       </section>
 
@@ -203,6 +212,8 @@ export function ProfileForm({
           register={form.register}
           setValue={form.setValue}
           errors={form.formState.errors}
+          open={activeAccordion === 'credentials'}
+          onOpenChange={(open) => setActiveAccordion(open ? 'credentials' : '')}
         />
       </section>
 
