@@ -56,7 +56,7 @@ export default async function PhysicianPage() {
         clinics={clinics}
       />
 
-      <FooterSection clinics={clinics} />
+      <FooterSection name={profile.name ?? ''} />
     </main>
   );
 }

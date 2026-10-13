@@ -17,14 +17,14 @@ export default function ContactSection({
   title,
   phone,
   email,
-  clinics = [],
-  address,
+//   clinics = [],
+//   address,
   background,
   slug,
 }: ContactSectionProps) {
-  const validClinics = clinics.filter(
-    (clinic) => clinic.name?.trim() && clinic.address?.trim(),
-  );
+//   const validClinics = clinics.filter(
+//     (clinic) => clinic.name?.trim() && clinic.address?.trim(),
+//   );
   return (
     <section id={slug} className={cn('scroll-mt-28 px-6 py-12', background)}>
       <div className="mx-auto max-w-5xl">
@@ -36,12 +36,12 @@ export default function ContactSection({
             <span className="hidden h-px w-10 bg-[#286487] sm:block" />
           </div>
 
-          <div
+          {/* <div
             className={cn(
               'grid gap-8',
               validClinics.length > 0 ? 'md:grid-cols-3' : 'md:grid-cols-2',
             )}
-          >
+          > */}
             <div className="space-y-3">
               <Phone className="h-8 w-8 text-blue-600" />
               <h3 className="text-xl font-semibold">Phone</h3>
@@ -58,7 +58,7 @@ export default function ContactSection({
               <h3 className="text-xl font-semibold">Address</h3>
               <p>{address}</p>
             </div> */}
-            {validClinics.length > 0 && (
+            {/* {validClinics.length > 0 && (
               <div className="space-y-3">
                 {' '}
                 <MapPin className="h-8 w-8 text-blue-600" />{' '}
@@ -82,8 +82,8 @@ export default function ContactSection({
                   ))}{' '}
                 </div>{' '}
               </div>
-            )}
-          </div>
+            )} */}
+          {/* </div> */}
         </Card>
       </div>
     </section>

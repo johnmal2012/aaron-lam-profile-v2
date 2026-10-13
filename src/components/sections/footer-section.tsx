@@ -3,13 +3,15 @@ import { Clinic } from '@/lib/types/clinic';
 interface FooterSectionProps {
   //   clinicName: string;
   //   clinicAddress: string;
-  clinics: Clinic[];
+  //   clinics: Clinic[];
+  name: string;
 }
 
 export default function FooterSection({
   //   clinicName,
   //   clinicAddress,
-  clinics,
+  //   clinics,
+  name,
 }: FooterSectionProps) {
   const currentYear = new Date().getFullYear();
   return (
@@ -28,7 +30,7 @@ export default function FooterSection({
     // </footer>
     <footer className="bg-slate-200 px-6 py-10 text-gray-600">
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {/* <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {clinics.map((clinic, index) => (
             <div key={`${clinic.name}-${clinic.address}-${index}`}>
               <h3 className="text-sm font-semibold text-slate-800">
@@ -38,13 +40,13 @@ export default function FooterSection({
               <p className="mt-1 text-sm text-gray-500">{clinic.address}</p>
             </div>
           ))}
-        </div>
+        </div> */}
 
-        <div className="mt-8 border-t border-slate-300 pt-6 text-center">
-          <p className="text-sm text-gray-500">
-            © {currentYear} All Rights Reserved.
+        {/* <div className="mt-8 border-t border-slate-300 pt-6 text-center"> */}
+          <p className="text-sm text-gray-500 text-center">
+            © {currentYear} Dr. {name}.{' '} All Rights Reserved.
           </p>
-        </div>
+        {/* </div> */}
       </div>
     </footer>
   );
