@@ -68,17 +68,25 @@ export function ClinicEditor({
           <AccordionTrigger className="min-w-0 flex-1 justify-start gap-3 py-3 text-left hover:no-underline">
             <MapPin className="size-5 shrink-0" />
 
-            <div className="min-w-0 flex-1">
-              <h3 className="text-lg font-semibold">Clinics</h3>
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <div className="flex min-w-0 items-center gap-2">
+                <h3 className="min-w-0 flex-1 text-lg font-semibold">
+                  Clinics
+                </h3>
+
+                <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
+                  {fields.length}
+                </span>
+              </div>
 
               <p className="text-sm font-normal text-muted-foreground">
-                Add one or more clinic locations.
+                Add one or more clinic locations
               </p>
             </div>
 
-            <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
+            {/* <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
               {fields.length}
-            </span>
+            </span> */}
           </AccordionTrigger>
 
           {/* Keep Add Clinic outside AccordionTrigger. */}

@@ -1,8 +1,5 @@
 'use client';
-
-import { useState } from 'react';
-
-import { Plus, Stethoscope } from 'lucide-react';
+import { Plus, Stethoscope, ChevronDown, ChevronUp } from 'lucide-react';
 
 import {
   type Control,
@@ -76,29 +73,53 @@ export function ExpertiseEditor({
     >
       <AccordionItem value="expertise" className="border-0">
         {/* Section heading */}
-        <div className="flex min-w-0 items-center gap-4">
-          <AccordionTrigger className="min-w-0 flex-1 justify-start gap-3 py-3 text-left hover:no-underline">
-            <Stethoscope className="size-5 shrink-0" />
 
-            <div className="min-w-0 flex-1">
-              <h3 className="text-lg font-semibold">Expertises</h3>
+        {/* Section heading */}
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-3">
+          <AccordionTrigger className="min-w-0 flex-1 justify-start gap-3 py-3 text-left hover:no-underline">
+            <Stethoscope className="mt-1 size-5 shrink-0" />
+
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <div className="flex min-w-0 items-center gap-2">
+                <h3 className="min-w-0 flex-1 text-lg font-semibold">
+                  Expertises
+                </h3>
+
+                <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
+                  {fields.length}
+                </span>
+              </div>
 
               <p className="text-sm font-normal text-muted-foreground">
                 Add areas of medical expertise displayed on the physician
                 website.
               </p>
             </div>
-
-            <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
-              {fields.length}
-            </span>
           </AccordionTrigger>
 
-          {/* Outside AccordionTrigger so Add doesn't toggle it */}
+          <div className="col-start-2 row-start-1 flex items-center justify-center gap-2 pt-3">
+            {/* <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
+              {fields.length}
+            </span> */}
+
+            <button
+              type="button"
+              aria-label={open ? 'Collapse Expertises' : 'Expand Expertises'}
+              onClick={() => onOpenChange(!open)}
+              className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              {open ? (
+                <ChevronUp className="size-4" />
+              ) : (
+                <ChevronDown className="size-4" />
+              )}
+            </button>
+          </div>
+
           <Button
             type="button"
-            className="w-36 shrink-0 justify-center bg-purple-600 text-white hover:bg-purple-700"
             onClick={addExpertise}
+            className="col-span-2 row-start-2 w-full justify-center bg-purple-600 text-white hover:bg-purple-700 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:w-36"
           >
             <Plus className="mr-2 size-4" />
             Add Expertise

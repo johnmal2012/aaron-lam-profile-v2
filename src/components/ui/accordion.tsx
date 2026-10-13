@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { cn } from "cn"
-import { Accordion as AccordionPrimitive } from "radix-ui"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import * as React from 'react';
+import { cn } from 'cn';
+import { Accordion as AccordionPrimitive } from 'radix-ui';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 
 function Accordion({
   className,
@@ -12,10 +12,10 @@ function Accordion({
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={cn("flex w-full flex-col", className)}
+      className={cn('flex w-full flex-col', className)}
       {...props}
     />
-  )
+  );
 }
 
 function AccordionItem({
@@ -25,10 +25,10 @@ function AccordionItem({
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn("not-last:border-b", className)}
+      className={cn('not-last:border-b', className)}
       {...props}
     />
-  )
+  );
 }
 
 // function AccordionTrigger({
@@ -130,4 +130,4 @@ function AccordionContent({
   );
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
