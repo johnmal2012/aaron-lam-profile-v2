@@ -1,7 +1,4 @@
 'use client';
-
-import { useState } from 'react';
-
 import { Plus, MapPin } from 'lucide-react';
 
 import {
@@ -69,8 +66,8 @@ export function ClinicEditor({
             <MapPin className="size-5 shrink-0" />
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <div className="flex min-w-0 items-center gap-2">
-                <h3 className="min-w-0 flex-1 text-lg font-semibold">
+              <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                <h3 className="min-w-0 text-lg font-semibold">
                   Clinics
                 </h3>
 
