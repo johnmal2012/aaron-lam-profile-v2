@@ -123,7 +123,7 @@ export function CredentialEditor({
 
             <div className="min-w-0 flex-1">
               <div className="flex min-w-0 items-center gap-2">
-                <h3 className="text-lg font-semibold">Credentials</h3>
+                <h3 className="text-lg font-semibold">Training &amp; Credentials</h3>
 
                 <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
                   {fields.length}
