@@ -61,15 +61,13 @@ export function ClinicEditor({
     >
       <AccordionItem value="clinics" className="border-0">
         {/* Section heading */}
-        <div className="flex min-w-0 items-center gap-4">
-          <AccordionTrigger className="min-w-0 flex-1 justify-start gap-3 py-3 text-left hover:no-underline">
-            <MapPin className="size-5 shrink-0" />
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-3">
+          <AccordionTrigger className="min-w-0 justify-start gap-3 py-3 text-left hover:no-underline">
+            <MapPin className="mt-1 size-5 shrink-0" />
 
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-                <h3 className="min-w-0 text-lg font-semibold">
-                  Clinics
-                </h3>
+                <h3 className="min-w-0 text-lg font-semibold">Clinics</h3>
 
                 <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
                   {fields.length}
@@ -80,23 +78,12 @@ export function ClinicEditor({
                 Add one or more clinic locations
               </p>
             </div>
-
-            {/* <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
-              {fields.length}
-            </span> */}
           </AccordionTrigger>
 
-          {/* Keep Add Clinic outside AccordionTrigger. */}
           <Button
             type="button"
             onClick={addClinic}
-            // style={{
-            //   width: '160px',
-            //   minWidth: '160px',
-            //   maxWidth: '160px',
-            //   flex: '0 0 160px',
-            // }}
-            className="w-36 shrink-0 justify-center bg-green-600 text-white hover:bg-green-700"
+            className="col-span-2 row-start-2 w-full justify-center bg-green-600 text-white hover:bg-green-700 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:w-36"
           >
             <Plus className="mr-2 size-4" />
             Add Clinic
