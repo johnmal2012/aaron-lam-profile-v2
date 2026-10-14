@@ -1,25 +1,27 @@
-import { PhysicianSection } from '@/lib/types/physician-section';
+import type { PhysicianSection } from '@/lib/types/physician-section';
 import { SectionCardContainer } from './section-card-container';
-import { chunk } from '@/lib/types/section-map';
 import { cn } from '@/lib/utils';
-import { getRowBackground } from '@/lib/website/get-row-background';
 
-export function DesktopSectionGrid({ sections }: {sections: PhysicianSection[]}) {
+export function DesktopSectionGrid({
+  sections,
+}: {
+  sections: PhysicianSection[];
+}) {
   return (
     <div className="hidden lg:block">
-      {chunk(sections, 2).map((row, rowIndex) => (
-        <div
-          key={rowIndex}
-          className={cn(
-            'grid gap-4 rounded-2xl p-4 lg:grid-cols-2',
-            getRowBackground(rowIndex),
-          )}
-        >
-          {row.map((section) => (
-            <SectionCardContainer key={section.id} section={section} />
-          ))}
-        </div>
-      ))}
+      <div className="grid grid-cols-2 gap-4">
+        {sections.map((section, index) => (
+          <SectionCardContainer
+            key={section.id}
+            section={section}
+            className={cn(
+              Math.floor(index / 2) % 2 === 0
+                ? 'bg-slate-100'
+                : 'bg-white',
+            )}
+          />
+        ))}
+      </div>
     </div>
   );
 }

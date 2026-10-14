@@ -38,9 +38,16 @@ export function ProfileDisplayField({
               profile.expertise.map((expertise, index) => (
                 <div
                   key={`${expertise.text}-${expertise.url}-${index}`}
+                  //   className={cn(
+                  //     'flex items-center gap-4 rounded-lg border p-3',
+                  //     index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-200',
+                  //   )}
                   className={cn(
-                    'flex items-center gap-4 rounded-lg border p-3',
-                    index % 2 === 0 ? 'bg-slate-100' : 'bg-slate-200',
+                    'flex min-w-0 items-center gap-4 rounded-lg border p-3',
+                    index % 2 === 0
+                      ? 'bg-slate-200 sm:bg-slate-200'
+                      : 'bg-slate-100 sm:bg-slate-200',
+                    Math.floor(index / 2) % 2 === 1 && 'sm:bg-slate-100',
                   )}
                 >
                   {expertise.image ? (

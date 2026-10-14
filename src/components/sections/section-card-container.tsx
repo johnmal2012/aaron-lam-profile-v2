@@ -1,14 +1,25 @@
-import { PhysicianSection } from "@/lib/types/physician-section";
-import { SectionCard } from "@/components/sections/section-card";
+import type { PhysicianSection } from '@/lib/types/physician-section';
+import { SectionCard } from '@/components/sections/section-card';
+import { cn } from '@/lib/utils';
+
+type Props = {
+  section: PhysicianSection;
+  className?: string;
+};
 
 export function SectionCardContainer({
   section,
-}: {
-  section: PhysicianSection;
-}) {
+  className,
+}: Props) {
   return (
-    <div className="rounded-2xl border bg-background p-5 transition hover:shadow-md">
-      <SectionCard section={section} />
+    <div className="min-w-0">
+      <SectionCard
+        section={section}
+        className={cn(
+          'h-full transition hover:shadow-md',
+          className,
+        )}
+      />
     </div>
   );
 }
