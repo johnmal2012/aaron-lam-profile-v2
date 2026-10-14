@@ -140,7 +140,7 @@ export function CredentialEditor({
           <Button
             type="button"
             onClick={addCredential}
-            className="col-span-2 row-start-2 w-full justify-center bg-blue-600 text-white hover:bg-blue-700 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:w-36"
+            className="col-span-2 row-start-2 w-full justify-center bg-blue-600 text-white hover:bg-blue-700 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:mt-3 sm:w-36"
           >
             <Plus className="mr-2 size-4" />
             Add Credential

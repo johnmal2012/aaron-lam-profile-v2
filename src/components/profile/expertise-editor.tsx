@@ -80,7 +80,7 @@ export function ExpertiseEditor({
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
                 <h3 className="min-w-0 text-lg font-semibold">
-                  Expertises
+                  Expertise
                 </h3>
 
                 <span className="shrink-0 rounded-md bg-muted px-2 py-1 text-xs font-semibold tabular-nums">
@@ -98,7 +98,7 @@ export function ExpertiseEditor({
           <Button
             type="button"
             onClick={addExpertise}
-            className="col-span-2 row-start-2 w-full justify-center bg-purple-600 text-white hover:bg-purple-700 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:w-36"
+            className="col-span-2 row-start-2 w-full justify-center bg-purple-600 text-white hover:bg-purple-700 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:mt-3 sm:w-36"
           >
             <Plus className="mr-2 size-4" />
             Add Expertise
