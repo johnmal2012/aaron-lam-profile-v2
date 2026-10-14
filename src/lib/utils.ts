@@ -27,33 +27,60 @@ export const formatLabel = (slug: string) =>
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
 /**
- * Responsive alternating background for profile display cards.
+ * Alternating backgrounds for profile field cards.
  *
- * Phone:
- *   item 0 → bg-slate-100
- *   item 1 → bg-white
- *   item 2 → bg-slate-100
- *   item 3 → bg-white
+ * Phone (< md):
+ *   Alternate every individual card.
  *
- * Desktop (2 columns):
- *   row 0 → bg-slate-100
- *   row 1 → bg-white
- *   row 2 → bg-slate-100
- *   row 3 → bg-white
+ * Tablet/desktop (md and above):
+ *   Alternate by visual row, assuming 2 columns.
  */
 export const getCardBackground = (
   index: number,
   cardsPerRow = 2,
 ) => {
-  // Phone: alternate every individual card.
+// Phone: alternate every individual card.
   const mobile =
-    index % 2 === 0
-      ? 'bg-slate-100'
-      : 'bg-white';
+    index % 2 === 0 ? 'bg-slate-100' : 'bg-white';
 
-  // Desktop: alternate by row.
+// Desktop: alternate by row.
   const desktop =
     Math.floor(index / cardsPerRow) % 2 === 0
+      ? 'md:bg-slate-100'
+      : 'md:bg-white';
+
+  return cn(mobile, desktop);
+};
+
+/**
+ * Continue alternating backgrounds after the basic profile fields.
+ *
+ * fieldCount:
+ *   Number of basic profile fields rendered above the sections.
+ *
+ * sectionOffset:
+ *   0 = Clinics
+ *   1 = Expertise
+ *   2 = Training & Credentials
+ *
+ * Phone: count individual fields.
+ * Tablet/desktop: count visual rows of basic fields.
+ */
+export const getSectionBackground = (
+  fieldCount: number,
+  sectionOffset: number,
+  cardsPerRow = 2,
+) => {
+  const mobileIndex = fieldCount + sectionOffset;
+
+  const desktopIndex =
+    Math.ceil(fieldCount / cardsPerRow) + sectionOffset;
+
+  const mobile =
+    mobileIndex % 2 === 0 ? 'bg-slate-100' : 'bg-white';
+
+  const desktop =
+    desktopIndex % 2 === 0
       ? 'md:bg-slate-100'
       : 'md:bg-white';
 

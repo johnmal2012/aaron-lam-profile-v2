@@ -1,6 +1,5 @@
 // ADMIN PROFILE EDIT > ProfileForm (RHF) > useForm() > RHF form state > CredentialEditor/ClinicEditor/ExpertiseEditor > form.handleSubmit() > onFormSubmit(RHF form data) > toProfilePayload(RHF form data) > Server Action > server-side validation: physicianProfileSchema.safe.Parse(RHF form data) > CRUD > Drizzle/Neon > physician_profile table > credential jsonb column > getWebsiteData() > HomepageSections > AboutSection > Training & Credentials
 'use client';
-
 import { useRouter } from 'next/navigation';
 
 import { toast } from 'sonner';
@@ -17,9 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { FieldGroup } from '@/components/ui/field';
 
-import { getCardBackground } from '@/lib/utils';
-
-import { cn } from '@/lib/utils';
+import { cn, getCardBackground, getSectionBackground } from '@/lib/utils';
 
 import { useForm } from 'react-hook-form';
 
@@ -54,9 +51,9 @@ type ProfileFormProps = {
   userImage?: string | null;
 };
 
-const clinicsSectionIndex = profileFormFields.length;
-const expertiseSectionIndex = clinicsSectionIndex + 1;
-const credentialSectionIndex = expertiseSectionIndex + 1;
+// const clinicsSectionIndex = profileFormFields.length;
+// const expertiseSectionIndex = clinicsSectionIndex + 1;
+// const credentialSectionIndex = expertiseSectionIndex + 1;
 
 // Component
 export function ProfileForm({
@@ -171,7 +168,7 @@ export function ProfileForm({
       <section
         className={cn(
           'rounded-lg border p-4',
-          getCardBackground(clinicsSectionIndex),
+          getSectionBackground(profileFormFields.length, 0),
         )}
       >
         <ClinicEditor
@@ -182,12 +179,11 @@ export function ProfileForm({
           onOpenChange={(open) => setActiveAccordion(open ? 'clinics' : '')}
         />
       </section>
-
       {/* Expertise */}
       <section
         className={cn(
           'rounded-lg border p-4',
-          getCardBackground(expertiseSectionIndex),
+          getSectionBackground(profileFormFields.length, 1),
         )}
       >
         <ExpertiseEditor
@@ -204,7 +200,7 @@ export function ProfileForm({
       <section
         className={cn(
           'rounded-lg border p-4',
-          getCardBackground(credentialSectionIndex),
+          getSectionBackground(profileFormFields.length, 2),
         )}
       >
         <CredentialEditor
