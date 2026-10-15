@@ -14,9 +14,8 @@ import {
 } from '@/actions/profile/physician-profile-actions';
 
 import { Button } from '@/components/ui/button';
-import { FieldGroup } from '@/components/ui/field';
 
-import { cn, getCardBackground, getSectionBackground } from '@/lib/utils';
+import { cn, getSectionBackground } from '@/lib/utils';
 
 import { useForm } from 'react-hook-form';
 
@@ -29,7 +28,7 @@ import {
 
 import { profileFormFields } from '@/lib/profile/profile-form-fields';
 
-import { ProfileFormField } from '@/components/profile/profile-form-field';
+import { BasicInformationEditor } from '@/components/profile/basic-information-editor';
 
 import { ClinicEditor } from '@/components/profile/clinic-editor';
 
@@ -39,8 +38,8 @@ import { getProfileDefaultValues } from '@/lib/profile/profile-default-values';
 
 import { toProfilePayload } from '@/lib/profile/profile-mappers';
 import { CredentialEditor } from '@/components/profile/credential-editor';
-import { FilePlus2, LoaderCircle, Save, X } from 'lucide-react';
 import { useState } from 'react';
+import { FilePlus2, LoaderCircle, Save, X, UserRound } from 'lucide-react';
 
 // Types
 type Profile = InferSelectModel<typeof physicianProfile>;
@@ -62,14 +61,10 @@ export function ProfileForm({
   userImage,
 }: ProfileFormProps) {
   const [activeAccordion, setActiveAccordion] = useState<
-    'clinics' | 'expertise' | 'credentials' | ''
+    'basic-info' | 'clinics' | 'expertise' | 'credentials' | ''
   >('');
 
   const router = useRouter();
-
-  if (!profile) {
-    return <div>Profile not found.</div>;
-  }
 
   // Form
   const form = useForm<PhysicianProfileFormInput>({
@@ -83,6 +78,10 @@ export function ProfileForm({
 
     // reValidateMode: 'onChange',
   });
+  
+  if (!profile) {
+    return <div>Profile not found.</div>;
+  }
 
   // Submit
   // For server actions called from RHF, no need to  use useTransition
@@ -147,22 +146,21 @@ export function ProfileForm({
         </h1>
       </div>
 
-      {/* Basic / standard profile fields*/}
-      <FieldGroup className="grid gap-4 md:grid-cols-2">
-        {profileFormFields.map((field, index) => (
-          <div
-            key={field.id}
-            className={cn('rounded-lg p-4', getCardBackground(index))}
-          >
-            <ProfileFormField
-              field={field}
-              form={form}
-              userName={userName}
-              userImage={userImage}
-            />
-          </div>
-        ))}
-      </FieldGroup>
+      {/* Basic Information */}
+      <section
+        className={cn(
+          'rounded-lg border p-4',
+          getSectionBackground(profileFormFields.length, 0),
+        )}
+      >
+        <BasicInformationEditor
+          form={form}
+          userName={userName}
+          userImage={userImage}
+          open={activeAccordion === 'basic-info'}
+          onOpenChange={(open) => setActiveAccordion(open ? 'basic-info' : '')}
+        />
+      </section>
 
       {/* Clinics */}
       <section
