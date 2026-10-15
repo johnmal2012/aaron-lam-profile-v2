@@ -36,27 +36,25 @@ export function BasicInformationEditor({
       type="single"
       collapsible
       value={open ? 'basic-info' : ''}
-      onValueChange={(value) =>
-        onOpenChange(value === 'basic-info')
-      }
+      onValueChange={(value) => onOpenChange(value === 'basic-info')}
       className="w-full"
     >
       <AccordionItem value="basic-info" className="border-0">
-        <AccordionTrigger className="min-w-0 justify-start gap-3 py-3 text-left hover:no-underline">
-          <UserRound className="mt-1 size-5 shrink-0" />
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <AccordionTrigger className="min-w-0 justify-start gap-3 py-3 text-left hover:no-underline">
+            <UserRound className="mt-1 size-5 shrink-0" />
 
-          <div className="min-w-0 flex-1">
-            <h2 className="text-lg font-semibold">
-              Basic Information
-            </h2>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg font-semibold">Basic Information</h2>
 
-            <p className="mt-1 text-sm font-normal text-muted-foreground">
-              Manage the physician's photo, contact details, specialties,
-              title, and website links.
-            </p>
-          </div>
-        </AccordionTrigger>
-
+              <p className="mt-1 text-sm font-normal text-muted-foreground">
+                Manage the physician&apos;s photo, contact details, specialties,
+                title, and website links.
+              </p>
+            </div>
+          </AccordionTrigger>
+          <div aria-hidden="true" className="hidden w-36 sm:block" />
+        </div>
         <AccordionContent className="overflow-visible">
           <FieldGroup className="grid min-w-0 gap-4 pt-3 md:grid-cols-2">
             {profileFormFields.map((field, index) => (

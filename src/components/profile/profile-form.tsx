@@ -66,6 +66,11 @@ export function ProfileForm({
 
   const router = useRouter();
 
+  const nextSectionBackground = () =>
+  getSectionBackground(sectionIndex++);
+  
+  let sectionIndex = 0;
+
   // Form
   const form = useForm<PhysicianProfileFormInput>({
     resolver: zodResolver(physicianProfileFormSchema),
@@ -78,7 +83,7 @@ export function ProfileForm({
 
     // reValidateMode: 'onChange',
   });
-  
+
   if (!profile) {
     return <div>Profile not found.</div>;
   }
@@ -150,7 +155,7 @@ export function ProfileForm({
       <section
         className={cn(
           'rounded-lg border p-4',
-          getSectionBackground(profileFormFields.length, 0),
+          nextSectionBackground(),
         )}
       >
         <BasicInformationEditor
@@ -166,7 +171,7 @@ export function ProfileForm({
       <section
         className={cn(
           'rounded-lg border p-4',
-          getSectionBackground(profileFormFields.length, 0),
+          nextSectionBackground(),
         )}
       >
         <ClinicEditor
@@ -181,7 +186,7 @@ export function ProfileForm({
       <section
         className={cn(
           'rounded-lg border p-4',
-          getSectionBackground(profileFormFields.length, 1),
+          nextSectionBackground(),
         )}
       >
         <ExpertiseEditor
@@ -198,7 +203,7 @@ export function ProfileForm({
       <section
         className={cn(
           'rounded-lg border p-4',
-          getSectionBackground(profileFormFields.length, 2),
+          nextSectionBackground(),
         )}
       >
         <CredentialEditor

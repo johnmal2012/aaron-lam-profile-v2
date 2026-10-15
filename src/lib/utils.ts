@@ -66,23 +66,26 @@ export const getCardBackground = (
  * Phone: count individual fields.
  * Tablet/desktop: count visual rows of basic fields.
  */
-export const getSectionBackground = (
-  fieldCount: number,
-  sectionOffset: number,
-  cardsPerRow = 2,
-) => {
-  const mobileIndex = fieldCount + sectionOffset;
+// export const getSectionBackground = (
+//   fieldCount: number,
+//   sectionOffset: number,
+//   cardsPerRow = 2,
+// ) => {
+//   const mobileIndex = fieldCount + sectionOffset;
 
-  const desktopIndex =
-    Math.ceil(fieldCount / cardsPerRow) + sectionOffset;
+//   const desktopIndex =
+//     Math.ceil(fieldCount / cardsPerRow) + sectionOffset;
 
-  const mobile =
-    mobileIndex % 2 === 0 ? 'bg-slate-100' : 'bg-white';
+//   const mobile =
+//     mobileIndex % 2 === 0 ? 'bg-slate-100' : 'bg-white';
 
-  const desktop =
-    desktopIndex % 2 === 0
-      ? 'md:bg-slate-100'
-      : 'md:bg-white';
+//   const desktop =
+//     desktopIndex % 2 === 0
+//       ? 'md:bg-slate-100'
+//       : 'md:bg-white';
 
-  return cn(mobile, desktop);
-};
+//   return cn(mobile, desktop);
+// };
+export function getSectionBackground(index: number) {
+  return index % 2 === 0 ? 'bg-white' : 'bg-slate-100';
+}
