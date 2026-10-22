@@ -66,12 +66,12 @@ export function ProfileForm({
 
   const router = useRouter();
 
+  let sectionIndex = 0;
+  
   const nextSectionBackground = () =>
   getSectionBackground(sectionIndex++);
   
-  let sectionIndex = 0;
-
-  // Form
+    // Form
   const form = useForm<PhysicianProfileFormInput>({
     resolver: zodResolver(physicianProfileFormSchema),
 

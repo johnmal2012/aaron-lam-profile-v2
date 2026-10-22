@@ -17,19 +17,43 @@ export function ExpertiseCarousel({ items }: { items: Expertise[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [current, setCurrent] = useState(1);
+  const [count, setCount] = useState(0);
 
-  const updateScrollState = useCallback((api: CarouselApi) => {
-    if (!api) return;
+  const updateScrollState = useCallback(
+    (api: CarouselApi) => {
+      if (!api) return;
 
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-  }, []);
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+
+      const total = items.length;
+      // if carousel displays 8 expertise cards at once, visibleSlides should be approximately 8
+      const visibleSlides = Math.round(
+        api.rootNode().clientWidth /
+          (api.slideNodes()[1]?.offsetLeft - api.slideNodes()[0]?.offsetLeft ||
+            1),
+      );
+
+      const currentSnap = api.selectedScrollSnap();
+
+      // Count the last visible card, capped at the total.
+      setCurrent(Math.min(total, currentSnap + visibleSlides));
+
+      setCount(total);
+    },
+    [items.length],
+  );
 
   useEffect(() => {
     if (!api) return;
 
+    // Initialize the counter and navigation buttons.
     updateScrollState(api);
+    // setCurrent(api.selectedScrollSnap() + 1);
+    // setCount(api.scrollSnapList().length);
 
+    // Update them whenever the carousel moves or reinitializes.
     api.on('select', updateScrollState);
     api.on('reInit', updateScrollState);
 
@@ -84,6 +108,12 @@ export function ExpertiseCarousel({ items }: { items: Expertise[] }) {
           <ChevronRight className="size-5" strokeWidth={2.5} />
         </button>
       </Carousel>
+      <p
+        className="mt-4 text-center text-sm text-muted-foreground"
+        aria-live="polite"
+      >
+        Slide {count === 0 ? 0 : current} of {count}
+      </p>
     </div>
   );
 }
@@ -91,8 +121,7 @@ export function ExpertiseCarousel({ items }: { items: Expertise[] }) {
 function ConditionCard({ item, index }: { item: Expertise; index: number }) {
   const content = item.text || 'Foot & Ankle Care';
 
-  const imageSrc =
-    item.image?.trim();
+  const imageSrc = item.image?.trim();
 
   const card = (
     <article className="group flex h-full min-w-0 flex-col items-center">
