@@ -1,3 +1,4 @@
+// 3) admin sections page
 'use server';
 
 import { revalidatePath } from 'next/cache';

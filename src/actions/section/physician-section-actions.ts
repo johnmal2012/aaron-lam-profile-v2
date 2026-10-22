@@ -15,6 +15,7 @@ import {
   physicianSectionUpdateSchema,
 } from '@/lib/validations/physician-section';
 import { APIError } from 'better-auth/api';
+import { requireAdmin } from '@/lib/auth/auth-utils';
 
 export async function getPhysicianSections() {
   try {
@@ -41,6 +42,8 @@ export async function createPhysicianSection(
   values: PhysicianSectionFormInput,
 ) {
   try {
+    await requireAdmin();
+    
     const validated = physicianSectionSchema.safeParse(values);
 
     if (!validated.success) {
@@ -53,7 +56,7 @@ export async function createPhysicianSection(
 
     revalidatePath('/');
     revalidatePath('/profile');
-    revalidatePath('/section');
+    revalidatePath('/sections');
 
     return { error: null };
   } catch (err) {
@@ -73,6 +76,8 @@ export async function updatePhysicianSection(
   values: PhysicianSectionFormInput,
 ) {
   try {
+    await requireAdmin();
+    
     const validated = physicianSectionUpdateSchema.safeParse(values);
 
     if (!validated.success) {
@@ -98,7 +103,7 @@ export async function updatePhysicianSection(
 
     revalidatePath('/');
     revalidatePath('/profile');
-    revalidatePath('/section');
+    revalidatePath('/sections');
 
     return { error: null };
   } catch (err) {
@@ -115,6 +120,8 @@ export async function updatePhysicianSection(
 // =========================
 export async function deletePhysicianSection(sectionId: number) {
   try {
+    await requireAdmin();
+
     const existing = await db.query.physicianSections.findFirst({
       where: eq(physicianSections.id, sectionId),
     });
@@ -135,7 +142,7 @@ export async function deletePhysicianSection(sectionId: number) {
 
     revalidatePath('/');
     revalidatePath('/profile');
-    revalidatePath('/section');
+    revalidatePath('/sections');
 
     return { error: null };
   } catch (err) {
